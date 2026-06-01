@@ -1,0 +1,47 @@
+services:
+  db:
+    image: postgres:15
+    container_name: aelb-db-prod
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - postgres_data_prod:/var/lib/postgresql/data
+    networks:
+      - aelbrains-net
+    restart: always
+
+  backend:
+    build: ./backend
+    container_name: aelb-backend-prod
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${DB_NAME}
+      SPRING_DATASOURCE_USERNAME: ${DB_USER}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      MAIL_USERNAME: ${MAIL_USER}
+      MAIL_PASSWORD: ${MAIL_PASS}
+    depends_on:
+      - db
+    networks:
+      - aelbrains-net
+    restart: always
+
+  frontend:
+    build: ./frontend
+    container_name: aelb-frontend-prod
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - aelbrains-net
+    restart: always
+
+networks:
+  aelbrains-net:
+    driver: bridge
+
+volumes:
+  postgres_data_prod:
