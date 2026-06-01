@@ -1,7 +1,6 @@
 plugins {
     java
     id("org.springframework.boot") version "3.3.0"
-    id("io.spring.dependency-management") version "1.1.5"
 }
 
 group = "com.aelb"
@@ -18,6 +17,7 @@ repositories {
 }
 
 dependencies {
+    implementation(platform("org.springframework.boot:spring-boot-dependencies:3.3.0"))
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-web")

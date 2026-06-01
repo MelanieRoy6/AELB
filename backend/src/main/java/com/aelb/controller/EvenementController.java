@@ -1,7 +1,7 @@
 package com.aelb.controller;
 
 import com.aelb.model.Evenement;
-import com.aelb.repository.EvenementRepository;
+import com.aelb.service.EvenementService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -15,10 +15,10 @@ import java.util.List;
 @RequestMapping("/api")
 public class EvenementController {
 
-    private final EvenementRepository evenementRepository;
+    private final EvenementService evenementService;
 
-    public EvenementController(EvenementRepository evenementRepository) {
-        this.evenementRepository = evenementRepository;
+    public EvenementController(EvenementService evenementService) {
+        this.evenementService = evenementService;
     }
 
     @GetMapping("/evenements")
@@ -30,41 +30,43 @@ public class EvenementController {
     ) {
         LocalDateTime start = (from != null) ? from : LocalDateTime.now().minusYears(1);
         LocalDateTime end = (to != null) ? to : LocalDateTime.now().plusYears(1);
-        return evenementRepository.findByDateDebutBetweenAndPublieTrue(start, end, PageRequest.of(page, size));
+        return evenementService.getEvents(start, end, PageRequest.of(page, size));
     }
 
     @GetMapping("/evenements/upcoming")
     public List<Evenement> getUpcomingEvenements() {
-        return evenementRepository.findUpcomingEvents(PageRequest.of(0, 5));
+        return evenementService.getUpcomingEvents(PageRequest.of(0, 5));
     }
 
     @PostMapping("/admin/evenements")
     public Evenement createEvenement(@RequestBody Evenement evenement) {
-        return evenementRepository.save(evenement);
+        return evenementService.save(evenement);
     }
 
     @PutMapping("/admin/evenements/{id}")
     public ResponseEntity<Evenement> updateEvenement(@PathVariable Long id, @RequestBody Evenement details) {
-        return evenementRepository.findById(id)
-                .map(e -> {
-                    e.setTitre(details.getTitre());
-                    e.setDescription(details.getDescription());
-                    e.setDateDebut(details.getDateDebut());
-                    e.setDateFin(details.getDateFin());
-                    e.setType(details.getType());
-                    e.setImageUrl(details.getImageUrl());
-                    e.setPublie(details.isPublie());
-                    return ResponseEntity.ok(evenementRepository.save(e));
-                })
-                .orElse(ResponseEntity.notFound().build());
+        try {
+            Evenement e = evenementService.findById(id);
+            e.setTitre(details.getTitre());
+            e.setDescription(details.getDescription());
+            e.setDateDebut(details.getDateDebut());
+            e.setDateFin(details.getDateFin());
+            e.setType(details.getType());
+            e.setImageUrl(details.getImageUrl());
+            e.setPublie(details.isPublie());
+            return ResponseEntity.ok(evenementService.save(e));
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/admin/evenements/{id}")
     public ResponseEntity<Void> deleteEvenement(@PathVariable Long id) {
-        if (evenementRepository.existsById(id)) {
-            evenementRepository.deleteById(id);
+        try {
+            evenementService.delete(id);
             return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.notFound().build();
     }
 }
