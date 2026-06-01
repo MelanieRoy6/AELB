@@ -1,0 +1,49 @@
+services:
+  db:
+    image: postgres:15
+    container_name: aelb-db
+    environment:
+      POSTGRES_DB: aelb_db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - aelbrains-net
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: aelb-backend
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/aelb_db
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: password
+    depends_on:
+      - db
+    networks:
+      - aelbrains-net
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: aelb-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - aelbrains-net
+
+networks:
+  aelbrains-net:
+    driver: bridge
+
+volumes:
+  postgres_data:
