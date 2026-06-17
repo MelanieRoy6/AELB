@@ -10,31 +10,62 @@ import { AuthService } from '../../core/services/auth.service';
   imports: [CommonModule, ReactiveFormsModule],
   template: `
     <div class="login-container">
-      <div class="login-box">
-        <h2>Espace Administration</h2>
+      <div class="login-box app-card">
+        <div class="login-header">
+          <h2>Espace Admin</h2>
+          <p>Veuillez vous identifier pour accéder à la gestion.</p>
+        </div>
         <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
           <div class="form-group">
             <label>Utilisateur</label>
-            <input type="text" formControlName="username">
+            <input type="text" formControlName="username" placeholder="Identifiant">
           </div>
           <div class="form-group">
             <label>Mot de passe</label>
-            <input type="password" formControlName="password">
+            <input type="password" formControlName="password" placeholder="••••••••">
           </div>
           <div class="error" *ngIf="error">{{ error }}</div>
-          <button type="submit" [disabled]="loginForm.invalid">Se connecter</button>
+          <button type="submit" class="app-button app-button-primary login-btn" [disabled]="loginForm.invalid">Se connecter</button>
         </form>
       </div>
     </div>
   `,
   styles: [`
-    .login-container { display: flex; height: 100vh; align-items: center; justify-content: center; background: #f1faee; }
-    .login-box { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
-    .form-group { margin-bottom: 20px; }
-    label { display: block; margin-bottom: 8px; font-weight: bold; }
-    input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
-    button { width: 100%; padding: 12px; background: #1d3557; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
-    .error { color: #e63946; margin-bottom: 15px; text-align: center; }
+    .login-container { display: flex; min-height: calc(100vh - 160px); align-items: center; justify-content: center; background: #f8fafc; padding: 20px; }
+    .login-box { padding: 40px; width: 100%; max-width: 450px; }
+    .login-header { text-align: center; margin-bottom: 30px; }
+    .login-header h2 { margin-bottom: 10px; color: #1d3557; }
+    .login-header p { color: #64748b; font-size: 0.95rem; }
+    
+    .form-group { margin-bottom: 25px; }
+    label { display: block; margin-bottom: 8px; font-weight: 600; color: #1d3557; }
+    input { 
+      width: 100%; 
+      padding: 14px 18px; 
+      border: 2px solid #f1f5f9; 
+      border-radius: 16px; 
+      box-sizing: border-box; 
+      transition: all 0.3s ease;
+      background: #f8fafc;
+      font-size: 1rem;
+    }
+    input:focus {
+      outline: none;
+      border-color: #a8dadc;
+      background: white;
+      box-shadow: 0 0 0 4px rgba(168, 218, 220, 0.2);
+    }
+    .login-btn { width: 100%; margin-top: 10px; }
+    .error { 
+      color: #e63946; 
+      background: #fff5f5; 
+      padding: 10px; 
+      border-radius: 8px; 
+      margin-bottom: 20px; 
+      text-align: center; 
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
   `]
 })
 export class LoginComponent {

@@ -3,11 +3,13 @@ import { HomeComponent } from './features/home/home.component';
 import { AssociatifComponent } from './features/associatif/associatif.component';
 import { SalleComponent } from './features/salle/salle.component';
 import { EquipeComponent } from './features/equipe/equipe.component';
+import { EvenementsComponent } from './features/evenements/evenements.component';
 import { LoginComponent } from './features/login/login.component';
 import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
+  { path: 'evenements', component: EvenementsComponent },
   { path: 'associatif', component: AssociatifComponent },
   { path: 'salle', component: SalleComponent },
   { path: 'equipe', component: EquipeComponent },

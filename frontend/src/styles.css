@@ -61,3 +61,71 @@ footer {
 h1, h2, h3 {
   color: #1d3557;
 }
+
+/* --- Global UI Refactoring --- */
+
+/* Cards: White background, light shadow, very rounded corners */
+.app-card {
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+  border-radius: 24px;
+  overflow: hidden;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+}
+
+.app-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* Buttons: "Pop" and friendly (Pill shape, bouncy hover) */
+.app-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 28px;
+  border-radius: 50px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  font-size: 1rem;
+  gap: 8px;
+}
+
+.app-button:hover {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+}
+
+.app-button:active {
+  transform: scale(0.95);
+}
+
+.app-button-primary {
+  background: #457b9d;
+  color: white;
+  box-shadow: 0 4px 15px rgba(69, 123, 157, 0.3);
+}
+
+.app-button-accent {
+  background: #e63946;
+  color: white;
+  box-shadow: 0 4px 15px rgba(230, 57, 70, 0.3);
+}
+
+.app-button-secondary {
+  background: #f1faee;
+  color: #1d3557;
+  border: 2px solid #a8dadc;
+}
+
+.app-button:disabled {
+  background: #cbd5e0;
+  color: #718096;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}

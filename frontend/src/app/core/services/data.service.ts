@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { Evenement, MembreEquipe, Media } from '../models';
 
@@ -13,25 +14,50 @@ export class DataService {
   constructor(private http: HttpClient) {}
 
   getUpcomingEvents(): Observable<Evenement[]> {
-    return this.http.get<Evenement[]>(`${this.apiUrl}/evenements/upcoming`);
+    return this.http.get<Evenement[]>(`${this.apiUrl}/evenements/upcoming`).pipe(
+      catchError(err => {
+        console.error('Error fetching upcoming events', err);
+        return of([]);
+      })
+    );
   }
 
   getEvents(type?: string): Observable<any> {
     let url = `${this.apiUrl}/evenements`;
     if (type) url += `?type=${type}`;
-    return this.http.get<any>(url);
+    return this.http.get<any>(url).pipe(
+      catchError(err => {
+        console.error('Error fetching events', err);
+        return of({ content: [] });
+      })
+    );
   }
 
   getEquipe(): Observable<MembreEquipe[]> {
-    return this.http.get<MembreEquipe[]>(`${this.apiUrl}/equipe`);
+    return this.http.get<MembreEquipe[]>(`${this.apiUrl}/equipe`).pipe(
+      catchError(err => {
+        console.error('Error fetching equipe', err);
+        return of([]);
+      })
+    );
   }
 
   getMedias(): Observable<Media[]> {
-    return this.http.get<Media[]>(`${this.apiUrl}/medias`);
+    return this.http.get<Media[]>(`${this.apiUrl}/medias`).pipe(
+      catchError(err => {
+        console.error('Error fetching medias', err);
+        return of([]);
+      })
+    );
   }
 
   getDisponibilites(from: string, to: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/reservations/disponibilites?from=${from}&to=${to}`);
+    return this.http.get<any[]>(`${this.apiUrl}/reservations/disponibilites?from=${from}&to=${to}`).pipe(
+      catchError(err => {
+        console.error('Error fetching disponibilites', err);
+        return of([]);
+      })
+    );
   }
 
   createReservation(reservation: any): Observable<any> {
@@ -39,7 +65,12 @@ export class DataService {
   }
 
   getAdminReservations(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/admin/reservations`);
+    return this.http.get<any[]>(`${this.apiUrl}/admin/reservations`).pipe(
+      catchError(err => {
+        console.error('Error fetching admin reservations', err);
+        return of([]);
+      })
+    );
   }
 
   updateReservationStatut(id: number, statut: string, commentaire?: string): Observable<any> {
@@ -48,7 +79,12 @@ export class DataService {
 
   // Adhérents
   getAdherents(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/admin/adherents`);
+    return this.http.get<any[]>(`${this.apiUrl}/admin/adherents`).pipe(
+      catchError(err => {
+        console.error('Error fetching adherents', err);
+        return of([]);
+      })
+    );
   }
 
   createAdherent(adherent: any): Observable<any> {

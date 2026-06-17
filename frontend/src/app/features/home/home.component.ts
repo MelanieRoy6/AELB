@@ -13,20 +13,25 @@ import { Evenement } from '../../core/models';
       <div class="hero-content">
         <h1>Location de la Salle Jean-Noël Prin</h1>
         <p>Un espace idéal pour vos événements au cœur de Brains.</p>
-        <a routerLink="/reservation" class="cta-button">Réserver la salle</a>
+        <a routerLink="/reservation" class="app-button app-button-accent">Réserver la salle</a>
       </div>
     </section>
 
     <section class="upcoming-events">
-      <h2>Prochainement à l'AELB</h2>
+      <div class="section-header">
+        <h2>Prochainement à l'AELB ({{ upcomingEvents.length }} événements)</h2>
+      </div>
       <div class="event-grid">
-        <div *ngFor="let event of upcomingEvents" class="event-card">
+        <div *ngIf="upcomingEvents.length === 0" class="empty-state">
+          Aucun événement prévu pour le moment.
+        </div>
+        <div *ngFor="let event of upcomingEvents" class="event-card app-card">
           <img [src]="event.imageUrl || 'assets/default-event.jpg'" [alt]="event.titre">
           <div class="card-body">
             <span class="badge">{{ event.type }}</span>
             <h3>{{ event.titre }}</h3>
             <p class="date">{{ event.dateDebut | date: 'fullDate' }}</p>
-            <p class="desc">{{ event.description | slice:0:100 }}...</p>
+            <p class="desc">{{ event.description || 'Pas de description' | slice:0:100 }}...</p>
           </div>
         </div>
       </div>
@@ -34,37 +39,36 @@ import { Evenement } from '../../core/models';
   `,
   styles: [`
     .hero {
-      background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/assets/hero-salle.jpg');
+      background: linear-gradient(rgba(29, 53, 87, 0.6), rgba(29, 53, 87, 0.3)), url('/salle-hero.png');
       background-size: cover;
-      height: 400px;
+      background-position: center;
+      height: 500px;
       display: flex;
       align-items: center;
       justify-content: center;
       color: white;
       text-align: center;
+      margin-bottom: 40px;
     }
-    .cta-button {
-      background: #e63946;
-      color: white;
-      padding: 10px 25px;
-      text-decoration: none;
-      border-radius: 5px;
-      font-weight: bold;
-    }
+    .hero-content h1 { color: white; font-size: 2.5rem; margin-bottom: 10px; }
+    .hero-content p { font-size: 1.2rem; margin-bottom: 30px; }
+    
+    .section-header { text-align: center; margin-bottom: 30px; }
+    
     .event-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 20px;
-      padding: 20px;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 30px;
+      padding: 0 20px 40px;
+      max-width: 1200px;
+      margin: 0 auto;
     }
-    .event-card {
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      overflow: hidden;
-    }
-    .event-card img { width: 100%; height: 150px; object-fit: cover; }
-    .card-body { padding: 15px; }
-    .badge { background: #f1faee; color: #1d3557; padding: 2px 8px; border-radius: 4px; font-size: 0.8em; }
+    .event-card img { width: 100%; height: 200px; object-fit: cover; }
+    .card-body { padding: 20px; }
+    .badge { background: #f1faee; color: #457b9d; padding: 4px 12px; border-radius: 20px; font-size: 0.8em; font-weight: 600; text-transform: uppercase; }
+    .date { color: #e63946; font-weight: 600; margin: 10px 0; font-size: 0.9em; }
+    .desc { color: #666; font-size: 0.95em; }
+    .empty-state { grid-column: 1 / -1; text-align: center; padding: 60px; color: #999; font-style: italic; }
   `]
 })
 export class HomeComponent implements OnInit {
