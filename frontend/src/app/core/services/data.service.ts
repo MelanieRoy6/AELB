@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
-import { Evenement, MembreEquipe, Media } from '../models';
+import { Evenement, FacebookPost, MembreEquipe, Media } from '../models';
 
 @Injectable({
   providedIn: 'root'
@@ -106,5 +106,14 @@ export class DataService {
 
   deleteMedia(id: number): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/admin/medias/${id}`);
+  }
+
+  getFacebookPosts(limit = 3): Observable<FacebookPost[]> {
+    return this.http.get<FacebookPost[]>(`${this.apiUrl}/facebook/posts?limit=${limit}`).pipe(
+      catchError(err => {
+        console.error('Error fetching Facebook posts', err);
+        return of([]);
+      })
+    );
   }
 }

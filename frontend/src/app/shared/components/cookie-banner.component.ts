@@ -19,33 +19,35 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
     </div>
   `,
   styles: [`
-    .cookie-banner-container { 
-      position: fixed; 
-      bottom: 24px; 
-      left: 24px; 
-      right: 24px; 
-      display: flex; 
-      justify-content: center; 
-      z-index: 9999; 
+    .cookie-banner-container {
+      position: fixed;
+      bottom: 24px;
+      left: 24px;
+      right: 24px;
+      display: flex;
+      justify-content: center;
+      z-index: 9999;
     }
-    .cookie-card { 
-      max-width: 600px; 
-      padding: 16px 24px; 
-      display: flex; 
-      align-items: center; 
-      justify-content: space-between; 
+    .cookie-card {
+      max-width: 580px;
+      padding: 16px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       gap: 20px;
-      border: 1px solid rgba(255,255,255,0.1);
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.97);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(45, 106, 79, 0.18);
+      box-shadow: 0 8px 32px rgba(30, 61, 47, 0.14);
     }
-    .cookie-content { display: flex; align-items: center; gap: 15px; }
-    .cookie-icon { font-size: 1.5rem; }
-    .cookie-card p { margin: 0; font-size: 0.9rem; color: #1d3557; font-weight: 500; }
-    .btn-sm { padding: 8px 20px; font-size: 0.85rem; }
-    
+    .cookie-content { display: flex; align-items: center; gap: 14px; }
+    .cookie-icon { font-size: 1.5rem; flex-shrink: 0; }
+    /* Texte : #1e3d2f sur blanc = 13:1 AAA */
+    .cookie-card p { margin: 0; font-size: 0.88rem; color: var(--g900, #1e3d2f); font-weight: 500; line-height: 1.45; }
+    .btn-sm { padding: 8px 18px; font-size: 0.84rem; white-space: nowrap; }
+
     @media (max-width: 600px) {
-      .cookie-card { flex-direction: column; text-align: center; gap: 15px; }
+      .cookie-card { flex-direction: column; text-align: center; gap: 14px; }
       .cookie-content { flex-direction: column; }
     }
   `]

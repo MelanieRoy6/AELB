@@ -26,3 +26,11 @@ export interface Media {
   categorie: 'GALERIE' | 'EQUIPE' | 'SALLE';
   dateUpload?: string;
 }
+
+export interface FacebookPost {
+  id: string;
+  message: string;
+  fullPicture: string;
+  createdTime: string;
+  permalinkUrl: string;
+}

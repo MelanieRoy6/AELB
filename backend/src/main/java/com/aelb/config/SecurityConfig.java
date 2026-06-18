@@ -39,6 +39,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/reservations/**").permitAll()
                 .requestMatchers("/api/equipe/**").permitAll()
                 .requestMatchers("/api/medias/**").permitAll()
+                .requestMatchers("/api/facebook/**").permitAll()
                 .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
                 .anyRequest().authenticated()
             )

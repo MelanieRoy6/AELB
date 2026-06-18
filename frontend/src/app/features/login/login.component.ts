@@ -31,38 +31,48 @@ import { AuthService } from '../../core/services/auth.service';
     </div>
   `,
   styles: [`
-    .login-container { display: flex; min-height: calc(100vh - 160px); align-items: center; justify-content: center; background: #f8fafc; padding: 20px; }
-    .login-box { padding: 40px; width: 100%; max-width: 450px; }
-    .login-header { text-align: center; margin-bottom: 30px; }
-    .login-header h2 { margin-bottom: 10px; color: #1d3557; }
-    .login-header p { color: #64748b; font-size: 0.95rem; }
-    
-    .form-group { margin-bottom: 25px; }
-    label { display: block; margin-bottom: 8px; font-weight: 600; color: #1d3557; }
-    input { 
-      width: 100%; 
-      padding: 14px 18px; 
-      border: 2px solid #f1f5f9; 
-      border-radius: 16px; 
-      box-sizing: border-box; 
-      transition: all 0.3s ease;
-      background: #f8fafc;
+    .login-container {
+      display: flex;
+      min-height: calc(100vh - 160px);
+      align-items: center;
+      justify-content: center;
+      background: var(--g010, #f6faf7);
+      padding: 24px;
+    }
+    .login-box { padding: 44px; width: 100%; max-width: 440px; }
+    .login-header { text-align: center; margin-bottom: 32px; }
+    .login-header h2 { margin-bottom: 8px; color: var(--g900, #1e3d2f); }
+    .login-header p { color: var(--text-muted, #556b5a); font-size: 0.95rem; margin: 0; }
+
+    .form-group { margin-bottom: 24px; }
+    label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--g900, #1e3d2f); font-size: 0.92rem; }
+    input {
+      width: 100%;
+      padding: 13px 18px;
+      border: 1.5px solid var(--border, rgba(45,106,79,.2));
+      border-radius: 14px;
+      box-sizing: border-box;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      background: var(--g010, #f6faf7);
       font-size: 1rem;
+      color: var(--text, #1a2e1d);
     }
     input:focus {
       outline: none;
-      border-color: #a8dadc;
-      background: white;
-      box-shadow: 0 0 0 4px rgba(168, 218, 220, 0.2);
+      border-color: var(--g700, #3d7a5c);
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.15);
     }
-    .login-btn { width: 100%; margin-top: 10px; }
-    .error { 
-      color: #e63946; 
-      background: #fff5f5; 
-      padding: 10px; 
-      border-radius: 8px; 
-      margin-bottom: 20px; 
-      text-align: center; 
+    .login-btn { width: 100%; margin-top: 8px; }
+    /* Erreur : #7a3f18 sur #fdf3ec = 6.5:1 AA */
+    .error {
+      color: #7a3f18;
+      background: #fdf3ec;
+      border: 1px solid rgba(158, 85, 36, 0.25);
+      padding: 10px 14px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      text-align: center;
       font-weight: 600;
       font-size: 0.9rem;
     }
