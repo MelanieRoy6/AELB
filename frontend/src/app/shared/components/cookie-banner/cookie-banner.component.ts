@@ -42,7 +42,6 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
     }
     .cookie-content { display: flex; align-items: center; gap: 14px; }
     .cookie-icon { font-size: 1.5rem; flex-shrink: 0; }
-    /* Texte : #1e3d2f sur blanc = 13:1 AAA */
     .cookie-card p { margin: 0; font-size: 0.88rem; color: var(--g900, #1e3d2f); font-weight: 500; line-height: 1.45; }
     .btn-sm { padding: 8px 18px; font-size: 0.84rem; white-space: nowrap; }
 
@@ -61,7 +60,7 @@ export class CookieBannerComponent implements OnInit {
     if (isPlatformBrowser(this.platformId)) {
       this.accepted = localStorage.getItem('cookie-accepted') === 'true';
     } else {
-      this.accepted = true; // Don't show on server
+      this.accepted = true;
     }
   }
 
