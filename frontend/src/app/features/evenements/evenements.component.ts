@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
+import { SeoService } from '../../core/services/seo.service';
 
 interface Animation {
   image: string;
@@ -283,7 +284,18 @@ interface Animation {
     }
   `]
 })
-export class EvenementsComponent {
+export class EvenementsComponent implements OnInit {
+  private seo = inject(SeoService);
+
+  ngOnInit(): void {
+    this.seo.set({
+      title: 'Évènements & Animations – Concerts, Apéro, Vide-grenier, Théâtre à Brains',
+      description: 'Découvrez les animations organisées par l\'AELB à Brains : concerts, apéros, vide-grenier, théâtre, expositions, carnaval. Des événements conviviaux pour toute la famille en Loire-Atlantique.',
+      keywords: 'concert Brains, apéro Brains, vide-grenier Brains, théâtre Brains, animations AELB, événements Brains 44830',
+      path: '/evenements'
+    });
+  }
+
   animations: Animation[] = [
     {
       image: '/EVENEMENTS/concert.jpg',

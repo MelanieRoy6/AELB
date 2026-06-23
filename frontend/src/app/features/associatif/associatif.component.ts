@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DataService } from '../../core/services/data.service';
+import { SeoService } from '../../core/services/seo.service';
 import { Evenement } from '../../core/models';
 
 interface Activite {
@@ -307,9 +308,17 @@ export class AssociatifComponent implements OnInit {
     }
   ];
 
+  private seo = inject(SeoService);
+
   constructor(private dataService: DataService) {}
 
   ngOnInit(): void {
+    this.seo.set({
+      title: 'Vie Associative – AELB, association laïque à Brains',
+      description: 'Découvrez la vie associative de l\'AELB à Brains : activités culturelles, sportives, éducatives et sociales ouvertes à tous. Une association laïque et populaire en Loire-Atlantique (44830).',
+      keywords: 'association Brains, AELB associatif, amis écoles laïques Brains, activités Brains 44830, vie associative Loire-Atlantique',
+      path: '/associatif'
+    });
     this.dataService.getEvents('ACTU').subscribe(page => {
       this.actualites = page.content;
     });

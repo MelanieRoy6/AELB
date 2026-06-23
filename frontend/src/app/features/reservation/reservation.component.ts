@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { SeoService } from '../../core/services/seo.service';
 import { DisponibilitesComponent } from './disponibilites.component';
 import { ReservationFormComponent } from './reservation-form.component';
 
@@ -38,4 +39,15 @@ import { ReservationFormComponent } from './reservation-form.component';
     }
   `]
 })
-export class ReservationComponent {}
+export class ReservationComponent implements OnInit {
+  private seo = inject(SeoService);
+
+  ngOnInit(): void {
+    this.seo.set({
+      title: 'Réserver la Salle Jean-Noël Prin à Brains',
+      description: 'Faites une demande de réservation pour la Salle Jean-Noël Prin à Brains (44830). Vérifiez les disponibilités et soumettez votre projet : mariage, anniversaire, concert, apéro, vide-grenier.',
+      keywords: 'réserver salle Brains, demande réservation salle, location salle événement Brains 44830, disponibilités salle Jean-Noël Prin',
+      path: '/reservation'
+    });
+  }
+}

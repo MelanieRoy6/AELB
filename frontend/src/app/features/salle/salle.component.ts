@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { SeoService } from '../../core/services/seo.service';
 
 @Component({
   selector: 'app-salle',
@@ -546,4 +547,15 @@ import { RouterModule } from '@angular/router';
     }
   `]
 })
-export class SalleComponent {}
+export class SalleComponent implements OnInit {
+  private seo = inject(SeoService);
+
+  ngOnInit(): void {
+    this.seo.set({
+      title: 'La Salle Jean-Noël Prin – Location salle mariage, concert, anniversaire à Brains',
+      description: 'Louez la Salle Jean-Noël Prin à Brains (44830) : 150 personnes, scène 50 m², cuisine équipée, grand parc. Idéale pour mariage, anniversaire, concert, théâtre, banquet et cocktail.',
+      keywords: 'location salle Brains, salle mariage Brains, salle anniversaire Brains, salle concert Brains, salle théâtre Brains, salle réception 44830, salle Jean-Noël Prin',
+      path: '/salle'
+    });
+  }
+}
