@@ -1,475 +1,332 @@
-import { Component, OnInit, signal } from '@angular/core';
-import { DataService } from '../../core/services/data.service';
-import { FacebookPost } from '../../core/models';
+import { Component } from '@angular/core';
+
+interface Animation {
+  image: string;
+  alt: string;
+  titre: string;
+  periode: string;
+  description: string;
+}
 
 @Component({
   selector: 'app-evenements',
   standalone: true,
   imports: [],
   template: `
-    <div class="evenements-page">
+    <div class="page-wrapper">
 
       <!-- Hero -->
-      <section class="events-hero">
+      <section class="hero">
         <div class="hero-content">
-          <span class="hero-badge">Facebook & Actualités</span>
-          <h1>Évènements & Actualités</h1>
-          <p>Toutes les nouvelles de l'AELB en un seul endroit</p>
+          <span class="section-label">Nos Animations</span>
+          <h1>Évènements & Animations</h1>
+          <p>Découvrez toutes les grandes animations organisées par l'AELB tout au long de l'année à Brains.</p>
         </div>
       </section>
 
-      <!-- Contenu principal -->
-      <div class="page-container">
-        <div class="layout-grid">
+      <!-- Animations -->
+      <section class="animations-section">
+        <div class="section-inner">
 
-          <!-- Sidebar -->
-          <aside class="sidebar">
+          <div class="section-title">
+            <span class="section-label">Ce que nous organisons</span>
+            <h2>Nos Grandes Animations</h2>
+          </div>
 
-            <div class="sidebar-card highlight-card">
-              <img src="/ICON/FollowUs.svg" alt="" aria-hidden="true" class="card-icon">
-              <h3>Suivez-nous !</h3>
-              <p>Rejoignez notre communauté sur Facebook pour être les premiers informés de nos événements, spectacles et activités associatives à Brains.</p>
-              <a href="https://www.facebook.com/aelbrains/" target="_blank" rel="noopener" class="app-button app-button-primary full-width">
-                Voir notre page Facebook
-              </a>
-            </div>
+          <div class="animation-list">
+            @for (anim of animations; track anim.titre; let i = $index) {
+              <div class="animation-row" [class.reverse]="i % 2 === 1">
 
-            <div class="sidebar-card">
-              <img src="/ICON/Calendar.svg" alt="" aria-hidden="true" class="card-icon">
-              <h3>Réserver la salle</h3>
-              <p>Vous organisez un événement ? Profitez de notre salle bien équipée au cœur de Brains.</p>
-              <a href="/reservation" class="app-button app-button-accent full-width">Faire une demande</a>
-            </div>
-
-            <div class="sidebar-card">
-              <img src="/ICON/Question.svg" alt="" aria-hidden="true" class="card-icon">
-              <h3>Une question ?</h3>
-              <p>Contactez-nous pour proposer un événement ou obtenir des informations sur nos activités.</p>
-              <a href="mailto:contact@aelb-brains.fr" class="app-button app-button-secondary full-width">Nous écrire</a>
-            </div>
-
-          </aside>
-
-          <!-- Posts Facebook -->
-          <main class="feed-main">
-
-            <div class="feed-header">
-              <div class="feed-title-row">
-                <h2>Derniers posts</h2>
-                <a href="https://www.facebook.com/aelbrains/" target="_blank" rel="noopener" class="fb-page-link">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#1877F2" width="18" height="18" aria-hidden="true">
-                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                  </svg>
-                  AELB – Brains
-                </a>
-              </div>
-              <p class="feed-subtitle">Les 3 derniers posts publiés sur notre page Facebook</p>
-            </div>
-
-            <!-- Squelettes de chargement -->
-            @if (loading()) {
-              <div class="posts-grid">
-                @for (s of [1,2,3]; track s) {
-                  <div class="post-card post-card--skeleton">
-                    <div class="skeleton skeleton-img"></div>
-                    <div class="post-card-body">
-                      <div class="skeleton skeleton-line skeleton-line--short"></div>
-                      <div class="skeleton skeleton-line"></div>
-                      <div class="skeleton skeleton-line"></div>
-                      <div class="skeleton skeleton-line skeleton-line--medium"></div>
-                    </div>
-                  </div>
-                }
-              </div>
-            }
-
-            <!-- Posts chargés -->
-            @if (!loading() && posts().length > 0) {
-              <div class="posts-grid">
-                @for (post of posts(); track post.id) {
-                  <article class="post-card">
-                    @if (post.fullPicture) {
-                      <div class="post-card-img">
-                        <img [src]="post.fullPicture" [alt]="'Post Facebook du ' + formatDate(post.createdTime)" loading="lazy">
-                      </div>
-                    } @else {
-                      <div class="post-card-img post-card-img--placeholder" aria-hidden="true">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#1877F2" width="40" height="40">
-                          <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                        </svg>
-                      </div>
-                    }
-                    <div class="post-card-body">
-                      <div class="post-meta">
-                        <div class="post-author">
-                          <div class="post-author-avatar" aria-hidden="true">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#1877F2" width="14" height="14">
-                              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                            </svg>
-                          </div>
-                          <span class="post-author-name">AELB – Brains</span>
-                        </div>
-                        <time class="post-date" [dateTime]="post.createdTime">{{ formatDate(post.createdTime) }}</time>
-                      </div>
-                      <p class="post-message">{{ truncate(post.message) }}</p>
-                      <a [href]="post.permalinkUrl" target="_blank" rel="noopener" class="post-link">
-                        Lire la suite
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
-                          <path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 001.06 0l7.22-7.22v5.69a.75.75 0 001.5 0v-7.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 000 1.5h5.69l-7.22 7.22a.75.75 0 000 1.06z" clip-rule="evenodd"/>
-                        </svg>
-                      </a>
-                    </div>
-                  </article>
-                }
-              </div>
-            }
-
-            <!-- Fallback : token non configuré ou erreur -->
-            @if (!loading() && posts().length === 0) {
-              <div class="feed-fallback">
-                <div class="fb-icon-wrap" aria-hidden="true">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#1877F2" width="40" height="40">
-                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                  </svg>
+                <div class="animation-text">
+                  <span class="anim-periode">{{ anim.periode }}</span>
+                  <h3>{{ anim.titre }}</h3>
+                  <p>{{ anim.description }}</p>
                 </div>
-                <h3>Retrouvez-nous sur Facebook</h3>
-                <p>Suivez notre page pour découvrir toutes nos actualités, événements et nouveautés.</p>
-                <a href="https://www.facebook.com/aelbrains/" target="_blank" rel="noopener" class="app-button app-button-primary">
-                  Voir notre page Facebook
-                </a>
+
+                <div class="animation-visual">
+                  <img [src]="anim.image" [alt]="anim.alt" class="animation-photo" loading="lazy">
+                </div>
+
               </div>
             }
-
-          </main>
+          </div>
 
         </div>
-      </div>
+      </section>
+
+      <!-- CTA bas de page -->
+      <section class="cta-section">
+        <div class="cta-inner">
+          <p class="cta-label">Restez informés</p>
+          <h2>Ne manquez aucun événement</h2>
+          <p class="cta-sub">Suivez notre page Facebook pour découvrir toutes les dates, nouveautés et surprises de l'AELB.</p>
+          <div class="cta-actions">
+            <a href="https://www.facebook.com/aelbrains/" target="_blank" rel="noopener" class="app-button app-button-primary">
+              Suivre sur Facebook
+            </a>
+            <a href="/reservation" class="app-button app-button-secondary">
+              Réserver la salle
+            </a>
+          </div>
+        </div>
+      </section>
+
     </div>
   `,
   styles: [`
+    /* === Page === */
+    .page-wrapper { background: #fff; }
+
     /* === Hero === */
-    .events-hero {
+    .hero {
       background:
-        linear-gradient(155deg, rgba(30, 61, 47, 0.82) 0%, rgba(45, 106, 79, 0.44) 100%),
+        linear-gradient(155deg, rgba(30,61,47,.82) 0%, rgba(45,106,79,.50) 100%),
         url('/salle-hero.png') center / cover no-repeat;
-      height: 320px;
+      padding: 80px 24px;
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
     }
 
-    .hero-content { max-width: 600px; padding: 0 24px; }
+    .hero-content { max-width: 640px; color: white; }
 
-    .hero-badge {
-      display: inline-block;
-      background: rgba(255, 255, 255, 0.18);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(255, 255, 255, 0.35);
+    .hero-content h1 {
+      font-size: 2.8rem;
+      font-weight: 800;
       color: white;
+      margin: 10px 0 16px;
+      text-shadow: 0 2px 12px rgba(0,0,0,.25);
+    }
+
+    .hero-content p {
+      font-size: 1.05rem;
+      color: rgba(255,255,255,.88);
+      line-height: 1.65;
+      margin: 0;
+    }
+
+    /* === Layout commun === */
+    .section-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .section-label {
+      display: inline-block;
+      background: var(--g050, #edf5ee);
+      color: var(--g800, #2d6a4f);
       padding: 5px 18px;
       border-radius: 50px;
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 1.5px;
-      margin-bottom: 18px;
     }
 
-    .hero-content h1 {
-      font-size: 2.6rem;
-      font-weight: 800;
-      color: white;
-      margin-bottom: 12px;
-      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
-    }
-
-    .hero-content p { font-size: 1.05rem; color: rgba(255, 255, 255, 0.88); margin: 0; }
-
-    /* === Mise en page === */
-    .page-container { max-width: 1200px; margin: 0 auto; padding: 60px 24px 80px; }
-
-    .layout-grid {
-      display: grid;
-      grid-template-columns: 280px 1fr;
-      gap: 36px;
-      align-items: start;
-    }
-
-    /* === Sidebar === */
-    .sidebar {
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-      position: sticky;
-      top: 90px;
-    }
-
-    .sidebar-card {
-      background: white;
-      border-radius: 20px;
-      padding: 26px 22px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-      border: 1px solid rgba(0, 0, 0, 0.04);
+    .section-title {
       text-align: center;
-      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+      margin-bottom: 56px;
     }
 
-    .sidebar-card:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(0, 0, 0, 0.09); }
-
-    .highlight-card {
-      background: linear-gradient(135deg, var(--g050, #edf5ee) 0%, #f0faf3 100%);
-      border-color: var(--g100, #c8ebd4);
+    .section-title h2 {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--g900, #1e3d2f);
+      margin: 12px 0 0;
     }
 
-    .card-icon { width: 48px; height: 48px; display: block; margin: 0 auto 14px; }
-
-    .sidebar-card h3 { font-size: 1rem; font-weight: 700; color: var(--g900, #1e3d2f); margin-bottom: 8px; }
-    .sidebar-card p { color: var(--text-muted, #556b5a); font-size: 0.85rem; line-height: 1.55; margin-bottom: 18px; }
-
-    .full-width { width: 100%; box-sizing: border-box; }
-
-    /* === Header flux === */
-    .feed-header { margin-bottom: 28px; }
-
-    .feed-title-row {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 6px;
+    /* === Section animations === */
+    .animations-section {
+      padding: 90px 0 100px;
+      background: linear-gradient(180deg, var(--g010, #f6faf7) 0%, #fff 70%);
     }
 
-    .feed-title-row h2 { font-size: 1.5rem; font-weight: 800; color: var(--g900, #1e3d2f); margin: 0; }
-
-    .fb-page-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: #1877F2;
-      text-decoration: none;
-      background: #e7f0fe;
-      padding: 4px 12px;
-      border-radius: 50px;
-      transition: background 0.2s;
-    }
-
-    .fb-page-link:hover { background: #d0e4fd; }
-
-    .feed-subtitle { color: var(--text-muted, #556b5a); font-size: 0.9rem; margin: 0; }
-
-    /* === Grille de posts === */
-    .posts-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-    }
-
-    /* === Carte de post === */
-    .post-card {
-      background: white;
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-      border: 1px solid rgba(0, 0, 0, 0.05);
+    .animation-list {
       display: flex;
       flex-direction: column;
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      gap: 80px;
     }
 
-    .post-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 32px rgba(30, 61, 47, 0.12);
+    /* Ligne : texte à gauche, photo à droite */
+    .animation-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
     }
 
-    /* Image du post */
-    .post-card-img {
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      overflow: hidden;
+    /* Ligne inversée : photo à gauche, texte à droite */
+    .animation-row.reverse .animation-text { order: 2; }
+    .animation-row.reverse .animation-visual { order: 1; }
+
+    .anim-periode {
+      display: inline-block;
       background: var(--g050, #edf5ee);
+      color: var(--g800, #2d6a4f);
+      padding: 3px 14px;
+      border-radius: 50px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      margin-bottom: 14px;
     }
 
-    .post-card-img img {
+    .animation-text h3 {
+      font-size: 1.65rem;
+      font-weight: 800;
+      color: var(--g900, #1e3d2f);
+      margin: 0 0 16px;
+    }
+
+    .animation-text p {
+      font-size: 1rem;
+      color: var(--text-muted, #556b5a);
+      line-height: 1.75;
+      margin: 0;
+    }
+
+    /* Conteneur photo */
+    .animation-visual {
+      border-radius: 24px;
+      overflow: hidden;
+      aspect-ratio: 4 / 3;
+      background: var(--g050, #edf5ee);
+      box-shadow: 0 8px 32px rgba(30,61,47,.12);
+    }
+
+    .animation-photo {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
-      transition: transform 0.35s ease;
+      transition: transform 0.5s ease;
     }
 
-    .post-card:hover .post-card-img img { transform: scale(1.04); }
+    .animation-visual:hover .animation-photo { transform: scale(1.04); }
 
-    .post-card-img--placeholder {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* Corps de la carte */
-    .post-card-body {
-      padding: 18px 20px 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      flex: 1;
-    }
-
-    .post-meta {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-    }
-
-    .post-author {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .post-author-avatar {
-      width: 24px;
-      height: 24px;
-      background: #e7f0fe;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .post-author-name {
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: var(--g900, #1e3d2f);
-    }
-
-    .post-date {
-      font-size: 0.75rem;
-      color: var(--text-muted, #556b5a);
-      white-space: nowrap;
-    }
-
-    .post-message {
-      font-size: 0.88rem;
-      color: var(--text-muted, #445a4e);
-      line-height: 1.6;
-      margin: 0;
-      flex: 1;
-      display: -webkit-box;
-      -webkit-line-clamp: 4;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-
-    .post-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: var(--g800, #2d6a4f);
-      text-decoration: none;
-      margin-top: auto;
-      align-self: flex-start;
-    }
-
-    .post-link:hover { color: var(--g900, #1e3d2f); text-decoration: underline; }
-
-    /* === Squelettes === */
-    .post-card--skeleton { pointer-events: none; }
-
-    .skeleton {
-      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-      background-size: 200% 100%;
-      animation: shimmer 1.4s infinite;
-      border-radius: 6px;
-    }
-
-    @keyframes shimmer {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
-    }
-
-    .skeleton-img { width: 100%; aspect-ratio: 16 / 9; border-radius: 0; }
-    .skeleton-line { height: 12px; margin: 4px 0; }
-    .skeleton-line--short { width: 45%; }
-    .skeleton-line--medium { width: 65%; }
-
-    /* === Fallback === */
-    .feed-fallback {
-      background: white;
-      border-radius: 24px;
-      padding: 60px 40px;
+    /* === CTA bas de page === */
+    .cta-section {
+      padding: 90px 24px;
+      background: linear-gradient(135deg, var(--g900, #1e3d2f) 0%, var(--g800, #2d6a4f) 100%);
       text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-      border: 1px solid rgba(0, 0, 0, 0.04);
     }
 
-    .fb-icon-wrap {
-      width: 72px;
-      height: 72px;
-      background: #e7f0fe;
-      border-radius: 50%;
+    .cta-inner { max-width: 560px; margin: 0 auto; }
+
+    .cta-label {
+      display: inline-block;
+      background: rgba(255,255,255,.15);
+      color: rgba(255,255,255,.9);
+      padding: 4px 16px;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.4px;
+      margin-bottom: 14px;
+    }
+
+    .cta-section h2 {
+      font-size: 2rem;
+      font-weight: 800;
+      color: white;
+      margin: 0 0 14px;
+    }
+
+    .cta-sub {
+      color: rgba(255,255,255,.78);
+      font-size: 1rem;
+      line-height: 1.65;
+      margin: 0 0 34px;
+    }
+
+    .cta-actions {
       display: flex;
-      align-items: center;
+      gap: 14px;
       justify-content: center;
-      margin-bottom: 8px;
+      flex-wrap: wrap;
     }
 
-    .feed-fallback h3 { font-size: 1.2rem; font-weight: 700; color: var(--g900, #1e3d2f); margin: 0; }
-    .feed-fallback p { color: var(--text-muted, #556b5a); font-size: 0.95rem; max-width: 340px; margin: 0 0 8px; line-height: 1.6; }
+    .cta-section .app-button-secondary {
+      background: rgba(255,255,255,.12);
+      color: white;
+      border-color: rgba(255,255,255,.35);
+    }
+
+    .cta-section .app-button-secondary:hover {
+      background: rgba(255,255,255,.22);
+    }
 
     /* === Responsive === */
-    @media (max-width: 1100px) {
-      .posts-grid { grid-template-columns: repeat(2, 1fr); }
+    @media (max-width: 860px) {
+      .animation-row,
+      .animation-row.reverse {
+        grid-template-columns: 1fr;
+        gap: 28px;
+      }
+
+      .animation-row .animation-text,
+      .animation-row.reverse .animation-text { order: 1; }
+      .animation-row .animation-visual,
+      .animation-row.reverse .animation-visual { order: 2; }
+
+      .animation-list { gap: 52px; }
+      .hero-content h1 { font-size: 2.1rem; }
     }
 
-    @media (max-width: 900px) {
-      .layout-grid { grid-template-columns: 1fr; }
-      .sidebar { position: static; flex-direction: row; flex-wrap: wrap; }
-      .sidebar-card { flex: 1; min-width: 220px; }
-      .feed-main { order: -1; }
-    }
-
-    @media (max-width: 640px) {
-      .posts-grid { grid-template-columns: 1fr; }
-      .events-hero { height: 260px; }
-      .hero-content h1 { font-size: 1.9rem; }
-      .sidebar { flex-direction: column; }
+    @media (max-width: 600px) {
+      .hero { padding: 60px 20px; }
+      .hero-content h1 { font-size: 1.8rem; }
+      .cta-section h2 { font-size: 1.6rem; }
     }
   `]
 })
-export class EvenementsComponent implements OnInit {
-  posts = signal<FacebookPost[]>([]);
-  loading = signal(true);
-
-  constructor(private dataService: DataService) {}
-
-  ngOnInit(): void {
-    this.dataService.getFacebookPosts(3).subscribe(data => {
-      this.posts.set(data);
-      this.loading.set(false);
-    });
-  }
-
-  formatDate(isoDate: string): string {
-    if (!isoDate) return '';
-    return new Date(isoDate).toLocaleDateString('fr-FR', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric'
-    });
-  }
-
-  truncate(text: string, max = 220): string {
-    if (!text || text.length <= max) return text;
-    return text.slice(0, text.lastIndexOf(' ', max)) + '…';
-  }
+export class EvenementsComponent {
+  animations: Animation[] = [
+    {
+      image: '/EVENEMENTS/concert.jpg',
+      alt: 'Soirée apéro-concert organisée par l\'AELB',
+      titre: 'Apéro / Concert',
+      periode: 'Tout au long de l\'année',
+      description: 'Des soirées conviviales avec des musiciens locaux et régionaux, dans une ambiance chaleureuse et festive. L\'AELB ouvre ses portes pour des moments de partage autour d\'un verre et de la musique live, accessibles à tous, petits et grands.'
+    },
+    {
+      image: '/EVENEMENTS/art.jpg',
+      alt: 'Exposition d\'art organisée par l\'AELB',
+      titre: 'Exposition d\'Art',
+      periode: 'Printemps / Automne',
+      description: 'L\'association met à l\'honneur les talents artistiques du territoire avec des expositions de peinture, sculpture et photographie. Un espace d\'expression unique, ouvert à tous les visiteurs, qui valorise la création locale et régionale.'
+    },
+    {
+      image: '/EVENEMENTS/voiture.jpg',
+      alt: 'Exposition de voitures anciennes à Brains',
+      titre: 'Exposition Voitures Anciennes',
+      periode: 'Été',
+      description: 'Un rassemblement de véhicules de collection qui passionne les amateurs et éveille la curiosité des plus jeunes. Belles mécaniques, discussions passionnées et convivialité sont au programme de cette journée devenue un rendez-vous attendu de l\'été à Brains.'
+    },
+    {
+      image: '/EVENEMENTS/videGrenier.jpg',
+      alt: 'Vide grenier annuel de l\'AELB',
+      titre: 'Vide Grenier',
+      periode: 'Printemps',
+      description: 'Le rendez-vous incontournable des chineurs de la région ! Notre vide grenier rassemble chaque année des dizaines d\'exposants et des centaines de visiteurs venus de toute la Loire-Atlantique pour une journée de bonnes affaires, de découvertes et de rencontres.'
+    },
+    {
+      image: '/EVENEMENTS/theatre.jpg',
+      alt: 'Représentation de théâtre de la troupe AELB',
+      titre: 'Représentation de Théâtre',
+      periode: 'Hiver / Printemps',
+      description: 'La troupe de théâtre de l\'AELB répète toute l\'année pour vous offrir des spectacles de qualité. Humour, émotion et talent local se retrouvent sur scène dans une salle qui fait salle comble à chaque représentation — un moment de culture accessible à tous.'
+    },
+    {
+      image: '/EVENEMENTS/scolaire.jpg',
+      alt: 'Spectacle de fin d\'année scolaire',
+      titre: 'Spectacle Scolaire',
+      periode: 'Fin d\'année scolaire',
+      description: 'En juin, les enfants de l\'école montent sur la scène de la salle Jean-Noël Prin pour présenter le fruit de leur travail annuel. Chants, danses et saynètes se succèdent dans un spectacle coloré et émouvant, temps fort de l\'année pour toutes les familles de Brains.'
+    }
+  ];
 }
