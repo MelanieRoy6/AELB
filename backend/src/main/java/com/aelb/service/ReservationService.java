@@ -38,6 +38,11 @@ public class ReservationService {
         return reservationRepository.findAllByOrderByDateCreationDesc();
     }
 
+    public Reservation createAdminReservation(Reservation reservation) {
+        reservation.setStatut(StatutReservation.CONFIRMEE);
+        return reservationRepository.save(reservation);
+    }
+
     public Reservation updateStatut(Long id, StatutReservation statut, String commentaire) {
         Reservation reservation = reservationRepository.findById(id).orElseThrow();
         reservation.setStatut(statut);

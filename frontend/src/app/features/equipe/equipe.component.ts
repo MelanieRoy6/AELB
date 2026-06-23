@@ -21,14 +21,26 @@ import { MembreEquipe } from '../../core/models';
 
         <!-- Grille équipe : vide pour l'instant -->
         @if (equipe.length > 0) {
-          <div class="equipe-grid">
-            @for (membre of equipe; track membre.nom) {
-              <div class="membre-card">
-                <img [src]="membre.photoUrl || 'assets/default-avatar.jpg'" [alt]="membre.prenom + ' ' + membre.nom">
+          <div class="equipe-list">
+            @for (membre of equipe; track membre.nom; let i = $index) {
+              <div class="membre-card" [class.reverse]="i % 2 === 1">
+                <div class="membre-photo-col">
+                  @if (membre.photoUrl) {
+                    <img [src]="membre.photoUrl" [alt]="membre.prenom + ' ' + membre.nom" class="membre-img">
+                  } @else {
+                    <div class="membre-avatar">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"
+                        width="52" height="52" aria-hidden="true">
+                        <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+                      </svg>
+                    </div>
+                  }
+                </div>
                 <div class="membre-info">
-                  <h3>{{ membre.prenom }} {{ membre.nom }}</h3>
                   <span class="role">{{ membre.role }}</span>
-                  <p class="bio">{{ membre.bio }}</p>
+                  <h3>{{ membre.prenom }} {{ membre.nom }}</h3>
+                  @if (membre.bio) { <p class="bio">{{ membre.bio }}</p> }
                 </div>
               </div>
             }
@@ -137,24 +149,57 @@ import { MembreEquipe } from '../../core/models';
       margin-bottom: 48px;
     }
 
-    /* ── Grille équipe ── */
-    .equipe-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 28px; }
+    /* ── Liste équipe ── */
+    .equipe-list { display: flex; flex-direction: column; gap: 32px; }
 
     .membre-card {
+      display: flex;
+      align-items: center;
+      gap: 40px;
       background: #fff;
-      border-radius: 20px;
+      border-radius: 24px;
       box-shadow: var(--shadow-sm, 0 4px 16px rgba(30,61,47,.08));
       border: 1px solid var(--border, rgba(45,106,79,.15));
       overflow: hidden;
-      text-align: center;
       transition: transform 0.28s ease, box-shadow 0.28s ease;
     }
-    .membre-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md, 0 10px 32px rgba(30,61,47,.10)); }
-    .membre-card img { width: 100%; height: 280px; object-fit: cover; }
-    .membre-info { padding: 22px 20px; }
-    .membre-info h3 { color: var(--g900, #1e3d2f); margin-bottom: 6px; }
-    .role { display: block; color: var(--g800, #2d6a4f); font-weight: 700; margin-bottom: 10px; font-size: 0.88rem; text-transform: uppercase; letter-spacing: 0.5px; }
-    .bio { font-size: 0.9rem; color: var(--text-muted, #556b5a); line-height: 1.5; }
+    .membre-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md, 0 10px 32px rgba(30,61,47,.10)); }
+    .membre-card.reverse { flex-direction: row-reverse; }
+
+    .membre-photo-col { flex-shrink: 0; }
+    .membre-img {
+      width: 220px;
+      height: 260px;
+      object-fit: cover;
+      display: block;
+    }
+    .membre-avatar {
+      width: 220px;
+      height: 260px;
+      background: var(--g010, #f0f7f2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--g400, #52b788);
+      opacity: 0.5;
+    }
+
+    .membre-info { padding: 28px 36px 28px 0; flex: 1; }
+    .membre-card.reverse .membre-info { padding: 28px 0 28px 36px; }
+
+    .membre-info h3 { color: var(--g900, #1e3d2f); font-size: 1.4rem; margin: 8px 0 14px; }
+    .role {
+      display: inline-block;
+      background: var(--g010, #edf5ee);
+      color: var(--g800, #2d6a4f);
+      font-weight: 800;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 4px 14px;
+      border-radius: 50px;
+    }
+    .bio { font-size: 0.95rem; color: var(--text-muted, #556b5a); line-height: 1.7; margin: 0; }
 
     /* ── Placeholder ── */
     .equipe-placeholder {
@@ -294,12 +339,18 @@ import { MembreEquipe } from '../../core/models';
       .cta-tagline { font-size: 1.1rem; }
     }
 
+    @media (max-width: 700px) {
+      .membre-card,
+      .membre-card.reverse { flex-direction: column; }
+      .membre-img, .membre-avatar { width: 100%; height: 260px; }
+      .membre-info { padding: 20px 20px 24px !important; }
+    }
+
     @media (max-width: 600px) {
       .container { padding: 24px 16px 40px; }
       .page-header { justify-content: center; }
       h1 { font-size: 1.8rem; }
       .intro { font-size: 1rem; margin-bottom: 32px; }
-      .equipe-grid { grid-template-columns: 1fr; }
       .support-section { padding: 56px 0 64px; }
     }
   `]

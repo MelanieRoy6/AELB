@@ -21,11 +21,13 @@ export const routes: Routes = [
     loadComponent: () => import('./features/admin/admin.component').then(m => m.AdminComponent),
     canActivate: [authGuard],
     children: [
+      { path: 'accueil', loadComponent: () => import('./features/admin/dashboard-admin.component').then(m => m.DashboardAdminComponent) },
       { path: 'planning', loadComponent: () => import('./features/admin/planning-admin.component').then(m => m.PlanningAdminComponent) },
       { path: 'demandes', loadComponent: () => import('./features/admin/demandes-admin.component').then(m => m.DemandesAdminComponent) },
       { path: 'adherents', loadComponent: () => import('./features/admin/adherents-admin.component').then(m => m.AdherentsAdminComponent) },
       { path: 'medias', loadComponent: () => import('./features/admin/medias-admin.component').then(m => m.MediasAdminComponent) },
-      { path: '', redirectTo: 'planning', pathMatch: 'full' }
+      { path: 'equipe', loadComponent: () => import('./features/admin/equipe-admin.component').then(m => m.EquipeAdminComponent) },
+      { path: '', redirectTo: 'accueil', pathMatch: 'full' }
     ]
   },
   { path: '**', redirectTo: '' }

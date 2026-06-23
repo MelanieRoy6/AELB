@@ -42,6 +42,11 @@ public class ReservationController {
         return reservationService.getAll();
     }
 
+    @PostMapping("/admin/reservations")
+    public ResponseEntity<Reservation> createAdminReservation(@RequestBody Reservation reservation) {
+        return ResponseEntity.ok(reservationService.createAdminReservation(reservation));
+    }
+
     @PutMapping("/admin/reservations/{id}/statut")
     public ResponseEntity<Reservation> updateStatut(
             @PathVariable Long id, 

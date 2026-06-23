@@ -42,6 +42,24 @@ export class DataService {
     );
   }
 
+  getAdminEquipe(): Observable<MembreEquipe[]> {
+    return this.http.get<MembreEquipe[]>(`${this.apiUrl}/admin/equipe`).pipe(
+      catchError(err => { console.error('Error fetching admin equipe', err); return of([]); })
+    );
+  }
+
+  createMembre(membre: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/admin/equipe`, membre);
+  }
+
+  updateMembre(id: number, membre: any): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/admin/equipe/${id}`, membre);
+  }
+
+  deleteMembre(id: number): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/admin/equipe/${id}`);
+  }
+
   getMedias(): Observable<Media[]> {
     return this.http.get<Media[]>(`${this.apiUrl}/medias`).pipe(
       catchError(err => {
@@ -75,6 +93,10 @@ export class DataService {
 
   updateReservationStatut(id: number, statut: string, commentaire?: string): Observable<any> {
     return this.http.put<any>(`${this.apiUrl}/admin/reservations/${id}/statut`, { statut, commentaire });
+  }
+
+  createAdminReservation(reservation: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/admin/reservations`, reservation);
   }
 
   // Adhérents
