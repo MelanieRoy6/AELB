@@ -23,12 +23,18 @@ import { ReservationFormComponent } from './reservation-form.component';
     </div>
   `,
   styles: [`
-    .container { padding: 20px; max-width: 1200px; margin: auto; }
-    .intro { margin-bottom: 40px; color: #555; }
+    .container { padding: 40px 24px 60px; max-width: 1200px; margin: auto; }
+    .container h1 { font-size: 2rem; margin-bottom: 12px; }
+    .intro { margin-bottom: 40px; color: #555; font-size: 1rem; line-height: 1.6; }
     .reservation-layout { display: grid; grid-template-columns: 1.5fr 1fr; gap: 40px; }
-    
+
     @media (max-width: 992px) {
       .reservation-layout { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      .container { padding: 24px 16px 40px; }
+      .container h1 { font-size: 1.6rem; }
     }
   `]
 })

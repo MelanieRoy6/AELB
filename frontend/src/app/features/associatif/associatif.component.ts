@@ -20,7 +20,6 @@ interface Activite {
       <!-- Hero -->
       <section class="hero">
         <div class="hero-content">
-          <span class="section-label">L'association</span>
           <h1>Vie Associative</h1>
           <p>L'Amicale de l'École Laïque de Brains œuvre pour l'animation culturelle et sociale de notre commune depuis de nombreuses années.</p>
         </div>

@@ -26,8 +26,8 @@ import { RouterLink } from '@angular/router';
   `,
   styles: [`
     .main-footer {
-      background: #fff;
-      border-top: 1px solid rgba(45, 106, 79, 0.12);
+      background: linear-gradient(135deg, #1e3d2f 0%, #2d6a4f 100%);
+      border-top: 1px solid rgba(0, 0, 0, 0.18);
       padding: 40px 0;
       margin-top: 60px;
     }
@@ -40,20 +40,20 @@ import { RouterLink } from '@angular/router';
     }
 
     .footer-content p {
-      color: var(--text-muted, #556b5a);
+      color: rgba(255, 255, 255, 0.65);
       font-size: 0.9rem;
       margin-bottom: 12px;
     }
 
     .footer-nav a {
-      color: var(--text-mid, #3d5c40);
+      color: rgba(255, 255, 255, 0.82);
       text-decoration: none;
       font-size: 0.85rem;
       transition: color 0.2s ease;
       border-bottom: 1px solid transparent;
     }
     .footer-nav a:hover {
-      color: var(--g900, #1e3d2f);
+      color: #fff;
       border-bottom-color: var(--g400, #52b788);
     }
 
@@ -64,19 +64,19 @@ import { RouterLink } from '@angular/router';
       gap: 6px;
       margin-top: 14px;
       font-size: 0.8rem;
-      color: #8fa898;
+      color: rgba(255, 255, 255, 0.45);
     }
 
     .credit-link {
       display: inline-flex;
       align-items: center;
       gap: 5px;
-      color: #0a66c2;
+      color: rgba(255, 255, 255, 0.75);
       font-weight: 600;
       text-decoration: none;
-      transition: opacity 0.2s;
+      transition: color 0.2s;
     }
-    .credit-link:hover { opacity: 0.75; }
+    .credit-link:hover { color: #fff; }
   `]
 })
 export class FooterComponent {}

@@ -9,6 +9,8 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
     <header>
       <nav class="main-nav">
         <div class="logo">AELB</div>
+
+        <!-- Nav desktop -->
         <ul class="nav-links">
           <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Accueil</a></li>
           <li><a routerLink="/evenements" routerLinkActive="active">Évènements</a></li>
@@ -17,18 +19,49 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
           <li><a routerLink="/equipe" routerLinkActive="active">L'Équipe</a></li>
           <li><a routerLink="/reservation" class="app-button app-button-accent nav-cta">Réserver</a></li>
         </ul>
+
+        <!-- Bouton burger (mobile uniquement) -->
+        <button
+          class="burger"
+          [class.open]="menuOpen"
+          (click)="toggleMenu()"
+          [attr.aria-expanded]="menuOpen"
+          aria-label="Menu de navigation">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
       </nav>
+
+      <!-- Menu mobile : injecté dans le DOM uniquement quand ouvert -->
+      @if (menuOpen) {
+        <div class="mobile-menu">
+          <ul>
+            <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()">Accueil</a></li>
+            <li><a routerLink="/evenements" routerLinkActive="active" (click)="closeMenu()">Évènements</a></li>
+            <li><a routerLink="/associatif" routerLinkActive="active" (click)="closeMenu()">Vie Associative</a></li>
+            <li><a routerLink="/salle" routerLinkActive="active" (click)="closeMenu()">La Salle</a></li>
+            <li><a routerLink="/equipe" routerLinkActive="active" (click)="closeMenu()">L'Équipe</a></li>
+            <li class="mobile-cta-item">
+              <a routerLink="/reservation" class="app-button app-button-accent mobile-cta" (click)="closeMenu()">Réserver la salle</a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Overlay cliquable pour fermer -->
+        <div class="overlay" (click)="closeMenu()" aria-hidden="true"></div>
+      }
     </header>
   `,
   styles: [`
     header {
-      background: #fff;
-      border-bottom: 1px solid rgba(45, 106, 79, 0.12);
+      background: linear-gradient(135deg, #1e3d2f 0%, #2d6a4f 100%);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.18);
       padding: 14px 0;
       position: sticky;
       top: 0;
       z-index: 1000;
-      box-shadow: 0 2px 12px rgba(30, 61, 47, 0.06);
+      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.22);
     }
 
     .main-nav {
@@ -43,11 +76,11 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
     .logo {
       font-size: 1.5rem;
       font-weight: 800;
-      color: var(--g900, #1e3d2f);
+      color: #fff;
       letter-spacing: -0.5px;
-      text-decoration: none;
     }
 
+    /* ── Nav desktop ── */
     .nav-links {
       display: flex;
       list-style: none;
@@ -58,7 +91,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
     }
 
     .nav-links a {
-      color: var(--g800, #2d6a4f);
+      color: rgba(255, 255, 255, 0.82);
       text-decoration: none;
       font-weight: 600;
       font-size: 0.95rem;
@@ -67,7 +100,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
       padding-bottom: 2px;
     }
 
-    .nav-links a.active { color: var(--g900, #1e3d2f); }
+    .nav-links a.active { color: #fff; }
     .nav-links a.active::after {
       content: '';
       position: absolute;
@@ -79,14 +112,129 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
       border-radius: 2px;
     }
 
-    .nav-links a:hover { color: var(--g900, #1e3d2f); }
-
+    .nav-links a:hover { color: #fff; }
     .nav-cta { padding: 9px 20px !important; font-size: 0.88rem !important; color: white !important; }
 
+    /* ── Bouton burger ── */
+    .burger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 40px;
+      height: 40px;
+      padding: 8px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background 0.2s ease;
+    }
+
+    .burger:hover { background: rgba(255, 255, 255, 0.12); }
+    .burger:focus-visible { outline: 3px solid rgba(255, 255, 255, 0.5); outline-offset: 2px; }
+
+    .burger span {
+      display: block;
+      width: 100%;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 2px;
+      transition: transform 0.28s ease, opacity 0.28s ease;
+      transform-origin: center;
+    }
+
+    /* Animation burger → croix */
+    .burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .burger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* ── Menu mobile ── */
+    .mobile-menu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: linear-gradient(135deg, #1e3d2f 0%, #2d6a4f 100%);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.18);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+      padding: 16px 0 24px;
+      z-index: 999;
+      animation: slideDown 0.22s ease forwards;
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .mobile-menu ul {
+      list-style: none;
+      margin: 0;
+      padding: 0 24px;
+    }
+
+    .mobile-menu li {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+    }
+
+    .mobile-menu li:last-child { border-bottom: none; }
+
+    .mobile-menu a {
+      display: block;
+      padding: 14px 4px;
+      color: rgba(255, 255, 255, 0.82);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: color 0.2s ease, padding-left 0.2s ease;
+    }
+
+    .mobile-menu a:hover { color: #fff; padding-left: 8px; }
+    .mobile-menu a.active { color: #fff; }
+
+    .mobile-cta-item {
+      border-bottom: none !important;
+      padding-top: 16px;
+    }
+
+    .mobile-cta {
+      display: block !important;
+      text-align: center;
+      padding: 13px 24px !important;
+      font-size: 1rem !important;
+      color: white !important;
+    }
+
+    /* ── Overlay ── */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.35);
+      z-index: 998;
+      animation: fadeIn 0.22s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* ── Responsive ── */
     @media (max-width: 768px) {
-      .nav-links { gap: 16px; }
-      .nav-links li:not(:last-child) { display: none; }
+      .nav-links { display: none; }
+      .burger { display: flex; }
     }
   `]
 })
-export class HeaderComponent {}
+export class HeaderComponent {
+  menuOpen = false;
+
+  toggleMenu(): void {
+    this.menuOpen = !this.menuOpen;
+  }
+
+  closeMenu(): void {
+    this.menuOpen = false;
+  }
+}

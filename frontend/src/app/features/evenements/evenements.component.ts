@@ -18,7 +18,6 @@ interface Animation {
       <!-- Hero -->
       <section class="hero">
         <div class="hero-content">
-          <span class="section-label">Nos Animations</span>
           <h1>Évènements & Animations</h1>
           <p>Découvrez toutes les grandes animations organisées par l'AELB tout au long de l'année à Brains.</p>
         </div>
