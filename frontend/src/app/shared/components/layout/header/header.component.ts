@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterLink, RouterLinkActive, Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -8,7 +8,19 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   template: `
     <header>
       <nav class="main-nav">
-        <div class="logo">AELB</div>
+        <a class="logo" (click)="onLogoClick($event)" [routerLink]="isHome() ? null : '/'">
+          <div class="logo-circle">
+            <img src="/LOGO/logo_website%28sans%20contour%29.png" alt="Logo AELB" class="logo-img" />
+          </div>
+        </a>
+
+        <!-- Lightbox logo -->
+        @if (logoOpen) {
+          <div class="logo-lightbox" (click)="logoOpen = false" role="dialog" aria-modal="true" aria-label="Logo AELB agrandi">
+            <img src="/LOGO/logo_website%28sans%20contour%29.png" alt="Logo AELB" class="logo-lightbox-img" (click)="$event.stopPropagation()" />
+            <button class="logo-lightbox-close" (click)="logoOpen = false" aria-label="Fermer">✕</button>
+          </div>
+        }
 
         <!-- Nav desktop -->
         <ul class="nav-links">
@@ -57,7 +69,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
     header {
       background: linear-gradient(135deg, #1e3d2f 0%, #2d6a4f 100%);
       border-bottom: 1px solid rgba(0, 0, 0, 0.18);
-      padding: 14px 0;
+      padding: 10px 0;
       position: sticky;
       top: 0;
       z-index: 1000;
@@ -68,16 +80,39 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
       display: flex;
       justify-content: space-between;
       align-items: center;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 24px;
+      width: 100%;
+      padding: 0 48px;
+      box-sizing: border-box;
     }
 
     .logo {
-      font-size: 1.5rem;
-      font-weight: 800;
-      color: #fff;
-      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .logo-circle {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18);
+      flex-shrink: 0;
+    }
+
+    .logo-img {
+      width: 72px;
+      height: 72px;
+      object-fit: contain;
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: crisp-edges;
+      will-change: transform;
+      transform: translateZ(0);
     }
 
     /* ── Nav desktop ── */
@@ -220,6 +255,54 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
       to   { opacity: 1; }
     }
 
+    /* ── Lightbox logo ── */
+    .logo-lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.2s ease forwards;
+      cursor: zoom-out;
+    }
+
+    .logo-lightbox-img {
+      max-width: 80vw;
+      max-height: 80vh;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      border-radius: 16px;
+      cursor: default;
+      animation: zoomIn 0.22s ease forwards;
+    }
+
+    @keyframes zoomIn {
+      from { opacity: 0; transform: scale(0.88); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    .logo-lightbox-close {
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      background: rgba(255, 255, 255, 0.15);
+      border: none;
+      color: #fff;
+      font-size: 1.2rem;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.18s;
+    }
+    .logo-lightbox-close:hover { background: rgba(255, 255, 255, 0.28); }
+
     /* ── Responsive ── */
     @media (max-width: 768px) {
       .nav-links { display: none; }
@@ -229,6 +312,20 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 })
 export class HeaderComponent {
   menuOpen = false;
+  logoOpen = false;
+
+  constructor(private router: Router) {}
+
+  isHome(): boolean {
+    return this.router.url === '/';
+  }
+
+  onLogoClick(event: Event): void {
+    if (this.isHome()) {
+      event.preventDefault();
+      this.logoOpen = true;
+    }
+  }
 
   toggleMenu(): void {
     this.menuOpen = !this.menuOpen;

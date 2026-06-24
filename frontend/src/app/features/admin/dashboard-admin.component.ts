@@ -24,6 +24,7 @@ interface PostIt {
         <h2>Tableau de bord</h2>
         <p class="dash-date">{{ todayLabel }}</p>
       </div>
+      <img src="/LOGO/logo_website%28sans%20contour%29.png" alt="Logo AELB" class="dash-logo">
     </div>
 
     <!-- Ligne 1 : Prochaine résa + Rappel adhérents -->
@@ -238,10 +239,14 @@ interface PostIt {
   styles: [`
     /* ── Header ── */
     .dash-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       margin-bottom: 28px;
     }
     .dash-header h2 { margin-bottom: 4px; color: #1e3d2f; font-size: 1.6rem; }
     .dash-date { color: #64748b; font-size: 0.9rem; margin: 0; text-transform: capitalize; }
+    .dash-logo { height: 72px; width: auto; object-fit: contain; opacity: 0.9; }
 
     /* ── Widgets row ── */
     .widgets-row {
