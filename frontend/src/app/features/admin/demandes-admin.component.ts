@@ -93,6 +93,140 @@ import { DataService } from '../../core/services/data.service';
       }
     </div>
 
+    <!-- Section : Prochaines réservations confirmées -->
+    <div class="section-sep">
+      <h3>Prochaines réservations confirmées</h3>
+      <p>Réservations à venir, triées chronologiquement.</p>
+    </div>
+
+    <!-- Vue desktop : tableau prochaines -->
+    <div class="table-container app-card desktop-only">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Demandeur</th>
+            <th>Dates</th>
+            <th>Motif</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let res of prochaines">
+            <td>
+              <div class="demandeur-info">
+                <strong>{{ res.nomDemandeur }}</strong>
+                <span>{{ res.email }}</span>
+                <span>{{ res.telephone }}</span>
+              </div>
+            </td>
+            <td>
+              <div class="date-info">
+                <span class="date-label">Du</span> {{ res.dateDebut | date:'dd/MM/yyyy HH:mm' }}<br>
+                <span class="date-label">Au</span> {{ res.dateFin | date:'dd/MM/yyyy HH:mm' }}
+              </div>
+            </td>
+            <td><p class="motif-text">{{ res.motif }}</p></td>
+          </tr>
+          <tr *ngIf="prochaines.length === 0">
+            <td colspan="3" class="empty-row">Aucune réservation confirmée à venir.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Vue mobile : cartes prochaines -->
+    <div class="cards-list mobile-only">
+      @if (prochaines.length === 0) {
+        <div class="empty-card app-card">Aucune réservation confirmée à venir.</div>
+      }
+      @for (res of prochaines; track res.id) {
+        <div class="prochain-card app-card">
+          <div class="card-top">
+            <div>
+              <div class="card-name">{{ res.nomDemandeur }}</div>
+              <div class="card-contact">{{ res.email }}</div>
+              @if (res.telephone) { <div class="card-contact">{{ res.telephone }}</div> }
+            </div>
+            <span class="confirmed-badge">Confirmé</span>
+          </div>
+          <div class="card-dates">
+            <span class="date-label">Du</span> {{ res.dateDebut | date:'dd/MM/yy HH:mm' }}
+            <span class="date-sep">→</span>
+            <span class="date-label">Au</span> {{ res.dateFin | date:'dd/MM/yy HH:mm' }}
+          </div>
+          @if (res.motif) {
+            <p class="card-motif">{{ res.motif }}</p>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Section : Historique des refus -->
+    <div class="section-sep">
+      <h3>Historique des demandes refusées</h3>
+      <p>Toutes les demandes ayant été refusées, de la plus récente à la plus ancienne.</p>
+    </div>
+
+    <!-- Vue desktop : tableau refusées -->
+    <div class="table-container app-card desktop-only">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Demandeur</th>
+            <th>Dates demandées</th>
+            <th>Motif</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let res of refusees" class="row-refused">
+            <td>
+              <div class="demandeur-info">
+                <strong>{{ res.nomDemandeur }}</strong>
+                <span>{{ res.email }}</span>
+                <span>{{ res.telephone }}</span>
+              </div>
+            </td>
+            <td>
+              <div class="date-info">
+                <span class="date-label">Du</span> {{ res.dateDebut | date:'dd/MM/yyyy HH:mm' }}<br>
+                <span class="date-label">Au</span> {{ res.dateFin | date:'dd/MM/yyyy HH:mm' }}
+              </div>
+            </td>
+            <td><p class="motif-text">{{ res.motif }}</p></td>
+          </tr>
+          <tr *ngIf="refusees.length === 0">
+            <td colspan="3" class="empty-row">Aucune demande refusée.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Vue mobile : cartes refusées -->
+    <div class="cards-list mobile-only">
+      @if (refusees.length === 0) {
+        <div class="empty-card app-card">Aucune demande refusée.</div>
+      }
+      @for (res of refusees; track res.id) {
+        <div class="refuse-card app-card">
+          <div class="card-top">
+            <div>
+              <div class="card-name">{{ res.nomDemandeur }}</div>
+              <div class="card-contact">{{ res.email }}</div>
+              @if (res.telephone) { <div class="card-contact">{{ res.telephone }}</div> }
+            </div>
+            <span class="refused-badge">Refusé</span>
+          </div>
+          <div class="card-dates">
+            <span class="date-label">Du</span> {{ res.dateDebut | date:'dd/MM/yy HH:mm' }}
+            <span class="date-sep">→</span>
+            <span class="date-label">Au</span> {{ res.dateFin | date:'dd/MM/yy HH:mm' }}
+          </div>
+          @if (res.motif) {
+            <p class="card-motif">{{ res.motif }}</p>
+          }
+        </div>
+      }
+    </div>
+
     <!-- Modal d'ajout manuel -->
     @if (showModal) {
       <div class="modal-overlay" (click)="closeModal()">
@@ -124,7 +258,7 @@ import { DataService } from '../../core/services/data.service';
 
             <div class="form-row">
               <div class="form-group">
-                <label for="email">Email *</label>
+                <label for="email">Adresse e-mail *</label>
                 <input id="email" type="email" [(ngModel)]="form.email" name="email" placeholder="email@exemple.fr" required />
               </div>
               <div class="form-group">
@@ -135,12 +269,24 @@ import { DataService } from '../../core/services/data.service';
 
             <div class="form-row">
               <div class="form-group">
-                <label for="dateDebut">Date de début *</label>
-                <input id="dateDebut" type="datetime-local" [(ngModel)]="form.dateDebut" name="dateDebut" required />
+                <label for="dateDebutDate">Date de début *</label>
+                <div class="datetime-split">
+                  <input id="dateDebutDate" type="date" [(ngModel)]="form.dateDebutDate" name="dateDebutDate" required />
+                  <select [(ngModel)]="form.dateDebutTime" name="dateDebutTime" required>
+                    <option value="">Heure</option>
+                    <option *ngFor="let s of timeSlots" [value]="s">{{ formatSlot(s) }}</option>
+                  </select>
+                </div>
               </div>
               <div class="form-group">
-                <label for="dateFin">Date de fin *</label>
-                <input id="dateFin" type="datetime-local" [(ngModel)]="form.dateFin" name="dateFin" required />
+                <label for="dateFinDate">Date de fin *</label>
+                <div class="datetime-split">
+                  <input id="dateFinDate" type="date" [(ngModel)]="form.dateFinDate" name="dateFinDate" required />
+                  <select [(ngModel)]="form.dateFinTime" name="dateFinTime" required>
+                    <option value="">Heure</option>
+                    <option *ngFor="let s of timeSlots" [value]="s">{{ formatSlot(s) }}</option>
+                  </select>
+                </div>
               </div>
             </div>
 
@@ -179,8 +325,8 @@ import { DataService } from '../../core/services/data.service';
     .add-btn { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
 
     /* ── Desktop table ── */
-    .desktop-only { display: block; }
-    .mobile-only  { display: none; }
+    .desktop-only { display: block !important; }
+    .mobile-only  { display: none !important; }
 
     .table-container { overflow-x: auto; }
     .admin-table { width: 100%; border-collapse: collapse; background: white; min-width: 560px; }
@@ -301,6 +447,27 @@ import { DataService } from '../../core/services/data.service';
     .form-group textarea:focus { border-color: #2d6a4f; box-shadow: 0 0 0 3px rgba(45,106,79,0.12); background: white; }
     .form-group textarea { resize: vertical; min-height: 72px; }
 
+    .datetime-split { display: flex; gap: 8px; }
+    .datetime-split input[type="date"] { flex: 1; min-width: 0; }
+    .datetime-split select {
+      width: 110px;
+      flex-shrink: 0;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 9px 8px;
+      font-size: 0.88rem;
+      color: #1e293b;
+      background: #fafcfe;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .datetime-split select:focus {
+      border-color: #2d6a4f;
+      box-shadow: 0 0 0 3px rgba(45,106,79,0.12);
+      background: white;
+      outline: none;
+    }
+
     .form-error { background: #fef2f2; border: 1px solid #fecaca; color: #dc2626; border-radius: 8px; padding: 9px 13px; font-size: 0.86rem; }
 
     .modal-actions { display: flex; justify-content: flex-end; gap: 10px; padding-top: 4px; flex-wrap: wrap; }
@@ -310,10 +477,45 @@ import { DataService } from '../../core/services/data.service';
     }
     .btn-cancel:hover { background: #e2e8f0; }
 
+    /* ── Section séparateur prochaines réservations ── */
+    .section-sep {
+      margin: 36px 0 20px;
+      padding-top: 28px;
+      border-top: 2px solid #f1f5f9;
+    }
+    .section-sep h3 { margin-bottom: 4px; color: #1e3d2f; font-size: 1.05rem; font-weight: 800; }
+    .section-sep p { color: #64748b; font-size: 0.88rem; margin: 0; }
+
+    .confirmed-badge {
+      flex-shrink: 0;
+      background: #d1fae5;
+      color: #065f46;
+      font-size: 0.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 20px;
+    }
+    .prochain-card { padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+
+    .refused-badge {
+      flex-shrink: 0;
+      background: #fee2e2;
+      color: #991b1b;
+      font-size: 0.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 20px;
+    }
+    .refuse-card { padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+    .row-refused td { opacity: 0.65; }
+    .row-refused .demandeur-info strong { color: #991b1b; }
+
     /* ── Responsive ── */
     @media (max-width: 640px) {
-      .desktop-only { display: none; }
-      .mobile-only  { display: flex; }
+      .desktop-only { display: none !important; }
+      .mobile-only  { display: flex !important; }
       .form-row { grid-template-columns: 1fr; }
       .modal-actions { justify-content: stretch; }
       .modal-actions button { flex: 1; text-align: center; }
@@ -322,11 +524,27 @@ import { DataService } from '../../core/services/data.service';
 })
 export class DemandesAdminComponent implements OnInit {
   demandes: any[] = [];
+  prochaines: any[] = [];
+  refusees: any[] = [];
   showModal = false;
   loading = false;
   errorMessage = '';
 
-  form = { prenom: '', nom: '', email: '', telephone: '', dateDebut: '', dateFin: '', motif: '' };
+  form = { prenom: '', nom: '', email: '', telephone: '', dateDebutDate: '', dateDebutTime: '', dateFinDate: '', dateFinTime: '', motif: '' };
+
+  readonly timeSlots: string[] = (() => {
+    const slots: string[] = [];
+    for (let h = 0; h < 24; h++) {
+      slots.push(`${String(h).padStart(2, '0')}:00`);
+      slots.push(`${String(h).padStart(2, '0')}:30`);
+    }
+    return slots;
+  })();
+
+  formatSlot(slot: string): string {
+    const [h, m] = slot.split(':');
+    return `${parseInt(h, 10)}h${m}`;
+  }
 
   constructor(private dataService: DataService) {}
 
@@ -334,7 +552,12 @@ export class DemandesAdminComponent implements OnInit {
 
   loadDemandes() {
     this.dataService.getAdminReservations().subscribe(all => {
+      const now = new Date();
       this.demandes = all.filter((r: any) => r.statut === 'EN_ATTENTE');
+      this.prochaines = all
+        .filter((r: any) => r.statut === 'CONFIRMEE' && new Date(r.dateFin) >= now)
+        .sort((a: any, b: any) => new Date(a.dateDebut).getTime() - new Date(b.dateDebut).getTime());
+      this.refusees = all.filter((r: any) => r.statut === 'REFUSEE');
     });
   }
 
@@ -345,7 +568,7 @@ export class DemandesAdminComponent implements OnInit {
   }
 
   openModal() {
-    this.form = { prenom: '', nom: '', email: '', telephone: '', dateDebut: '', dateFin: '', motif: '' };
+    this.form = { prenom: '', nom: '', email: '', telephone: '', dateDebutDate: '', dateDebutTime: '', dateFinDate: '', dateFinTime: '', motif: '' };
     this.errorMessage = '';
     this.showModal = true;
   }
@@ -353,11 +576,14 @@ export class DemandesAdminComponent implements OnInit {
   closeModal() { this.showModal = false; this.loading = false; this.errorMessage = ''; }
 
   submitReservation() {
-    if (!this.form.prenom || !this.form.nom || !this.form.email || !this.form.telephone || !this.form.dateDebut || !this.form.dateFin) {
+    if (!this.form.prenom || !this.form.nom || !this.form.email || !this.form.telephone
+        || !this.form.dateDebutDate || !this.form.dateDebutTime || !this.form.dateFinDate || !this.form.dateFinTime) {
       this.errorMessage = 'Veuillez remplir tous les champs obligatoires.';
       return;
     }
-    if (new Date(this.form.dateFin) <= new Date(this.form.dateDebut)) {
+    const dateDebut = `${this.form.dateDebutDate}T${this.form.dateDebutTime}`;
+    const dateFin = `${this.form.dateFinDate}T${this.form.dateFinTime}`;
+    if (new Date(dateFin) <= new Date(dateDebut)) {
       this.errorMessage = 'La date de fin doit être postérieure à la date de début.';
       return;
     }
@@ -366,7 +592,7 @@ export class DemandesAdminComponent implements OnInit {
     const payload = {
       nomDemandeur: `${this.form.prenom} ${this.form.nom}`,
       email: this.form.email, telephone: this.form.telephone,
-      dateDebut: this.form.dateDebut, dateFin: this.form.dateFin,
+      dateDebut, dateFin,
       motif: this.form.motif || 'Réservation manuelle', statut: 'CONFIRMEE'
     };
     this.dataService.createAdminReservation(payload).subscribe({
@@ -375,7 +601,7 @@ export class DemandesAdminComponent implements OnInit {
         this.loading = false;
         const s = err?.status;
         if (s === 403) this.errorMessage = 'Accès refusé (403).';
-        else if (s === 404) this.errorMessage = 'Endpoint introuvable (404) — redémarrez le backend.';
+        else if (s === 404) this.errorMessage = 'Point d\'accès introuvable (404) — redémarrez le serveur.';
         else if (s === 400) this.errorMessage = `Données invalides (400) : ${err?.error?.message ?? ''}`;
         else if (s === 500) this.errorMessage = `Erreur serveur (500) : ${err?.error?.message ?? err?.error?.error ?? ''}`;
         else this.errorMessage = `Erreur ${s ?? '?'} : ${err?.error?.message ?? err?.message ?? 'Une erreur est survenue.'}`;

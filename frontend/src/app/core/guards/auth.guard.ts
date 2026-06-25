@@ -6,10 +6,11 @@ export const authGuard = () => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  if (authService.isLoggedIn()) {
+  if (authService.isAdmin()) {
     return true;
   }
 
+  authService.logout();
   router.navigate(['/login']);
   return false;
 };

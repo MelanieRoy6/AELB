@@ -17,8 +17,8 @@ import { AuthService } from '../../core/services/auth.service';
         </div>
         <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
           <div class="form-group">
-            <label>Utilisateur</label>
-            <input type="text" formControlName="username" placeholder="Identifiant">
+            <label>Email</label>
+            <input type="email" formControlName="email" placeholder="votre@email.fr">
           </div>
           <div class="form-group">
             <label>Mot de passe</label>
@@ -84,14 +84,14 @@ export class LoginComponent {
   private router = inject(Router);
 
   loginForm = this.fb.group({
-    username: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
     password: ['', Validators.required]
   });
   error = '';
 
   onLogin() {
     if (this.loginForm.invalid) return;
-    this.authService.login(this.loginForm.value as any).subscribe({
+    this.authService.login(this.loginForm.value as { email: string; password: string }).subscribe({
       next: () => this.router.navigate(['/admin']),
       error: () => this.error = 'Identifiants invalides'
     });

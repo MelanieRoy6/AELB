@@ -1,5 +1,6 @@
 package com.aelb.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -11,9 +12,11 @@ public class Reservation {
     private Long id;
 
     @Column(name = "date_debut", nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime dateDebut;
 
     @Column(name = "date_fin", nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime dateFin;
 
     @Column(name = "nom_demandeur", nullable = false)
@@ -32,6 +35,7 @@ public class Reservation {
     private StatutReservation statut;
 
     @Column(name = "date_creation", nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime dateCreation;
 
     @Column(name = "commentaire_admin", columnDefinition = "TEXT")

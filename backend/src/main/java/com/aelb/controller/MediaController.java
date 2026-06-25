@@ -11,9 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.net.MalformedURLException;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 @RestController
@@ -29,16 +29,28 @@ public class MediaController {
     }
 
     @GetMapping("/medias")
-    public List<Media> getAllPublic() {
+    public List<Media> getAllPublic(@RequestParam(required = false) CategorieMedia categorie) {
+        if (categorie != null) return mediaRepository.findByCategorieOrderByDateUploadDesc(categorie);
         return mediaRepository.findAll();
     }
 
     @PostMapping("/admin/medias/upload")
-    public ResponseEntity<Media> upload(
+    public ResponseEntity<?> upload(
             @RequestParam("file") MultipartFile file,
             @RequestParam("categorie") CategorieMedia categorie,
             @RequestParam(value = "legende", required = false) String legende
     ) {
+        if (file.isEmpty()) {
+            return ResponseEntity.badRequest().body("Le fichier est vide.");
+        }
+        String contentType = file.getContentType();
+        if (contentType == null || !contentType.startsWith("image/")) {
+            return ResponseEntity.badRequest().body("Seules les images sont acceptées (JPG, PNG, WEBP…).");
+        }
+        if (file.getSize() > 10L * 1024 * 1024) {
+            return ResponseEntity.badRequest().body("Le fichier dépasse la limite de 10 Mo.");
+        }
+
         String url = fileStorageService.save(file);
         Media media = new Media();
         media.setUrl(url);
@@ -50,16 +62,17 @@ public class MediaController {
     @GetMapping("/medias/files/{filename:.+}")
     public ResponseEntity<Resource> getFile(@PathVariable String filename) {
         try {
-            Path file = Paths.get("uploads").resolve(filename);
-            Resource resource = new UrlResource(file.toUri());
-            if (resource.exists() || resource.isReadable()) {
-                return ResponseEntity.ok()
-                        .contentType(MediaType.IMAGE_JPEG) // Simple simplification
-                        .body(resource);
-            } else {
+            Path filePath = fileStorageService.getFilePath(filename);
+            Resource resource = new UrlResource(filePath.toUri());
+            if (!resource.exists() || !resource.isReadable()) {
                 return ResponseEntity.notFound().build();
             }
-        } catch (MalformedURLException e) {
+            String detectedType = Files.probeContentType(filePath);
+            MediaType mediaType = detectedType != null
+                    ? MediaType.parseMediaType(detectedType)
+                    : MediaType.APPLICATION_OCTET_STREAM;
+            return ResponseEntity.ok().contentType(mediaType).body(resource);
+        } catch (IOException e) {
             return ResponseEntity.badRequest().build();
         }
     }

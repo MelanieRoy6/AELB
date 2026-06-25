@@ -1,9 +1,9 @@
 package com.aelb.config;
 
 import com.aelb.repository.UtilisateurRepository;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -16,7 +16,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.Duration;
 import java.util.List;
 
 @Configuration
@@ -58,10 +57,10 @@ public class ApplicationConfig {
     }
 
     @Bean
-    public RestTemplate restTemplate(RestTemplateBuilder builder) {
-        return builder
-                .connectTimeout(Duration.ofSeconds(5))
-                .readTimeout(Duration.ofSeconds(10))
-                .build();
+    public RestTemplate restTemplate() {
+        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+        factory.setConnectTimeout(5000);
+        factory.setReadTimeout(10000);
+        return new RestTemplate(factory);
     }
 }

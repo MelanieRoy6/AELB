@@ -27,6 +27,35 @@ interface PostIt {
       <img src="/LOGO/logo_website%28sans%20contour%29.png" alt="Logo AELB" class="dash-logo">
     </div>
 
+    <!-- Notification demandes en attente -->
+    @if (demandesEnAttente > 0) {
+      <div class="notif-banner">
+        <div class="notif-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"
+            width="22" height="22">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+        </div>
+        <div class="notif-content">
+          <strong>
+            {{ demandesEnAttente }} demande{{ demandesEnAttente > 1 ? 's' : '' }}
+            de réservation en attente
+          </strong>
+          <span>{{ demandesEnAttente > 1 ? 'Ces demandes nécessitent votre attention.' : 'Cette demande nécessite votre attention.' }}</span>
+        </div>
+        <a routerLink="/admin/demandes" class="notif-btn">
+          Traiter {{ demandesEnAttente > 1 ? 'les demandes' : 'la demande' }}
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+            width="14" height="14">
+            <polyline points="9 18 15 12 9 6"/>
+          </svg>
+        </a>
+      </div>
+    }
+
     <!-- Ligne 1 : Prochaine résa + Rappel adhérents -->
     <div class="widgets-row">
 
@@ -247,6 +276,62 @@ interface PostIt {
     .dash-header h2 { margin-bottom: 4px; color: #1e3d2f; font-size: 1.6rem; }
     .dash-date { color: #64748b; font-size: 0.9rem; margin: 0; text-transform: capitalize; }
     .dash-logo { height: 72px; width: auto; object-fit: contain; opacity: 0.9; }
+
+    /* ── Notification bandeau ── */
+    .notif-banner {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: #fffbeb;
+      border: 1.5px solid #fbbf24;
+      border-left: 5px solid #f59e0b;
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .notif-icon {
+      width: 44px;
+      height: 44px;
+      background: #fef3c7;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #d97706;
+      flex-shrink: 0;
+    }
+    .notif-content {
+      flex: 1;
+      min-width: 180px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .notif-content strong {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #92400e;
+    }
+    .notif-content span {
+      font-size: 0.82rem;
+      color: #b45309;
+    }
+    .notif-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #f59e0b;
+      color: white;
+      border-radius: 50px;
+      padding: 9px 18px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-decoration: none;
+      flex-shrink: 0;
+      transition: background 0.18s;
+    }
+    .notif-btn:hover { background: #d97706; }
 
     /* ── Widgets row ── */
     .widgets-row {
@@ -585,6 +670,7 @@ export class DashboardAdminComponent implements OnInit {
   todayLabel = '';
   nextResa: any = null;
   daysUntil = 0;
+  demandesEnAttente = 0;
 
   adherentLastUpdate: Date | null = null;
   adherentMonthsAgo = 0;
@@ -616,6 +702,7 @@ export class DashboardAdminComponent implements OnInit {
   loadNextReservation(): void {
     this.dataService.getAdminReservations().subscribe(resas => {
       const now = new Date();
+      this.demandesEnAttente = resas.filter((r: any) => r.statut === 'EN_ATTENTE').length;
       const future = resas
         .filter(r => r.statut === 'CONFIRMEE' && new Date(r.dateDebut) > now)
         .sort((a: any, b: any) => new Date(a.dateDebut).getTime() - new Date(b.dateDebut).getTime());

@@ -62,10 +62,13 @@ export class DataService {
 
   getMedias(): Observable<Media[]> {
     return this.http.get<Media[]>(`${this.apiUrl}/medias`).pipe(
-      catchError(err => {
-        console.error('Error fetching medias', err);
-        return of([]);
-      })
+      catchError(err => { console.error('Error fetching medias', err); return of([]); })
+    );
+  }
+
+  getMediasByCategorie(categorie: string): Observable<Media[]> {
+    return this.http.get<Media[]>(`${this.apiUrl}/medias?categorie=${categorie}`).pipe(
+      catchError(err => { console.error('Error fetching medias by categorie', err); return of([]); })
     );
   }
 

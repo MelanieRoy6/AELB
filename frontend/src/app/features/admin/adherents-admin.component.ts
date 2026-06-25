@@ -156,7 +156,7 @@ import { DataService } from '../../core/services/data.service';
     .empty-row { text-align: center; padding: 40px !important; color: #94a3b8; font-style: italic; }
 
     /* ── Mobile cards ── */
-    .cards-list { display: flex; flex-direction: column; gap: 10px; }
+    .cards-list { flex-direction: column; gap: 10px; }
     .empty-card { text-align: center; padding: 40px 20px; color: #94a3b8; font-style: italic; }
 
     .adherent-card { padding: 14px 16px; display: flex; flex-direction: column; gap: 12px; }

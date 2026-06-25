@@ -20,8 +20,8 @@ export class AuthService {
     }
   }
 
-  login(credentials: { username: string, password: string }): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/login`, credentials).pipe(
+  login(credentials: { email: string, password: string }): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/login`, { username: credentials.email, password: credentials.password }).pipe(
       tap(res => {
         if (isPlatformBrowser(this.platformId)) {
           localStorage.setItem('token', res.token);
@@ -47,5 +47,17 @@ export class AuthService {
 
   isLoggedIn(): boolean {
     return !!this.getToken();
+  }
+
+  isAdmin(): boolean {
+    const token = this.getToken();
+    if (!token) return false;
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      const roles: string[] = payload['roles'] ?? [];
+      return roles.includes('ADMIN');
+    } catch {
+      return false;
+    }
   }
 }

@@ -27,10 +27,16 @@ public class ReservationService {
     public Reservation createReservation(Reservation reservation) {
         reservation.setStatut(StatutReservation.EN_ATTENTE);
         Reservation saved = reservationRepository.save(reservation);
-        
-        emailService.sendEmail(saved.getEmail(), "Demande reçue", "Bonjour " + saved.getNomDemandeur() + ", votre demande est en attente.");
-        emailService.sendEmail("admin@aelbrains.com", "Nouvelle demande", "Nouvelle demande de " + saved.getNomDemandeur());
-        
+
+        try {
+            emailService.sendEmail(saved.getEmail(), "Demande reçue",
+                    "Bonjour " + saved.getNomDemandeur() + ", votre demande est en attente de confirmation.");
+            emailService.sendEmail("admin@aelbrains.com", "Nouvelle demande de réservation",
+                    "Nouvelle demande de " + saved.getNomDemandeur() + " (" + saved.getEmail() + ").");
+        } catch (Exception e) {
+            // L'envoi d'e-mail est non bloquant : la réservation est enregistrée même en cas d'échec SMTP
+        }
+
         return saved;
     }
 
@@ -49,8 +55,12 @@ public class ReservationService {
         reservation.setCommentaireAdmin(commentaire);
         Reservation saved = reservationRepository.save(reservation);
 
-        String subject = statut == StatutReservation.CONFIRMEE ? "Réservation Confirmée" : "Réservation Refusée";
-        emailService.sendEmail(saved.getEmail(), subject, "Votre demande est " + statut);
+        try {
+            String subject = statut == StatutReservation.CONFIRMEE ? "Réservation confirmée" : "Réservation refusée";
+            emailService.sendEmail(saved.getEmail(), subject, "Votre demande est " + statut);
+        } catch (Exception e) {
+            // Non bloquant
+        }
 
         return saved;
     }

@@ -1,0 +1,15 @@
+# =============================================================
+# Gestion des accès Espace Admin - AELB
+# =============================================================
+# Listez ici les personnes autorisées à accéder à l'espace admin.
+# Les mots de passe sont en clair dans ce fichier — ils sont hashés
+# automatiquement en base de données au démarrage du serveur.
+#
+# IMPORTANT : Relancez le serveur après toute modification.
+# Les personnes absentes de cette liste seront automatiquement
+# révoquées au prochain démarrage.
+# =============================================================
+
+admins:
+  - email: admin@aelb.fr
+    password: ChangeMe2026!

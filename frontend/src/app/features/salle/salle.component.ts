@@ -1,11 +1,14 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { SeoService } from '../../core/services/seo.service';
+import { DataService } from '../../core/services/data.service';
+import { Media } from '../../core/models';
 
 @Component({
   selector: 'app-salle',
   standalone: true,
-  imports: [RouterModule],
+  imports: [RouterModule, CommonModule],
   template: `
     <div class="salle-page">
       <section class="salle-hero">
@@ -219,19 +222,56 @@ import { SeoService } from '../../core/services/seo.service';
 
         </section>
 
-        <section class="galerie">
+        <section class="galerie" *ngIf="photos.length > 0">
           <div class="section-header">
             <h2>Galerie Photos</h2>
             <p>Découvrez la salle en images lors de différents événements.</p>
           </div>
 
-          <div class="galerie-placeholder">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" width="48" height="48" aria-hidden="true">
-              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-              <circle cx="8.5" cy="8.5" r="1.5"/>
-              <polyline points="21 15 16 10 5 21"/>
-            </svg>
-            <p>La galerie photos arrive bientôt.</p>
+          <div class="carousel-wrapper"
+               (mouseenter)="pauseAuto()"
+               (mouseleave)="resumeAuto()">
+
+            <button class="carousel-arrow arrow-prev" (click)="prev()" aria-label="Photo précédente">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                   stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
+                <polyline points="15 18 9 12 15 6"/>
+              </svg>
+            </button>
+
+            <div class="carousel">
+              <!-- Slides -->
+              <div class="carousel-track">
+                <div *ngFor="let photo of photos; let i = index"
+                     class="carousel-slide"
+                     [class.active]="i === currentIndex"
+                     [class.prev]="i === prevIndex">
+                  <img [src]="photo.url" [alt]="photo.legende || 'Photo de la salle'" loading="lazy">
+                  <div class="slide-legend" *ngIf="photo.legende">{{ photo.legende }}</div>
+                </div>
+              </div>
+
+              <!-- Dots -->
+              <div class="carousel-dots">
+                <button *ngFor="let photo of photos; let i = index"
+                        class="dot"
+                        [class.active]="i === currentIndex"
+                        (click)="goTo(i)"
+                        [attr.aria-label]="'Photo ' + (i + 1)">
+                </button>
+              </div>
+
+              <!-- Counter -->
+              <div class="carousel-counter">{{ currentIndex + 1 }} / {{ photos.length }}</div>
+            </div>
+
+            <button class="carousel-arrow arrow-next" (click)="next()" aria-label="Photo suivante">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                   stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
+                <polyline points="9 18 15 12 9 6"/>
+              </svg>
+            </button>
+
           </div>
         </section>
       </div>
@@ -284,19 +324,114 @@ import { SeoService } from '../../core/services/seo.service';
     .address-footer { display: flex; align-items: center; gap: 10px; color: var(--g800, #2d6a4f); font-weight: 600; }
     .address-footer p { margin: 0; }
 
-    .galerie-placeholder {
+    /* ── Carousel ── */
+    .carousel-wrapper {
       display: flex;
-      flex-direction: column;
       align-items: center;
       gap: 16px;
-      padding: 60px 24px;
-      color: var(--text-muted, #556b5a);
-      border: 2px dashed rgba(45, 106, 79, 0.2);
-      border-radius: 20px;
-      background: var(--g010, #f6faf7);
+      max-width: 960px;
+      margin: 0 auto;
+      user-select: none;
     }
-    .galerie-placeholder svg { color: var(--g400, #52b788); opacity: 0.6; }
-    .galerie-placeholder p { margin: 0; font-size: 1rem; font-style: italic; }
+
+    .carousel {
+      position: relative;
+      flex: 1;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(30, 61, 47, 0.15);
+      background: #1a2e1d;
+      aspect-ratio: 16 / 9;
+      max-height: 520px;
+    }
+    .carousel-track { position: relative; width: 100%; height: 100%; }
+
+    .carousel-slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+      pointer-events: none;
+    }
+    .carousel-slide.active { opacity: 1; pointer-events: auto; z-index: 1; }
+    .carousel-slide.prev   { opacity: 0; z-index: 0; }
+
+    .carousel-slide img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .slide-legend {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 28px 24px 16px;
+      background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 100%);
+      color: white;
+      font-size: 0.95rem;
+      font-weight: 500;
+      z-index: 2;
+    }
+
+    .carousel-arrow {
+      flex-shrink: 0;
+      background: var(--g800, #2d6a4f);
+      border: none;
+      color: white;
+      border-radius: 50%;
+      width: 48px; height: 48px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 14px rgba(45, 106, 79, 0.35);
+    }
+    .carousel-arrow:hover {
+      background: var(--g700, #40916c);
+      transform: scale(1.1);
+      box-shadow: 0 6px 18px rgba(45, 106, 79, 0.45);
+    }
+
+    .carousel-dots {
+      position: absolute;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 7px;
+      z-index: 10;
+    }
+    .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.45);
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .dot.active {
+      background: white;
+      transform: scale(1.35);
+    }
+
+    .carousel-counter {
+      position: absolute;
+      top: 14px; right: 16px;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(4px);
+      color: white;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      z-index: 10;
+    }
+
+    @media (max-width: 600px) {
+      .carousel-wrapper { gap: 10px; }
+      .carousel { aspect-ratio: 4 / 3; max-height: 300px; }
+      .carousel-arrow { width: 38px; height: 38px; }
+    }
 
     /* ══ Présentation détaillée ══ */
     .detail-section {
@@ -547,8 +682,14 @@ import { SeoService } from '../../core/services/seo.service';
     }
   `]
 })
-export class SalleComponent implements OnInit {
+export class SalleComponent implements OnInit, OnDestroy {
   private seo = inject(SeoService);
+  private dataService = inject(DataService);
+
+  photos: Media[] = [];
+  currentIndex = 0;
+  prevIndex = -1;
+  private autoTimer: any;
 
   ngOnInit(): void {
     this.seo.set({
@@ -557,5 +698,47 @@ export class SalleComponent implements OnInit {
       keywords: 'location salle Brains, salle mariage Brains, salle anniversaire Brains, salle concert Brains, salle théâtre Brains, salle réception 44830, salle Jean-Noël Prin',
       path: '/salle'
     });
+
+    this.dataService.getMediasByCategorie('SALLE').subscribe(medias => {
+      this.photos = medias.filter(m => m.categorie === 'SALLE');
+      if (this.photos.length > 1) this.startAuto();
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.stopAuto();
+  }
+
+  next(): void {
+    this.prevIndex = this.currentIndex;
+    this.currentIndex = (this.currentIndex + 1) % this.photos.length;
+  }
+
+  prev(): void {
+    this.prevIndex = this.currentIndex;
+    this.currentIndex = (this.currentIndex - 1 + this.photos.length) % this.photos.length;
+  }
+
+  goTo(index: number): void {
+    if (index === this.currentIndex) return;
+    this.prevIndex = this.currentIndex;
+    this.currentIndex = index;
+    this.resetAuto();
+  }
+
+  pauseAuto(): void { this.stopAuto(); }
+  resumeAuto(): void { if (this.photos.length > 1) this.startAuto(); }
+
+  private startAuto(): void {
+    this.autoTimer = setInterval(() => this.next(), 5000);
+  }
+
+  private stopAuto(): void {
+    if (this.autoTimer) { clearInterval(this.autoTimer); this.autoTimer = null; }
+  }
+
+  private resetAuto(): void {
+    this.stopAuto();
+    if (this.photos.length > 1) this.startAuto();
   }
 }

@@ -365,7 +365,7 @@ interface MonthGrid {
   `]
 })
 export class PlanningAdminComponent implements OnInit {
-  view: 'month' | 'year' = 'month';
+  view: 'month' | 'year' = 'year';
   currentYear = new Date().getFullYear();
   monthsData: MonthGrid[] = [];
 
