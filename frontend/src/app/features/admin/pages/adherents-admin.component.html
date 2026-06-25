@@ -1,0 +1,87 @@
+<div class="admin-header">
+  <div class="header-left">
+    <h2>Gestion des adhérents</h2>
+    <p>Consultez et gérez la liste des membres de l'association.</p>
+  </div>
+  <button class="app-button app-button-primary export-btn" (click)="exportCSV()">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+      width="15" height="15">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+      <polyline points="7 10 12 15 17 10"/>
+      <line x1="12" y1="15" x2="12" y2="3"/>
+    </svg>
+    Exporter CSV
+  </button>
+</div>
+
+<div class="search-container">
+  <div class="search-wrapper">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+      width="16" height="16" class="search-icon">
+      <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    </svg>
+    <input type="text" [(ngModel)]="searchTerm" placeholder="Rechercher par nom, prénom ou email…">
+  </div>
+</div>
+
+<!-- Desktop : tableau -->
+<div class="table-container app-card desktop-only">
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>Adhérent</th>
+        <th>Contact</th>
+        <th>Section</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let a of filteredAdherents()">
+        <td>
+          <div class="user-info">
+            <div class="avatar">{{ a.nom[0] }}{{ a.prenom[0] }}</div>
+            <strong>{{ a.nom }} {{ a.prenom }}</strong>
+          </div>
+        </td>
+        <td>
+          <div class="contact-info">
+            <span>{{ a.email }}</span>
+            <small>{{ a.telephone }}</small>
+          </div>
+        </td>
+        <td><span class="section-tag">{{ a.section }}</span></td>
+        <td>
+          <button class="app-button app-button-accent btn-sm" (click)="delete(a.id)">Supprimer</button>
+        </td>
+      </tr>
+      <tr *ngIf="filteredAdherents().length === 0">
+        <td colspan="4" class="empty-row">Aucun adhérent trouvé.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Mobile : cartes -->
+<div class="cards-list mobile-only">
+  @if (filteredAdherents().length === 0) {
+    <div class="empty-card app-card">Aucun adhérent trouvé.</div>
+  }
+  @for (a of filteredAdherents(); track a.id) {
+    <div class="adherent-card app-card">
+      <div class="card-top">
+        <div class="avatar">{{ a.nom[0] }}{{ a.prenom[0] }}</div>
+        <div class="card-info">
+          <div class="card-name">{{ a.nom }} {{ a.prenom }}</div>
+          <div class="card-email">{{ a.email }}</div>
+          @if (a.telephone) { <div class="card-phone">{{ a.telephone }}</div> }
+        </div>
+        @if (a.section) { <span class="section-tag">{{ a.section }}</span> }
+      </div>
+      <div class="card-footer">
+        <button class="app-button app-button-accent btn-sm" (click)="delete(a.id)">Supprimer</button>
+      </div>
+    </div>
+  }
+</div>

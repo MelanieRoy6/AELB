@@ -1,0 +1,302 @@
+<div class="admin-header">
+  <div class="header-left">
+    <h2>Demandes de réservation</h2>
+    <p>Gérez les demandes de location de la salle Jean-Noël Prin.</p>
+  </div>
+  <button class="app-button app-button-primary add-btn" (click)="openModal()">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+      width="16" height="16">
+      <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+    </svg>
+    Ajouter
+  </button>
+</div>
+
+<!-- Vue desktop : tableau -->
+<div class="table-container app-card desktop-only">
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>Demandeur</th>
+        <th>Dates</th>
+        <th>Motif</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let res of demandes">
+        <td>
+          <div class="demandeur-info">
+            <strong>{{ res.nomDemandeur }}</strong>
+            <span>{{ res.email }}</span>
+            <span>{{ res.telephone }}</span>
+          </div>
+        </td>
+        <td>
+          <div class="date-info">
+            <span class="date-label">Du</span> {{ res.dateDebut | date:'dd/MM/yyyy HH:mm' }}<br>
+            <span class="date-label">Au</span> {{ res.dateFin | date:'dd/MM/yyyy HH:mm' }}
+          </div>
+        </td>
+        <td><p class="motif-text">{{ res.motif }}</p></td>
+        <td class="actions">
+          <button class="app-button app-button-primary btn-sm" (click)="updateStatut(res.id, 'CONFIRMEE')">Confirmer</button>
+          <button class="app-button app-button-accent btn-sm" (click)="updateStatut(res.id, 'REFUSEE')">Refuser</button>
+        </td>
+      </tr>
+      <tr *ngIf="demandes.length === 0">
+        <td colspan="4" class="empty-row">Aucune demande en attente.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Vue mobile : cartes -->
+<div class="cards-list mobile-only">
+  @if (demandes.length === 0) {
+    <div class="empty-card app-card">Aucune demande en attente.</div>
+  }
+  @for (res of demandes; track res.id) {
+    <div class="demande-card app-card">
+      <div class="card-top">
+        <div>
+          <div class="card-name">{{ res.nomDemandeur }}</div>
+          <div class="card-contact">{{ res.email }}</div>
+          @if (res.telephone) { <div class="card-contact">{{ res.telephone }}</div> }
+        </div>
+        <span class="pending-badge">En attente</span>
+      </div>
+      <div class="card-dates">
+        <span class="date-label">Du</span> {{ res.dateDebut | date:'dd/MM/yy HH:mm' }}
+        <span class="date-sep">→</span>
+        <span class="date-label">Au</span> {{ res.dateFin | date:'dd/MM/yy HH:mm' }}
+      </div>
+      @if (res.motif) {
+        <p class="card-motif">{{ res.motif }}</p>
+      }
+      <div class="card-actions">
+        <button class="app-button app-button-primary btn-sm" (click)="updateStatut(res.id, 'CONFIRMEE')">Confirmer</button>
+        <button class="app-button app-button-accent btn-sm" (click)="updateStatut(res.id, 'REFUSEE')">Refuser</button>
+      </div>
+    </div>
+  }
+</div>
+
+<!-- Section : Prochaines réservations confirmées -->
+<div class="section-sep">
+  <h3>Prochaines réservations confirmées</h3>
+  <p>Réservations à venir, triées chronologiquement.</p>
+</div>
+
+<!-- Vue desktop : tableau prochaines -->
+<div class="table-container app-card desktop-only">
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>Demandeur</th>
+        <th>Dates</th>
+        <th>Motif</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let res of prochaines">
+        <td>
+          <div class="demandeur-info">
+            <strong>{{ res.nomDemandeur }}</strong>
+            <span>{{ res.email }}</span>
+            <span>{{ res.telephone }}</span>
+          </div>
+        </td>
+        <td>
+          <div class="date-info">
+            <span class="date-label">Du</span> {{ res.dateDebut | date:'dd/MM/yyyy HH:mm' }}<br>
+            <span class="date-label">Au</span> {{ res.dateFin | date:'dd/MM/yyyy HH:mm' }}
+          </div>
+        </td>
+        <td><p class="motif-text">{{ res.motif }}</p></td>
+      </tr>
+      <tr *ngIf="prochaines.length === 0">
+        <td colspan="3" class="empty-row">Aucune réservation confirmée à venir.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Vue mobile : cartes prochaines -->
+<div class="cards-list mobile-only">
+  @if (prochaines.length === 0) {
+    <div class="empty-card app-card">Aucune réservation confirmée à venir.</div>
+  }
+  @for (res of prochaines; track res.id) {
+    <div class="prochain-card app-card">
+      <div class="card-top">
+        <div>
+          <div class="card-name">{{ res.nomDemandeur }}</div>
+          <div class="card-contact">{{ res.email }}</div>
+          @if (res.telephone) { <div class="card-contact">{{ res.telephone }}</div> }
+        </div>
+        <span class="confirmed-badge">Confirmé</span>
+      </div>
+      <div class="card-dates">
+        <span class="date-label">Du</span> {{ res.dateDebut | date:'dd/MM/yy HH:mm' }}
+        <span class="date-sep">→</span>
+        <span class="date-label">Au</span> {{ res.dateFin | date:'dd/MM/yy HH:mm' }}
+      </div>
+      @if (res.motif) {
+        <p class="card-motif">{{ res.motif }}</p>
+      }
+    </div>
+  }
+</div>
+
+<!-- Section : Historique des refus -->
+<div class="section-sep">
+  <h3>Historique des demandes refusées</h3>
+  <p>Toutes les demandes ayant été refusées, de la plus récente à la plus ancienne.</p>
+</div>
+
+<!-- Vue desktop : tableau refusées -->
+<div class="table-container app-card desktop-only">
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>Demandeur</th>
+        <th>Dates demandées</th>
+        <th>Motif</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let res of refusees" class="row-refused">
+        <td>
+          <div class="demandeur-info">
+            <strong>{{ res.nomDemandeur }}</strong>
+            <span>{{ res.email }}</span>
+            <span>{{ res.telephone }}</span>
+          </div>
+        </td>
+        <td>
+          <div class="date-info">
+            <span class="date-label">Du</span> {{ res.dateDebut | date:'dd/MM/yyyy HH:mm' }}<br>
+            <span class="date-label">Au</span> {{ res.dateFin | date:'dd/MM/yyyy HH:mm' }}
+          </div>
+        </td>
+        <td><p class="motif-text">{{ res.motif }}</p></td>
+      </tr>
+      <tr *ngIf="refusees.length === 0">
+        <td colspan="3" class="empty-row">Aucune demande refusée.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Vue mobile : cartes refusées -->
+<div class="cards-list mobile-only">
+  @if (refusees.length === 0) {
+    <div class="empty-card app-card">Aucune demande refusée.</div>
+  }
+  @for (res of refusees; track res.id) {
+    <div class="refuse-card app-card">
+      <div class="card-top">
+        <div>
+          <div class="card-name">{{ res.nomDemandeur }}</div>
+          <div class="card-contact">{{ res.email }}</div>
+          @if (res.telephone) { <div class="card-contact">{{ res.telephone }}</div> }
+        </div>
+        <span class="refused-badge">Refusé</span>
+      </div>
+      <div class="card-dates">
+        <span class="date-label">Du</span> {{ res.dateDebut | date:'dd/MM/yy HH:mm' }}
+        <span class="date-sep">→</span>
+        <span class="date-label">Au</span> {{ res.dateFin | date:'dd/MM/yy HH:mm' }}
+      </div>
+      @if (res.motif) {
+        <p class="card-motif">{{ res.motif }}</p>
+      }
+    </div>
+  }
+</div>
+
+<!-- Modal d'ajout manuel -->
+@if (showModal) {
+  <div class="modal-overlay" (click)="closeModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+
+      <div class="modal-header">
+        <h3>Ajouter une réservation</h3>
+        <button class="modal-close" (click)="closeModal()" aria-label="Fermer">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            width="20" height="20">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <form class="modal-form" (ngSubmit)="submitReservation()" #f="ngForm">
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="prenom">Prénom *</label>
+            <input id="prenom" type="text" [(ngModel)]="form.prenom" name="prenom" placeholder="Prénom" required />
+          </div>
+          <div class="form-group">
+            <label for="nom">Nom *</label>
+            <input id="nom" type="text" [(ngModel)]="form.nom" name="nom" placeholder="Nom de famille" required />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="email">Adresse e-mail *</label>
+            <input id="email" type="email" [(ngModel)]="form.email" name="email" placeholder="email@exemple.fr" required />
+          </div>
+          <div class="form-group">
+            <label for="telephone">Téléphone *</label>
+            <input id="telephone" type="tel" [(ngModel)]="form.telephone" name="telephone" placeholder="06 xx xx xx xx" required />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="dateDebutDate">Date de début *</label>
+            <div class="datetime-split">
+              <input id="dateDebutDate" type="date" [(ngModel)]="form.dateDebutDate" name="dateDebutDate" required />
+              <select [(ngModel)]="form.dateDebutTime" name="dateDebutTime" required>
+                <option value="">Heure</option>
+                <option *ngFor="let s of timeSlots" [value]="s">{{ formatSlot(s) }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="dateFinDate">Date de fin *</label>
+            <div class="datetime-split">
+              <input id="dateFinDate" type="date" [(ngModel)]="form.dateFinDate" name="dateFinDate" required />
+              <select [(ngModel)]="form.dateFinTime" name="dateFinTime" required>
+                <option value="">Heure</option>
+                <option *ngFor="let s of timeSlots" [value]="s">{{ formatSlot(s) }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="motif">Motif / Événement</label>
+          <textarea id="motif" [(ngModel)]="form.motif" name="motif" rows="3" placeholder="Type d'événement, description…"></textarea>
+        </div>
+
+        @if (errorMessage) {
+          <div class="form-error">{{ errorMessage }}</div>
+        }
+
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" (click)="closeModal()">Annuler</button>
+          <button type="submit" class="app-button app-button-primary" [disabled]="loading || !f.valid">
+            @if (loading) { Enregistrement… } @else { Confirmer la réservation }
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+}

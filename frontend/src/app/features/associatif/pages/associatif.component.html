@@ -1,0 +1,40 @@
+<div class="page-wrapper">
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Vie Associative</h1>
+      <p>L'Amicale de l'École Laïque de Brains œuvre pour l'animation culturelle et sociale de notre commune depuis de nombreuses années.</p>
+    </div>
+  </section>
+
+  <!-- Activités -->
+  <section class="activites-section">
+    <div class="section-inner">
+
+      <div class="section-title">
+        <span class="section-label">Ce que nous faisons</span>
+        <h2>Nos Activités</h2>
+      </div>
+
+      <div class="activity-list">
+        @for (activite of activites; track activite.titre; let i = $index) {
+          <div class="activity-row" [class.reverse]="i % 2 === 1">
+
+            <div class="activity-text">
+              <h3>{{ activite.titre }}</h3>
+              <p>{{ activite.description }}</p>
+            </div>
+
+            <div class="activity-visual">
+              <img [src]="activite.image" [alt]="activite.alt" class="activity-photo">
+            </div>
+
+          </div>
+        }
+      </div>
+
+    </div>
+  </section>
+
+</div>

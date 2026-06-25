@@ -1,0 +1,58 @@
+<div class="page-wrapper">
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Évènements &amp; Animations</h1>
+      <p>Découvrez toutes les grandes animations organisées par l'AELB tout au long de l'année à Brains.</p>
+    </div>
+  </section>
+
+  <!-- Animations -->
+  <section class="animations-section">
+    <div class="section-inner">
+
+      <div class="section-title">
+        <span class="section-label">Ce que nous organisons</span>
+        <h2>Nos Grandes Animations</h2>
+      </div>
+
+      <div class="animation-list">
+        @for (anim of animations; track anim.titre; let i = $index) {
+          <div class="animation-row" [class.reverse]="i % 2 === 1">
+
+            <div class="animation-text">
+              <span class="anim-periode">{{ anim.periode }}</span>
+              <h3>{{ anim.titre }}</h3>
+              <p>{{ anim.description }}</p>
+            </div>
+
+            <div class="animation-visual">
+              <img [src]="anim.image" [alt]="anim.alt" class="animation-photo" loading="lazy">
+            </div>
+
+          </div>
+        }
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CTA bas de page -->
+  <section class="cta-section">
+    <div class="cta-inner">
+      <p class="cta-label">Restez informés</p>
+      <h2>Ne manquez aucun événement</h2>
+      <p class="cta-sub">Suivez notre page Facebook pour découvrir toutes les dates, nouveautés et surprises de l'AELB.</p>
+      <div class="cta-actions">
+        <a href="https://www.facebook.com/aelbrains/" target="_blank" rel="noopener" class="app-button app-button-primary">
+          Suivre sur Facebook
+        </a>
+        <a href="/reservation" class="app-button app-button-secondary">
+          Réserver la salle
+        </a>
+      </div>
+    </div>
+  </section>
+
+</div>

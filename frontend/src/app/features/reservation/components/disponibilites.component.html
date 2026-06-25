@@ -1,0 +1,89 @@
+<div class="year-container">
+
+  <div class="desktop-view">
+    <div class="year-nav">
+      <button class="nav-btn" (click)="prevYear()" aria-label="Année précédente">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          width="18" height="18"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <span class="year-label">{{ currentYear }}</span>
+      <button class="nav-btn" (click)="nextYear()" aria-label="Année suivante">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          width="18" height="18"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+
+    @if (loading) {
+      <div class="loading-state">Chargement du planning…</div>
+    } @else {
+      <div class="year-grid">
+        @for (m of monthsData; track m.month) {
+          <div class="mini-month" [class.current-month]="isCurrentMonth(m.month)">
+            <div class="mini-month-header">
+              <span class="mini-month-name">{{ m.name }}</span>
+              @if (m.count > 0) {
+                <span class="mini-month-badge">{{ m.count }}</span>
+              }
+            </div>
+            <div class="mini-cal">
+              <span class="dow">L</span><span class="dow">M</span><span class="dow">M</span>
+              <span class="dow">J</span><span class="dow">V</span><span class="dow">S</span><span class="dow">D</span>
+              @for (cell of m.cells; track $index) {
+                @if (cell) {
+                  <span class="day-cell" [class.occupied]="cell.occupied" [class.today]="isToday(m.month, cell.day)">{{ cell.day }}</span>
+                } @else {
+                  <span class="day-cell empty"></span>
+                }
+              }
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  <div class="mobile-view">
+    <div class="month-nav">
+      <button class="nav-btn" (click)="prevMobileMonth()" aria-label="Mois précédent">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          width="18" height="18"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <span class="month-label">{{ mobileMonthLabel }}</span>
+      <button class="nav-btn" (click)="nextMobileMonth()" aria-label="Mois suivant">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          width="18" height="18"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+
+    @if (loading) {
+      <div class="loading-state">Chargement…</div>
+    } @else if (mobileMonthData) {
+      <div class="month-grid-large">
+        <span class="dow-lg">Lun</span><span class="dow-lg">Mar</span><span class="dow-lg">Mer</span>
+        <span class="dow-lg">Jeu</span><span class="dow-lg">Ven</span><span class="dow-lg">Sam</span><span class="dow-lg">Dim</span>
+        @for (cell of mobileMonthData.cells; track $index) {
+          @if (cell) {
+            <span class="day-lg" [class.occupied]="cell.occupied" [class.today]="isToday(currentMobileMonth, cell.day)">{{ cell.day }}</span>
+          } @else {
+            <span class="day-lg empty"></span>
+          }
+        }
+      </div>
+    }
+  </div>
+
+  <div class="legend">
+    <div class="legend-item">
+      <span class="box occupied"></span>
+      <span>Salle occupée</span>
+    </div>
+    <div class="legend-item">
+      <span class="box today-box"></span>
+      <span>Aujourd'hui</span>
+    </div>
+  </div>
+</div>

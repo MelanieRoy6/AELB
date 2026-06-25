@@ -1,0 +1,84 @@
+<div class="form-container app-card">
+  <div class="form-header">
+    <h3>Demande de réservation</h3>
+    <p>Remplissez ce formulaire pour solliciter la location de la salle.</p>
+  </div>
+
+  <form [formGroup]="resForm" (ngSubmit)="onSubmit()" *ngIf="!submitted; else successMsg">
+    <div class="form-group">
+      <label>Nom complet du demandeur</label>
+      <input type="text" formControlName="nomDemandeur" placeholder="Ex: Jean Dupont">
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Adresse e-mail</label>
+        <input type="email" formControlName="email" placeholder="votre@email.com">
+      </div>
+      <div class="form-group">
+        <label>Téléphone</label>
+        <input type="tel" formControlName="telephone" placeholder="06 00 00 00 00">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Début de l'occupation</label>
+        <div class="datetime-split">
+          <input type="date" (change)="onDebutDateChange($event)" placeholder="Date">
+          <select (change)="onDebutTimeChange($event)">
+            <option value="">Heure</option>
+            <option *ngFor="let s of timeSlots" [value]="s">{{ formatSlot(s) }}</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Fin de l'occupation</label>
+        <div class="datetime-split">
+          <input type="date" (change)="onFinDateChange($event)" placeholder="Date">
+          <select (change)="onFinTimeChange($event)">
+            <option value="">Heure</option>
+            <option *ngFor="let s of timeSlots" [value]="s">{{ formatSlot(s) }}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Motif de la location</label>
+      <textarea formControlName="motif" rows="3" placeholder="Description de votre événement..."></textarea>
+    </div>
+
+    @if (conflictWarning) {
+      <div class="conflict-warning">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          width="18" height="18" aria-hidden="true">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+          <line x1="12" y1="9" x2="12" y2="13"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+        <span>
+          <strong>Attention :</strong> la salle semble déjà réservée sur tout ou partie de cette période.
+          Votre demande sera quand même transmise, mais elle pourrait être refusée.
+          Consultez le calendrier pour voir les créneaux disponibles.
+        </span>
+      </div>
+    }
+
+    <div class="error-msg" *ngIf="error">{{ error }}</div>
+
+    <button type="submit" class="app-button app-button-primary submit-btn" [disabled]="resForm.invalid || loading">
+      {{ loading ? 'Envoi en cours...' : 'Envoyer la demande' }}
+    </button>
+  </form>
+
+  <ng-template #successMsg>
+    <div class="success-box">
+      <div class="success-icon">✓</div>
+      <h4>Merci pour votre demande !</h4>
+      <p>Elle a été transmise au bureau de l'AELB. Vous recevrez prochainement un email de confirmation.</p>
+      <button (click)="reset()" class="app-button app-button-secondary">Faire une autre demande</button>
+    </div>
+  </ng-template>
+</div>

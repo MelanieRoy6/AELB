@@ -8,40 +8,8 @@ import { ReservationFormComponent } from '../components/reservation-form.compone
   selector: 'app-reservation',
   standalone: true,
   imports: [CommonModule, DisponibilitesComponent, ReservationFormComponent],
-  template: `
-    <div class="container">
-      <h1>Réserver la Salle Jean-Noël Prin</h1>
-      <p class="intro">Utilisez le calendrier pour vérifier les disponibilités et remplissez le formulaire ci-dessous pour nous soumettre votre demande.</p>
-
-      <div class="reservation-layout">
-        <div class="calendar-section">
-          <app-disponibilites></app-disponibilites>
-        </div>
-        <div class="form-section">
-          <app-reservation-form></app-reservation-form>
-        </div>
-      </div>
-    </div>
-  `,
-  styles: [`
-    .container { padding: 40px 24px 60px; max-width: 1200px; margin: auto; }
-    .container h1 { font-size: 2rem; margin-bottom: 12px; }
-    .intro { margin-bottom: 40px; color: #555; font-size: 1rem; line-height: 1.6; }
-    .reservation-layout { display: grid; grid-template-columns: 1.5fr 1fr; gap: 40px; align-items: start; }
-
-    @media (max-width: 992px) {
-      .reservation-layout { display: flex; flex-direction: column; }
-      .form-section    { order: 1; }
-      .calendar-section { order: 2; }
-    }
-
-    @media (max-width: 600px) {
-      .container { padding: 24px 16px 40px; }
-      .container h1 { font-size: 1.6rem; text-align: center; }
-      .intro { text-align: center; }
-      .reservation-layout { align-items: center; }
-    }
-  `]
+  templateUrl: './reservation.component.html',
+  styleUrls: ['./reservation.component.css']
 })
 export class ReservationComponent implements OnInit {
   private seo = inject(SeoService);

@@ -1,0 +1,181 @@
+<div class="admin-header">
+  <div class="header-left">
+    <h2>Bureau de l'AELB</h2>
+    <p>Gérez les membres du bureau affichés sur la page publique.</p>
+  </div>
+  <button class="app-button app-button-primary add-btn" (click)="openModal()">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+      width="16" height="16">
+      <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+    </svg>
+    Ajouter un membre
+  </button>
+</div>
+
+<!-- Liste des membres -->
+@if (membres.length === 0) {
+  <div class="empty-state app-card">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"
+      width="48" height="48">
+      <circle cx="9" cy="7" r="3"/><circle cx="17" cy="7" r="3"/>
+      <path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/>
+      <path d="M19 11c1.66 0 3 1.34 3 3v2"/>
+    </svg>
+    <p>Aucun membre enregistré. Ajoutez les membres du bureau.</p>
+  </div>
+}
+
+<div class="membres-list">
+  @for (m of membres; track m.id) {
+    <div class="membre-row app-card">
+      <div class="membre-photo-wrap">
+        @if (m.photoUrl) {
+          <img [src]="m.photoUrl" [alt]="m.prenom + ' ' + m.nom" class="membre-photo">
+        } @else {
+          <div class="membre-photo-placeholder">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+              width="28" height="28"><circle cx="12" cy="8" r="4"/>
+              <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+          </div>
+        }
+        <span class="ordre-badge">#{{ m.ordre ?? '—' }}</span>
+      </div>
+
+      <div class="membre-info">
+        <div class="membre-name">{{ m.prenom }} {{ m.nom }}</div>
+        <span class="role-tag">{{ m.role }}</span>
+        @if (m.bio) { <p class="membre-bio">{{ m.bio }}</p> }
+      </div>
+
+      <div class="membre-actions">
+        <button class="icon-btn edit" (click)="openModal(m)" title="Modifier">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            width="16" height="16">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+          </svg>
+        </button>
+        <button class="icon-btn delete" (click)="confirmDelete(m)" title="Supprimer">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            width="16" height="16">
+            <polyline points="3 6 5 6 21 6"/>
+            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+            <path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  }
+</div>
+
+<!-- Modal ajout / édition -->
+@if (showModal) {
+  <div class="modal-overlay" (click)="closeModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+
+      <div class="modal-header">
+        <h3>{{ editingMembre ? 'Modifier le membre' : 'Ajouter un membre' }}</h3>
+        <button class="modal-close" (click)="closeModal()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            width="20" height="20">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Photo -->
+        <div class="photo-section">
+          <div class="photo-preview-wrap">
+            @if (photoPreview || form.photoUrl) {
+              <img [src]="photoPreview || form.photoUrl" alt="Aperçu" class="photo-preview">
+            } @else {
+              <div class="photo-placeholder">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                  width="36" height="36"><circle cx="12" cy="8" r="4"/>
+                  <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+              </div>
+            }
+          </div>
+          <div class="photo-controls">
+            <label class="photo-upload-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                width="15" height="15">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+              </svg>
+              {{ photoUploading ? 'Envoi…' : 'Choisir une photo' }}
+              <input type="file" accept="image/*" (change)="onPhotoSelected($event)" [disabled]="photoUploading" hidden>
+            </label>
+            @if (form.photoUrl && !photoPreview) {
+              <button class="remove-photo-btn" (click)="form.photoUrl = ''" type="button">Supprimer la photo</button>
+            }
+            <p class="photo-hint">JPG, PNG · Max 5 Mo · Ratio 3:4 recommandé</p>
+          </div>
+        </div>
+
+        <div class="form-divider"></div>
+
+        <!-- Infos -->
+        <div class="form-row">
+          <div class="form-group">
+            <label>Prénom *</label>
+            <input type="text" [(ngModel)]="form.prenom" placeholder="Prénom" name="prenom">
+          </div>
+          <div class="form-group">
+            <label>Nom *</label>
+            <input type="text" [(ngModel)]="form.nom" placeholder="Nom de famille" name="nom">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Rôle / Fonction *</label>
+            <select [(ngModel)]="roleSelection" (ngModelChange)="onRoleChange($event)" name="roleSelect">
+              <option value="">-- Choisir un rôle --</option>
+              @for (r of rolesPredefs; track r) { <option [value]="r">{{ r }}</option> }
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Ordre d'affichage</label>
+            <input type="number" [(ngModel)]="form.ordre" placeholder="1, 2, 3…" min="1" name="ordre">
+          </div>
+        </div>
+
+        @if (roleSelection === 'Autre') {
+          <div class="form-group">
+            <label>Rôle personnalisé *</label>
+            <input type="text" [(ngModel)]="form.role" placeholder="Ex : Responsable communication" name="roleCustom">
+          </div>
+        }
+
+        <div class="form-group">
+          <label>Texte de présentation</label>
+          <textarea [(ngModel)]="form.bio" rows="4"
+            placeholder="Décrivez brièvement ce membre, son rôle dans l'association…"
+            name="bio"></textarea>
+          <span class="char-count">{{ form.bio?.length ?? 0 }} / 400 caractères</span>
+        </div>
+
+        @if (errorMessage) { <div class="form-error">{{ errorMessage }}</div> }
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn-cancel" (click)="closeModal()">Annuler</button>
+        <button type="button" class="app-button app-button-primary"
+          (click)="saveMembre()"
+          [disabled]="saving || photoUploading || !form.prenom || !form.nom || !form.role">
+          {{ saving ? 'Enregistrement…' : (editingMembre ? 'Mettre à jour' : 'Ajouter au bureau') }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

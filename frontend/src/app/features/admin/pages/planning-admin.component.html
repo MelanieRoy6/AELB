@@ -1,0 +1,88 @@
+<div class="admin-header">
+  <div class="header-left">
+    <h2>Planning global de la salle</h2>
+    <p>Visualisez toutes les réservations confirmées et en attente.</p>
+  </div>
+  <div class="view-toggle">
+    <button [class.active]="view === 'month'" (click)="setView('month')">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+        width="15" height="15" aria-hidden="true">
+        <rect x="3" y="4" width="18" height="18" rx="2"/>
+        <line x1="3" y1="10" x2="21" y2="10"/>
+        <line x1="8" y1="2" x2="8" y2="6"/>
+        <line x1="16" y1="2" x2="16" y2="6"/>
+      </svg>
+      Mois
+    </button>
+    <button [class.active]="view === 'year'" (click)="setView('year')">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+        width="15" height="15" aria-hidden="true">
+        <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+        <rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
+      </svg>
+      Année
+    </button>
+  </div>
+</div>
+
+<!-- Vue Mois (FullCalendar) -->
+@if (view === 'month') {
+  <div class="calendar-admin app-card">
+    <full-calendar [options]="calendarOptions"></full-calendar>
+  </div>
+}
+
+<!-- Vue Année (mini-calendriers) -->
+@if (view === 'year') {
+  <div class="year-view">
+    <div class="year-nav">
+      <button class="nav-btn" (click)="prevYear()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          width="18" height="18"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <span class="year-label">{{ currentYear }}</span>
+      <button class="nav-btn" (click)="nextYear()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          width="18" height="18"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+
+    <div class="year-grid">
+      @for (m of monthsData; track m.month) {
+        <div class="mini-month" [class.current-month]="isCurrentMonth(m.month)">
+          <div class="mini-month-header">
+            <span class="mini-month-name">{{ m.name }}</span>
+            @if (m.count > 0) { <span class="mini-month-badge">{{ m.count }}</span> }
+          </div>
+          <div class="mini-cal">
+            <span class="dow">L</span><span class="dow">M</span><span class="dow">M</span>
+            <span class="dow">J</span><span class="dow">V</span><span class="dow">S</span><span class="dow">D</span>
+            @for (cell of m.cells; track $index) {
+              @if (cell) {
+                <span class="day-cell"
+                  [class.confirmed]="cell.status === 'confirmed'"
+                  [class.pending]="cell.status === 'pending'"
+                  [class.cancelled]="cell.status === 'cancelled'"
+                  [class.today]="isToday(m.month, cell.day)">
+                  {{ cell.day }}
+                </span>
+              } @else {
+                <span class="day-cell empty"></span>
+              }
+            }
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+}
+
+<div class="legend-container">
+  <div class="legend-item"><span class="box confirmed"></span><span class="label">Confirmé</span></div>
+  <div class="legend-item"><span class="box pending"></span><span class="label">En attente</span></div>
+  <div class="legend-item"><span class="box cancelled"></span><span class="label">Annulé</span></div>
+</div>
