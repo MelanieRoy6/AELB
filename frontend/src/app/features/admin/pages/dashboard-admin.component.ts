@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { AdminService } from '../services/admin.service';
+import { APP_ICONS } from '../../../core/app-icons';
 
 const STORAGE_POSTITS = 'aelb_postits';
 const STORAGE_ADHERENTS = 'aelb_adherents_last_update';
@@ -22,6 +23,7 @@ interface PostIt {
   styleUrls: ['./dashboard-admin.component.css']
 })
 export class DashboardAdminComponent implements OnInit {
+  readonly icons = APP_ICONS;
   todayLabel = '';
   nextResa: any = null;
   daysUntil = 0;

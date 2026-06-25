@@ -3,7 +3,7 @@
     <h2>Tableau de bord</h2>
     <p class="dash-date">{{ todayLabel }}</p>
   </div>
-  <img src="/LOGO/logo_website%28sans%20contour%29.png" alt="Logo AELB" class="dash-logo">
+  <img [src]="icons.LOGO.MAIN" alt="Logo AELB" class="dash-logo">
 </div>
 
 @if (demandesEnAttente > 0) {

@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { SeoService } from '../../../core/services/seo.service';
 import { SalleService } from '../services/salle.service';
 import { Media } from '../../../core/models';
+import { APP_ICONS } from '../../../core/app-icons';
 
 @Component({
   selector: 'app-salle',
@@ -13,6 +14,7 @@ import { Media } from '../../../core/models';
   styleUrls: ['./salle.component.css']
 })
 export class SalleComponent implements OnInit, OnDestroy {
+  readonly icons = APP_ICONS;
   private seo = inject(SeoService);
   private salleService = inject(SalleService);
 

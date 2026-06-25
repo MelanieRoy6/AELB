@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive, Router } from '@angular/router';
+import { APP_ICONS } from '../../../../core/app-icons';
 
 @Component({
   selector: 'app-header',
@@ -10,14 +11,14 @@ import { RouterLink, RouterLinkActive, Router } from '@angular/router';
       <nav class="main-nav">
         <a class="logo" (click)="onLogoClick($event)" [routerLink]="isHome() ? null : '/'">
           <div class="logo-circle">
-            <img src="/LOGO/logo_website%28sans%20contour%29.png" alt="Logo AELB" class="logo-img" />
+            <img [src]="icons.LOGO.MAIN" alt="Logo AELB" class="logo-img" />
           </div>
         </a>
 
         <!-- Lightbox logo -->
         @if (logoOpen) {
           <div class="logo-lightbox" (click)="logoOpen = false" role="dialog" aria-modal="true" aria-label="Logo AELB agrandi">
-            <img src="/LOGO/logo_website%28sans%20contour%29.png" alt="Logo AELB" class="logo-lightbox-img" (click)="$event.stopPropagation()" />
+            <img [src]="icons.LOGO.MAIN" alt="Logo AELB" class="logo-lightbox-img" (click)="$event.stopPropagation()" />
             <button class="logo-lightbox-close" (click)="logoOpen = false" aria-label="Fermer">✕</button>
           </div>
         }
@@ -311,6 +312,7 @@ import { RouterLink, RouterLinkActive, Router } from '@angular/router';
   `]
 })
 export class HeaderComponent {
+  readonly icons = APP_ICONS;
   menuOpen = false;
   logoOpen = false;
 

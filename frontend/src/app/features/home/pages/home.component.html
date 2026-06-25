@@ -113,7 +113,7 @@
 
     <div class="feed-aside">
       <div class="aside-card">
-        <img src="/ICON/FollowUs.svg" alt="" aria-hidden="true" class="aside-icon">
+        <img [src]="icons.ICON.FOLLOW_US" alt="" aria-hidden="true" class="aside-icon">
         <h3>Restez connectés !</h3>
         <p>Suivez-nous sur Facebook pour ne manquer aucun événement, spectacle ou nouvelle de l'AELB.</p>
         <a href="https://www.facebook.com/aelbrains/" target="_blank" rel="noopener" class="app-button app-button-primary">
@@ -122,14 +122,14 @@
       </div>
 
       <div class="aside-card">
-        <img src="/ICON/HomeSalle.svg" alt="" aria-hidden="true" class="aside-icon">
+        <img [src]="icons.ICON.HOME_SALLE" alt="" aria-hidden="true" class="aside-icon">
         <h3>Réservez la salle</h3>
         <p>Organisez votre prochain événement dans un cadre convivial et bien équipé, en plein cœur de Brains.</p>
         <a routerLink="/reservation" class="app-button app-button-accent">Faire une demande</a>
       </div>
 
       <div class="aside-card">
-        <img src="/ICON/Question.svg" alt="" aria-hidden="true" class="aside-icon">
+        <img [src]="icons.ICON.QUESTION" alt="" aria-hidden="true" class="aside-icon">
         <h3>Une question ?</h3>
         <p>Notre équipe est disponible pour vous accompagner dans votre projet d'événement.</p>
         <a href="mailto:contact@aelb-brains.fr" class="app-button app-button-secondary">Nous écrire</a>

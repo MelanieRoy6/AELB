@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { EquipeService } from '../services/equipe.service';
 import { SeoService } from '../../../core/services/seo.service';
 import { MembreEquipe } from '../../../core/models';
+import { APP_ICONS } from '../../../core/app-icons';
 
 @Component({
   selector: 'app-equipe',
@@ -12,6 +13,7 @@ import { MembreEquipe } from '../../../core/models';
   styleUrls: ['./equipe.component.css']
 })
 export class EquipeComponent implements OnInit {
+  readonly icons = APP_ICONS;
   equipe: MembreEquipe[] = [];
 
   private seo = inject(SeoService);

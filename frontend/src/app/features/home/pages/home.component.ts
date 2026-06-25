@@ -1,6 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { SeoService } from '../../../core/services/seo.service';
+import { APP_ICONS } from '../../../core/app-icons';
 
 @Component({
   selector: 'app-home',
@@ -10,6 +11,7 @@ import { SeoService } from '../../../core/services/seo.service';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+  readonly icons = APP_ICONS;
   private seo = inject(SeoService);
 
   ngOnInit(): void {
