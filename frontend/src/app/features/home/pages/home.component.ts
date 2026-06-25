@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { SeoService } from '../../core/services/seo.service';
+import { SeoService } from '../../../core/services/seo.service';
 
 @Component({
   selector: 'app-home',
@@ -470,7 +470,6 @@ import { SeoService } from '../../core/services/seo.service';
       line-height: 1.6;
     }
 
-    /* === Layout feed : colonne verticale === */
     .feed-aside {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -478,7 +477,6 @@ import { SeoService } from '../../core/services/seo.service';
       margin-bottom: 36px;
     }
 
-    /* === Carte Facebook (pleine largeur, layout horizontal) === */
     .fb-card {
       background: white;
       border-radius: 24px;
@@ -606,7 +604,6 @@ import { SeoService } from '../../core/services/seo.service';
       .objectives-grid { grid-template-columns: 1fr; }
       .bottom-row { grid-template-columns: 1fr; }
       .feed-aside { grid-template-columns: 1fr; }
-      /* Carte Facebook : repasse en colonne sur tablette */
       .fb-card {
         grid-template-columns: 1fr;
         grid-template-rows: auto;

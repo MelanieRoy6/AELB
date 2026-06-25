@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { DataService } from '../../core/services/data.service';
+import { ReservationService } from '../services/reservation.service';
 
 @Component({
   selector: 'app-reservation-form',
@@ -13,7 +13,7 @@ import { DataService } from '../../core/services/data.service';
         <h3>Demande de réservation</h3>
         <p>Remplissez ce formulaire pour solliciter la location de la salle.</p>
       </div>
-      
+
       <form [formGroup]="resForm" (ngSubmit)="onSubmit()" *ngIf="!submitted; else successMsg">
         <div class="form-group">
           <label>Nom complet du demandeur</label>
@@ -98,35 +98,20 @@ import { DataService } from '../../core/services/data.service';
     .form-header { margin-bottom: 24px; text-align: center; }
     .form-header h3 { margin-bottom: 6px; font-size: 1.6rem; }
     .form-header p { color: #666; font-size: 0.95rem; margin: 0; }
-
     .form-group { margin-bottom: 18px; }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-
     label { display: block; margin-bottom: 6px; font-weight: 600; color: #1d3557; font-size: 0.9rem; }
     input, textarea, select {
-      width: 100%;
-      padding: 12px 14px;
-      border: 2px solid #edf2f7;
-      border-radius: 12px;
-      box-sizing: border-box;
-      transition: all 0.3s ease;
-      font-size: 1rem;
-      background: #f8fafc;
-      font-family: inherit;
+      width: 100%; padding: 12px 14px; border: 2px solid #edf2f7; border-radius: 12px;
+      box-sizing: border-box; transition: all 0.3s ease; font-size: 1rem; background: #f8fafc; font-family: inherit;
     }
     input:focus, textarea:focus, select:focus {
-      outline: none;
-      border-color: #a8dadc;
-      background: white;
-      box-shadow: 0 0 0 4px rgba(168, 218, 220, 0.2);
+      outline: none; border-color: #a8dadc; background: white; box-shadow: 0 0 0 4px rgba(168, 218, 220, 0.2);
     }
-
     .datetime-split { display: flex; gap: 8px; }
     .datetime-split input[type="date"] { flex: 1; min-width: 0; }
     .datetime-split select { width: 108px; flex-shrink: 0; padding: 12px 8px; cursor: pointer; }
-
     .submit-btn { width: 100%; margin-top: 16px; }
-
     .success-box { text-align: center; padding: 24px 16px; }
     .success-icon {
       width: 60px; height: 60px; background: #d8f3dc; color: #1b4332;
@@ -135,39 +120,18 @@ import { DataService } from '../../core/services/data.service';
     }
     .success-box h4 { color: #1b4332; margin-bottom: 8px; }
     .success-box p { margin-bottom: 20px; color: #4a5568; font-size: 0.95rem; }
-
-    .error-msg {
-      background: #fff5f5; color: #e63946; padding: 12px;
-      border-radius: 8px; font-size: 0.9rem; margin-bottom: 16px;
-      border-left: 4px solid #e63946;
-    }
-
+    .error-msg { background: #fff5f5; color: #e63946; padding: 12px; border-radius: 8px; font-size: 0.9rem; margin-bottom: 16px; border-left: 4px solid #e63946; }
     .conflict-warning {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      background: #fffbeb;
-      border: 1.5px solid #fbbf24;
-      color: #92400e;
-      padding: 12px 14px;
-      border-radius: 10px;
-      font-size: 0.88rem;
-      line-height: 1.5;
-      margin-bottom: 4px;
+      display: flex; align-items: flex-start; gap: 10px;
+      background: #fffbeb; border: 1.5px solid #fbbf24; color: #92400e;
+      padding: 12px 14px; border-radius: 10px; font-size: 0.88rem; line-height: 1.5; margin-bottom: 4px;
     }
     .conflict-warning svg { flex-shrink: 0; margin-top: 1px; color: #d97706; }
-
-    /* ── Mobile ── */
-    @media (max-width: 992px) {
-      .form-container { padding: 24px 20px; }
-      .form-header h3 { font-size: 1.35rem; }
-    }
-
+    @media (max-width: 992px) { .form-container { padding: 24px 20px; } .form-header h3 { font-size: 1.35rem; } }
     @media (max-width: 600px) {
       .form-container { padding: 20px 16px; border-radius: 14px; width: 100%; box-sizing: border-box; }
       .form-header { margin-bottom: 18px; text-align: center; }
-      .form-header h3 { font-size: 1.2rem; }
-      .form-header p { font-size: 0.85rem; }
+      .form-header h3 { font-size: 1.2rem; } .form-header p { font-size: 0.85rem; }
       .form-row { grid-template-columns: 1fr; gap: 0; }
       .form-group { margin-bottom: 14px; }
       label { font-size: 0.83rem; margin-bottom: 5px; }
@@ -241,12 +205,12 @@ export class ReservationFormComponent implements OnInit {
       this.conflictWarning = false;
       return;
     }
-    this.dataService.getDisponibilites(debut, fin).subscribe(periods => {
+    this.reservationService.getDisponibilites(debut, fin).subscribe(periods => {
       this.conflictWarning = periods.length > 0;
     });
   }
 
-  constructor(private fb: FormBuilder, private dataService: DataService) {
+  constructor(private fb: FormBuilder, private reservationService: ReservationService) {
     this.resForm = this.fb.group({
       nomDemandeur: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -261,28 +225,18 @@ export class ReservationFormComponent implements OnInit {
 
   onSubmit(): void {
     if (this.resForm.invalid) return;
-
     this.loading = true;
     this.error = '';
-
     const start = new Date(this.resForm.value.dateDebut);
     const end = new Date(this.resForm.value.dateFin);
-
     if (start >= end) {
-      this.error = "La date de fin doit être après la date de début.";
+      this.error = 'La date de fin doit être après la date de début.';
       this.loading = false;
       return;
     }
-
-    this.dataService.createReservation(this.resForm.value).subscribe({
-      next: () => {
-        this.submitted = true;
-        this.loading = false;
-      },
-      error: (err) => {
-        this.error = "Une erreur est survenue lors de l'envoi. Veuillez réessayer.";
-        this.loading = false;
-      }
+    this.reservationService.createReservation(this.resForm.value).subscribe({
+      next: () => { this.submitted = true; this.loading = false; },
+      error: () => { this.error = "Une erreur est survenue lors de l'envoi. Veuillez réessayer."; this.loading = false; }
     });
   }
 

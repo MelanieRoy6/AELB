@@ -17,7 +17,6 @@ import { Component } from '@angular/core';
 
       <div class="content-wrapper">
 
-        <!-- 1. Édition du site -->
         <section class="legal-section">
           <div class="section-number">1</div>
           <div class="section-body">
@@ -63,7 +62,6 @@ import { Component } from '@angular/core';
           </div>
         </section>
 
-        <!-- 2. Hébergement -->
         <section class="legal-section">
           <div class="section-number">2</div>
           <div class="section-body">
@@ -87,7 +85,6 @@ import { Component } from '@angular/core';
           </div>
         </section>
 
-        <!-- 3. Propriété intellectuelle -->
         <section class="legal-section">
           <div class="section-number">3</div>
           <div class="section-body">
@@ -97,7 +94,6 @@ import { Component } from '@angular/core';
           </div>
         </section>
 
-        <!-- 4. Protection des données personnelles -->
         <section class="legal-section">
           <div class="section-number">4</div>
           <div class="section-body">
@@ -139,10 +135,8 @@ import { Component } from '@angular/core';
     </div>
   `,
   styles: [`
-    /* === Page === */
     .page-wrapper { background: #fff; }
 
-    /* === Hero === */
     .page-hero {
       background: linear-gradient(155deg, rgba(30,61,47,.82) 0%, rgba(45,106,79,.50) 100%),
                   url('/salle-hero.png') center / cover no-repeat;
@@ -174,14 +168,8 @@ import { Component } from '@angular/core';
       text-shadow: 0 2px 12px rgba(0,0,0,.25);
     }
 
-    .hero-inner p {
-      font-size: 0.95rem;
-      color: rgba(255,255,255,.82);
-      line-height: 1.6;
-      margin: 0;
-    }
+    .hero-inner p { font-size: 0.95rem; color: rgba(255,255,255,.82); line-height: 1.6; margin: 0; }
 
-    /* === Contenu === */
     .content-wrapper {
       max-width: 820px;
       margin: 0 auto;
@@ -191,7 +179,6 @@ import { Component } from '@angular/core';
       gap: 48px;
     }
 
-    /* === Section légale === */
     .legal-section {
       display: grid;
       grid-template-columns: 48px 1fr;
@@ -200,44 +187,20 @@ import { Component } from '@angular/core';
     }
 
     .section-number {
-      width: 48px;
-      height: 48px;
+      width: 48px; height: 48px;
       background: var(--g800, #2d6a4f);
       color: white;
       border-radius: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
-      font-weight: 800;
-      flex-shrink: 0;
-      margin-top: 4px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; font-weight: 800;
+      flex-shrink: 0; margin-top: 4px;
     }
 
-    .section-body h2 {
-      font-size: 1.35rem;
-      font-weight: 800;
-      color: var(--g900, #1e3d2f);
-      margin: 0 0 16px;
-    }
-
-    .section-body h3 {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--g900, #1e3d2f);
-      margin: 24px 0 12px;
-    }
-
-    .section-body p {
-      color: var(--text-body, #3a4f42);
-      font-size: 0.93rem;
-      line-height: 1.75;
-      margin: 0 0 14px;
-    }
-
+    .section-body h2 { font-size: 1.35rem; font-weight: 800; color: var(--g900, #1e3d2f); margin: 0 0 16px; }
+    .section-body h3 { font-size: 1rem; font-weight: 700; color: var(--g900, #1e3d2f); margin: 24px 0 12px; }
+    .section-body p { color: var(--text-body, #3a4f42); font-size: 0.93rem; line-height: 1.75; margin: 0 0 14px; }
     .section-body p:last-child { margin-bottom: 0; }
 
-    /* === Note légale === */
     .legal-note {
       background: #fffbf0;
       border-left: 3px solid #f59e0b;
@@ -248,7 +211,6 @@ import { Component } from '@angular/core';
       margin-bottom: 16px !important;
     }
 
-    /* === Liste de définitions === */
     .info-list {
       display: grid;
       grid-template-columns: auto 1fr;
@@ -258,44 +220,20 @@ import { Component } from '@angular/core';
     }
 
     .info-list dt {
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: var(--g800, #2d6a4f);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      white-space: nowrap;
-      padding-top: 1px;
+      font-size: 0.82rem; font-weight: 700; color: var(--g800, #2d6a4f);
+      text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; padding-top: 1px;
     }
 
-    .info-list dd {
-      font-size: 0.93rem;
-      color: var(--text-body, #3a4f42);
-      line-height: 1.6;
-      margin: 0;
-    }
-
-    .info-list a {
-      color: var(--g800, #2d6a4f);
-      text-decoration: none;
-      font-weight: 600;
-    }
-
+    .info-list dd { font-size: 0.93rem; color: var(--text-body, #3a4f42); line-height: 1.6; margin: 0; }
+    .info-list a { color: var(--g800, #2d6a4f); text-decoration: none; font-weight: 600; }
     .info-list a:hover { text-decoration: underline; }
 
-    /* Lien LinkedIn */
     .linkedin-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      color: #0a66c2;
-      font-weight: 600;
-      text-decoration: none;
-      font-size: 0.93rem;
+      display: inline-flex; align-items: center; gap: 6px;
+      color: #0a66c2; font-weight: 600; text-decoration: none; font-size: 0.93rem;
     }
-
     .linkedin-link:hover { text-decoration: underline; }
 
-    /* Champs à compléter */
     .placeholder {
       background: #fef9c3;
       border: 1px dashed #d97706;
@@ -306,14 +244,8 @@ import { Component } from '@angular/core';
       font-style: italic;
     }
 
-    .note {
-      display: block;
-      font-size: 0.78rem;
-      color: var(--text-muted, #556b5a);
-      margin-top: 3px;
-    }
+    .note { display: block; font-size: 0.78rem; color: var(--text-muted, #556b5a); margin-top: 3px; }
 
-    /* === Bloc CNIL === */
     .cnil-block {
       background: var(--g050, #edf5ee);
       border-left: 4px solid var(--g400, #52b788);
@@ -321,20 +253,10 @@ import { Component } from '@angular/core';
       padding: 16px 18px;
       margin-top: 20px;
     }
-
-    .cnil-block p {
-      margin: 0 !important;
-      font-size: 0.92rem !important;
-    }
-
-    .cnil-block a {
-      color: var(--g800, #2d6a4f);
-      font-weight: 600;
-    }
-
+    .cnil-block p { margin: 0 !important; font-size: 0.92rem !important; }
+    .cnil-block a { color: var(--g800, #2d6a4f); font-weight: 600; }
     .cnil-block a:hover { text-decoration: underline; }
 
-    /* === Responsive === */
     @media (max-width: 600px) {
       .legal-section { grid-template-columns: 1fr; gap: 12px; }
       .section-number { width: 38px; height: 38px; font-size: 0.95rem; }

@@ -1,14 +1,13 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
-import { AuthService } from '../../core/services/auth.service';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-admin',
   standalone: true,
   imports: [CommonModule, RouterModule],
   template: `
-    <!-- Barre mobile -->
     <div class="mobile-topbar">
       <button class="hamburger" (click)="toggleSidebar()" [attr.aria-expanded]="sidebarOpen" aria-label="Menu">
         @if (!sidebarOpen) {
@@ -26,7 +25,6 @@ import { AuthService } from '../../core/services/auth.service';
       <span class="mobile-title">Admin AELB</span>
     </div>
 
-    <!-- Overlay mobile -->
     @if (sidebarOpen) {
       <div class="sidebar-overlay" (click)="closeSidebar()"></div>
     }
@@ -136,168 +134,64 @@ import { AuthService } from '../../core/services/auth.service';
     </div>
   `,
   styles: [`
-    /* ── Mobile topbar ── */
     .mobile-topbar {
-      display: none;
-      align-items: center;
-      gap: 14px;
-      padding: 14px 16px;
-      background: #edf5ee;
-      border-bottom: 1px solid rgba(45, 106, 79, 0.15);
-      position: sticky;
-      top: 0;
-      z-index: 200;
+      display: none; align-items: center; gap: 14px; padding: 14px 16px;
+      background: #edf5ee; border-bottom: 1px solid rgba(45, 106, 79, 0.15);
+      position: sticky; top: 0; z-index: 200;
     }
-    .mobile-title {
-      font-size: 1rem;
-      font-weight: 800;
-      color: #1e3d2f;
-    }
+    .mobile-title { font-size: 1rem; font-weight: 800; color: #1e3d2f; }
     .hamburger {
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: #2d6a4f;
-      padding: 4px;
-      display: flex;
-      border-radius: 8px;
-      transition: background 0.15s;
+      background: none; border: none; cursor: pointer; color: #2d6a4f;
+      padding: 4px; display: flex; border-radius: 8px; transition: background 0.15s;
     }
     .hamburger:hover { background: rgba(45,106,79,0.1); }
-
-    /* ── Overlay ── */
-    .sidebar-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.4);
-      z-index: 299;
-    }
-
-    /* ── Layout ── */
-    .admin-layout {
-      display: flex;
-      height: 100vh;
-      background: #f6faf7;
-    }
-
-    /* ── Sidebar ── */
+    .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 299; }
+    .admin-layout { display: flex; height: 100vh; background: #f6faf7; }
     .sidebar {
-      width: 250px;
-      background: #edf5ee;
-      border-right: 1px solid rgba(45, 106, 79, 0.15);
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      flex-shrink: 0;
+      width: 250px; background: #edf5ee; border-right: 1px solid rgba(45, 106, 79, 0.15);
+      padding: 0; display: flex; flex-direction: column; flex-shrink: 0;
     }
-
     .sidebar-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 24px 20px 20px;
-      border-bottom: 1px solid rgba(45, 106, 79, 0.15);
-      margin-bottom: 12px;
+      display: flex; align-items: center; gap: 12px; padding: 24px 20px 20px;
+      border-bottom: 1px solid rgba(45, 106, 79, 0.15); margin-bottom: 12px;
     }
     .sidebar-logo {
-      width: 40px;
-      height: 40px;
-      background: #2d6a4f;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      flex-shrink: 0;
+      width: 40px; height: 40px; background: #2d6a4f; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center; color: white; flex-shrink: 0;
     }
-    .sidebar-title {
-      display: block;
-      font-size: 0.95rem;
-      font-weight: 800;
-      color: #1e3d2f;
-      line-height: 1.2;
-    }
-    .sidebar-sub {
-      display: block;
-      font-size: 0.75rem;
-      color: #52b788;
-      font-weight: 500;
-    }
-
-    nav {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      padding: 0 12px;
-      flex: 1;
-    }
+    .sidebar-title { display: block; font-size: 0.95rem; font-weight: 800; color: #1e3d2f; line-height: 1.2; }
+    .sidebar-sub { display: block; font-size: 0.75rem; color: #52b788; font-weight: 500; }
+    nav { display: flex; flex-direction: column; gap: 2px; padding: 0 12px; flex: 1; }
     nav a {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: #2d6a4f;
-      text-decoration: none;
-      padding: 11px 14px;
-      border-radius: 10px;
-      font-size: 0.9rem;
-      font-weight: 600;
+      display: flex; align-items: center; gap: 10px; color: #2d6a4f; text-decoration: none;
+      padding: 11px 14px; border-radius: 10px; font-size: 0.9rem; font-weight: 600;
       transition: background 0.18s ease, color 0.18s ease;
     }
     nav a svg { flex-shrink: 0; opacity: 0.8; }
     nav a:hover { background: rgba(45, 106, 79, 0.1); color: #1e3d2f; }
     nav a.active { background: #2d6a4f; color: white; }
     nav a.active svg { opacity: 1; }
-
     .logout-btn {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin: 12px;
-      padding: 11px 14px;
-      background: rgba(220, 53, 69, 0.08);
-      color: #c0392b;
-      border: 1px solid rgba(220, 53, 69, 0.2);
-      border-radius: 10px;
-      font-size: 0.9rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.18s ease;
+      display: flex; align-items: center; gap: 10px; margin: 12px; padding: 11px 14px;
+      background: rgba(220, 53, 69, 0.08); color: #c0392b;
+      border: 1px solid rgba(220, 53, 69, 0.2); border-radius: 10px;
+      font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: background 0.18s ease;
     }
     .logout-btn:hover { background: rgba(220, 53, 69, 0.15); }
+    .admin-content { flex: 1; padding: 32px; overflow-y: auto; background: #f6faf7; }
 
-    /* ── Main content ── */
-    .admin-content {
-      flex: 1;
-      padding: 32px;
-      overflow-y: auto;
-      background: #f6faf7;
-    }
-
-    /* ── Responsive ── */
     @media (max-width: 768px) {
       .mobile-topbar { display: flex; }
       .sidebar-overlay { display: block; }
-
       .admin-layout { height: calc(100vh - 53px); }
-
       .admin-content { padding: 20px 16px; }
-
       .sidebar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        height: 100vh;
-        z-index: 300;
+        position: fixed; top: 0; left: 0; height: 100vh; z-index: 300;
         transform: translateX(-100%);
         transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: none;
-        width: 260px;
+        box-shadow: none; width: 260px;
       }
-      .sidebar.open {
-        transform: translateX(0);
-        box-shadow: 4px 0 24px rgba(0,0,0,0.15);
-      }
+      .sidebar.open { transform: translateX(0); box-shadow: 4px 0 24px rgba(0,0,0,0.15); }
     }
   `]
 })

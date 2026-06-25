@@ -1,8 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SeoService } from '../../core/services/seo.service';
-import { DisponibilitesComponent } from './disponibilites.component';
-import { ReservationFormComponent } from './reservation-form.component';
+import { SeoService } from '../../../core/services/seo.service';
+import { DisponibilitesComponent } from '../components/disponibilites.component';
+import { ReservationFormComponent } from '../components/reservation-form.component';
 
 @Component({
   selector: 'app-reservation',
@@ -12,7 +12,7 @@ import { ReservationFormComponent } from './reservation-form.component';
     <div class="container">
       <h1>Réserver la Salle Jean-Noël Prin</h1>
       <p class="intro">Utilisez le calendrier pour vérifier les disponibilités et remplissez le formulaire ci-dessous pour nous soumettre votre demande.</p>
-      
+
       <div class="reservation-layout">
         <div class="calendar-section">
           <app-disponibilites></app-disponibilites>

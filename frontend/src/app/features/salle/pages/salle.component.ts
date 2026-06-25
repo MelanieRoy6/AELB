@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { SeoService } from '../../core/services/seo.service';
-import { DataService } from '../../core/services/data.service';
-import { Media } from '../../core/models';
+import { SeoService } from '../../../core/services/seo.service';
+import { SalleService } from '../services/salle.service';
+import { Media } from '../../../core/models';
 
 @Component({
   selector: 'app-salle',
@@ -71,10 +71,8 @@ import { Media } from '../../core/models';
           </div>
         </section>
 
-        <!-- ══ Présentation détaillée ══ -->
         <section class="detail-section">
 
-          <!-- Intro -->
           <div class="detail-intro">
             <p class="detail-lead">
               Vous recherchez le lieu idéal pour vos événements, repas de famille ou banquets ?
@@ -83,7 +81,6 @@ import { Media } from '../../core/models';
             </p>
           </div>
 
-          <!-- Volumes -->
           <div class="detail-block">
             <h2 class="block-heading">
               <span class="heading-icon" aria-hidden="true">
@@ -97,7 +94,6 @@ import { Media } from '../../core/models';
             <p class="block-sub">L'espace se compose de plusieurs zones modulables pour s'adapter à vos besoins.</p>
 
             <div class="spaces-grid">
-
               <div class="space-card">
                 <div class="space-top">
                   <div class="space-icon">
@@ -138,11 +134,9 @@ import { Media } from '../../core/models';
                 <h3>Espace d'accueil &amp; dégagement</h3>
                 <p>Grand couloir idéal pour installer un vestiaire ou un espace d'émargement.</p>
               </div>
-
             </div>
           </div>
 
-          <!-- Cuisine -->
           <div class="detail-block">
             <div class="cuisine-card">
               <div class="cuisine-left">
@@ -187,7 +181,6 @@ import { Media } from '../../core/models';
             </div>
           </div>
 
-          <!-- Extérieur -->
           <div class="detail-block">
             <div class="exterior-card">
               <div class="exterior-text">
@@ -240,7 +233,6 @@ import { Media } from '../../core/models';
             </button>
 
             <div class="carousel">
-              <!-- Slides -->
               <div class="carousel-track">
                 <div *ngFor="let photo of photos; let i = index"
                      class="carousel-slide"
@@ -251,7 +243,6 @@ import { Media } from '../../core/models';
                 </div>
               </div>
 
-              <!-- Dots -->
               <div class="carousel-dots">
                 <button *ngFor="let photo of photos; let i = index"
                         class="dot"
@@ -261,7 +252,6 @@ import { Media } from '../../core/models';
                 </button>
               </div>
 
-              <!-- Counter -->
               <div class="carousel-counter">{{ currentIndex + 1 }} / {{ photos.length }}</div>
             </div>
 
@@ -324,7 +314,6 @@ import { Media } from '../../core/models';
     .address-footer { display: flex; align-items: center; gap: 10px; color: var(--g800, #2d6a4f); font-weight: 600; }
     .address-footer p { margin: 0; }
 
-    /* ── Carousel ── */
     .carousel-wrapper {
       display: flex;
       align-items: center;
@@ -333,341 +322,138 @@ import { Media } from '../../core/models';
       margin: 0 auto;
       user-select: none;
     }
-
     .carousel {
-      position: relative;
-      flex: 1;
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 8px 32px rgba(30, 61, 47, 0.15);
-      background: #1a2e1d;
-      aspect-ratio: 16 / 9;
-      max-height: 520px;
+      position: relative; flex: 1; border-radius: 20px; overflow: hidden;
+      box-shadow: 0 8px 32px rgba(30, 61, 47, 0.15); background: #1a2e1d;
+      aspect-ratio: 16 / 9; max-height: 520px;
     }
     .carousel-track { position: relative; width: 100%; height: 100%; }
-
-    .carousel-slide {
-      position: absolute;
-      inset: 0;
-      opacity: 0;
-      transition: opacity 0.6s ease;
-      pointer-events: none;
-    }
+    .carousel-slide { position: absolute; inset: 0; opacity: 0; transition: opacity 0.6s ease; pointer-events: none; }
     .carousel-slide.active { opacity: 1; pointer-events: auto; z-index: 1; }
-    .carousel-slide.prev   { opacity: 0; z-index: 0; }
-
-    .carousel-slide img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
+    .carousel-slide.prev { opacity: 0; z-index: 0; }
+    .carousel-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .slide-legend {
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
+      position: absolute; bottom: 0; left: 0; right: 0;
       padding: 28px 24px 16px;
       background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 100%);
-      color: white;
-      font-size: 0.95rem;
-      font-weight: 500;
-      z-index: 2;
+      color: white; font-size: 0.95rem; font-weight: 500; z-index: 2;
     }
-
     .carousel-arrow {
-      flex-shrink: 0;
-      background: var(--g800, #2d6a4f);
-      border: none;
-      color: white;
-      border-radius: 50%;
-      width: 48px; height: 48px;
+      flex-shrink: 0; background: var(--g800, #2d6a4f); border: none; color: white;
+      border-radius: 50%; width: 48px; height: 48px;
       display: flex; align-items: center; justify-content: center;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+      cursor: pointer; transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
       box-shadow: 0 4px 14px rgba(45, 106, 79, 0.35);
     }
-    .carousel-arrow:hover {
-      background: var(--g700, #40916c);
-      transform: scale(1.1);
-      box-shadow: 0 6px 18px rgba(45, 106, 79, 0.45);
-    }
-
+    .carousel-arrow:hover { background: var(--g700, #40916c); transform: scale(1.1); box-shadow: 0 6px 18px rgba(45, 106, 79, 0.45); }
     .carousel-dots {
-      position: absolute;
-      bottom: 14px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 7px;
-      z-index: 10;
+      position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 7px; z-index: 10;
     }
     .dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.45);
-      border: none;
-      cursor: pointer;
-      padding: 0;
+      width: 8px; height: 8px; border-radius: 50%;
+      background: rgba(255, 255, 255, 0.45); border: none; cursor: pointer; padding: 0;
       transition: background 0.2s, transform 0.2s;
     }
-    .dot.active {
-      background: white;
-      transform: scale(1.35);
-    }
-
+    .dot.active { background: white; transform: scale(1.35); }
     .carousel-counter {
-      position: absolute;
-      top: 14px; right: 16px;
-      background: rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(4px);
-      color: white;
-      font-size: 0.8rem;
-      font-weight: 600;
-      padding: 4px 10px;
-      border-radius: 20px;
-      z-index: 10;
+      position: absolute; top: 14px; right: 16px;
+      background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(4px);
+      color: white; font-size: 0.8rem; font-weight: 600;
+      padding: 4px 10px; border-radius: 20px; z-index: 10;
     }
 
-    @media (max-width: 600px) {
-      .carousel-wrapper { gap: 10px; }
-      .carousel { aspect-ratio: 4 / 3; max-height: 300px; }
-      .carousel-arrow { width: 38px; height: 38px; }
-    }
-
-    /* ══ Présentation détaillée ══ */
-    .detail-section {
-      margin-bottom: 60px;
-      display: flex;
-      flex-direction: column;
-      gap: 48px;
-    }
-
-    /* Intro */
-    .detail-intro {
-      text-align: center;
-      max-width: 760px;
-      margin: 0 auto;
-      padding: 0 8px;
-    }
-    .detail-lead {
-      font-size: 1.08rem;
-      color: var(--text-muted, #556b5a);
-      line-height: 1.75;
-      margin: 0;
-    }
+    .detail-section { margin-bottom: 60px; display: flex; flex-direction: column; gap: 48px; }
+    .detail-intro { text-align: center; max-width: 760px; margin: 0 auto; padding: 0 8px; }
+    .detail-lead { font-size: 1.08rem; color: var(--text-muted, #556b5a); line-height: 1.75; margin: 0; }
     .detail-lead strong { color: var(--g800, #2d6a4f); }
-
-    /* Blocs */
     .detail-block { display: flex; flex-direction: column; }
-
     .block-heading {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-size: 1.5rem;
-      font-weight: 800;
-      color: var(--g900, #1e3d2f);
-      margin: 0 0 8px;
+      display: flex; align-items: center; gap: 12px;
+      font-size: 1.5rem; font-weight: 800; color: var(--g900, #1e3d2f); margin: 0 0 8px;
     }
     .heading-icon {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 44px; height: 44px;
-      background: var(--g050, #edf5ee);
-      border-radius: 12px;
-      color: var(--g800, #2d6a4f);
-      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      width: 44px; height: 44px; background: var(--g050, #edf5ee);
+      border-radius: 12px; color: var(--g800, #2d6a4f); flex-shrink: 0;
     }
-    .block-sub {
-      color: var(--text-muted, #556b5a);
-      font-size: 0.95rem;
-      margin: 0 0 28px;
-    }
-
-    /* Grille volumes */
-    .spaces-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-    }
-
+    .block-sub { color: var(--text-muted, #556b5a); font-size: 0.95rem; margin: 0 0 28px; }
+    .spaces-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
     .space-card {
-      background: var(--g010, #f6faf7);
-      border: 1px solid var(--border, rgba(45,106,79,.15));
-      border-radius: 20px;
-      padding: 26px 22px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
+      background: var(--g010, #f6faf7); border: 1px solid var(--border, rgba(45,106,79,.15));
+      border-radius: 20px; padding: 26px 22px;
+      display: flex; flex-direction: column; gap: 12px;
       transition: transform 0.25s ease, box-shadow 0.25s ease;
     }
-    .space-card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-md, 0 10px 32px rgba(30,61,47,.10));
-    }
-    .space-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+    .space-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md, 0 10px 32px rgba(30,61,47,.10)); }
+    .space-top { display: flex; align-items: center; justify-content: space-between; }
     .space-icon {
-      width: 50px; height: 50px;
-      background: var(--g050, #edf5ee);
-      border-radius: 13px;
-      display: flex; align-items: center; justify-content: center;
+      width: 50px; height: 50px; background: var(--g050, #edf5ee);
+      border-radius: 13px; display: flex; align-items: center; justify-content: center;
       color: var(--g800, #2d6a4f);
     }
     .space-sqm {
-      font-size: 1.1rem;
-      font-weight: 800;
-      color: var(--accent, #9e5524);
-      background: rgba(158, 85, 36, 0.1);
-      padding: 4px 12px;
-      border-radius: 50px;
+      font-size: 1.1rem; font-weight: 800; color: var(--accent, #9e5524);
+      background: rgba(158, 85, 36, 0.1); padding: 4px 12px; border-radius: 50px;
     }
-    .space-card h3 {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--g900, #1e3d2f);
-      margin: 0;
-    }
-    .space-card p {
-      font-size: 0.88rem;
-      color: var(--text-muted, #556b5a);
-      line-height: 1.6;
-      margin: 0;
-    }
+    .space-card h3 { font-size: 1rem; font-weight: 700; color: var(--g900, #1e3d2f); margin: 0; }
+    .space-card p { font-size: 0.88rem; color: var(--text-muted, #556b5a); line-height: 1.6; margin: 0; }
 
-    /* Cuisine */
     .cuisine-card {
-      background: #fff;
-      border: 1px solid var(--border, rgba(45,106,79,.15));
-      border-radius: 20px;
-      box-shadow: var(--shadow-sm, 0 4px 16px rgba(30,61,47,.08));
-      padding: 32px 32px 0;
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      overflow: hidden;
+      background: #fff; border: 1px solid var(--border, rgba(45,106,79,.15));
+      border-radius: 20px; box-shadow: var(--shadow-sm, 0 4px 16px rgba(30,61,47,.08));
+      padding: 32px 32px 0; display: flex; flex-direction: column; overflow: hidden;
     }
     .cuisine-left { padding-bottom: 28px; }
-    .cuisine-title-row {
-      display: flex;
-      align-items: flex-start;
-      gap: 16px;
-      margin-bottom: 20px;
-    }
+    .cuisine-title-row { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 20px; }
     .cuisine-icon-wrap {
-      width: 52px; height: 52px;
-      background: var(--g050, #edf5ee);
-      border-radius: 14px;
+      width: 52px; height: 52px; background: var(--g050, #edf5ee); border-radius: 14px;
       display: flex; align-items: center; justify-content: center;
-      color: var(--g800, #2d6a4f);
-      flex-shrink: 0;
-      margin-top: 4px;
+      color: var(--g800, #2d6a4f); flex-shrink: 0; margin-top: 4px;
     }
-    .cuisine-title-row h2 {
-      font-size: 1.4rem;
-      font-weight: 800;
-      color: var(--g900, #1e3d2f);
-      margin: 0 0 6px;
-    }
-    .cuisine-sqm-badge {
-      font-size: 0.78rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      color: var(--text-muted, #556b5a);
-    }
-    .equip-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .equip-list li {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 0.95rem;
-      color: var(--text, #1a2e1d);
-    }
+    .cuisine-title-row h2 { font-size: 1.4rem; font-weight: 800; color: var(--g900, #1e3d2f); margin: 0 0 6px; }
+    .cuisine-sqm-badge { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-muted, #556b5a); }
+    .equip-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+    .equip-list li { display: flex; align-items: center; gap: 10px; font-size: 0.95rem; color: var(--text, #1a2e1d); }
     .equip-list li svg { color: var(--g700, #40916c); flex-shrink: 0; }
-
     .mobilier-callout {
-      display: flex;
-      gap: 16px;
-      align-items: flex-start;
-      background: rgba(158, 85, 36, 0.07);
-      border-top: 3px solid var(--accent, #9e5524);
-      padding: 22px 32px;
-      margin: 0 -32px;
+      display: flex; gap: 16px; align-items: flex-start;
+      background: rgba(158, 85, 36, 0.07); border-top: 3px solid var(--accent, #9e5524);
+      padding: 22px 32px; margin: 0 -32px;
     }
-    .callout-icon {
-      width: 40px; height: 40px;
-      display: flex; align-items: center; justify-content: center;
-      color: var(--accent, #9e5524);
-      flex-shrink: 0;
-      margin-top: 2px;
-    }
+    .callout-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: var(--accent, #9e5524); flex-shrink: 0; margin-top: 2px; }
     .mobilier-callout strong { display: block; font-size: 0.95rem; font-weight: 700; color: var(--accent-alt, #7a3f18); margin-bottom: 4px; }
     .mobilier-callout p { margin: 0; font-size: 0.9rem; color: var(--text-muted, #556b5a); line-height: 1.6; }
     .mobilier-callout p strong { display: inline; color: var(--accent, #9e5524); }
 
-    /* Extérieur */
     .exterior-card {
       background: linear-gradient(135deg, var(--g050, #edf5ee) 0%, var(--g010, #f6faf7) 100%);
-      border: 1px solid rgba(45, 106, 79, 0.2);
-      border-left: 4px solid var(--g400, #52b788);
-      border-radius: 20px;
-      padding: 32px 36px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
+      border: 1px solid rgba(45, 106, 79, 0.2); border-left: 4px solid var(--g400, #52b788);
+      border-radius: 20px; padding: 32px 36px;
+      display: flex; flex-direction: column; gap: 20px;
     }
     .ext-icon-wrap {
-      width: 54px; height: 54px;
-      background: rgba(82, 183, 136, 0.2);
-      border-radius: 14px;
+      width: 54px; height: 54px; background: rgba(82, 183, 136, 0.2); border-radius: 14px;
       display: flex; align-items: center; justify-content: center;
-      color: var(--g800, #2d6a4f);
-      margin-bottom: 4px;
+      color: var(--g800, #2d6a4f); margin-bottom: 4px;
     }
-    .exterior-text h2 {
-      font-size: 1.4rem;
-      font-weight: 800;
-      color: var(--g900, #1e3d2f);
-      margin: 0 0 14px;
-    }
-    .exterior-text p {
-      font-size: 0.95rem;
-      color: var(--text-muted, #556b5a);
-      line-height: 1.7;
-      margin: 0 0 10px;
-    }
+    .exterior-text h2 { font-size: 1.4rem; font-weight: 800; color: var(--g900, #1e3d2f); margin: 0 0 14px; }
+    .exterior-text p { font-size: 0.95rem; color: var(--text-muted, #556b5a); line-height: 1.7; margin: 0 0 10px; }
     .exterior-text p:last-child { margin-bottom: 0; }
     .exterior-text strong { color: var(--g800, #2d6a4f); }
-    .exterior-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
+    .exterior-tags { display: flex; flex-wrap: wrap; gap: 10px; }
     .ext-tag {
-      background: #fff;
-      border: 1px solid rgba(45, 106, 79, 0.2);
-      border-radius: 50px;
-      padding: 6px 16px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--g800, #2d6a4f);
+      background: #fff; border: 1px solid rgba(45, 106, 79, 0.2); border-radius: 50px;
+      padding: 6px 16px; font-size: 0.85rem; font-weight: 600; color: var(--g800, #2d6a4f);
     }
 
     @media (max-width: 900px) {
       .info-grid { grid-template-columns: 1fr; }
       .spaces-grid { grid-template-columns: 1fr; }
       .hero-content h1 { font-size: 2.2rem; }
+      .carousel-wrapper { gap: 10px; }
+      .carousel { aspect-ratio: 4 / 3; max-height: 300px; }
+      .carousel-arrow { width: 38px; height: 38px; }
     }
 
     @media (max-width: 600px) {
@@ -684,7 +470,7 @@ import { Media } from '../../core/models';
 })
 export class SalleComponent implements OnInit, OnDestroy {
   private seo = inject(SeoService);
-  private dataService = inject(DataService);
+  private salleService = inject(SalleService);
 
   photos: Media[] = [];
   currentIndex = 0;
@@ -699,25 +485,16 @@ export class SalleComponent implements OnInit, OnDestroy {
       path: '/salle'
     });
 
-    this.dataService.getMediasByCategorie('SALLE').subscribe(medias => {
+    this.salleService.getMediasByCategorie('SALLE').subscribe(medias => {
       this.photos = medias.filter(m => m.categorie === 'SALLE');
       if (this.photos.length > 1) this.startAuto();
     });
   }
 
-  ngOnDestroy(): void {
-    this.stopAuto();
-  }
+  ngOnDestroy(): void { this.stopAuto(); }
 
-  next(): void {
-    this.prevIndex = this.currentIndex;
-    this.currentIndex = (this.currentIndex + 1) % this.photos.length;
-  }
-
-  prev(): void {
-    this.prevIndex = this.currentIndex;
-    this.currentIndex = (this.currentIndex - 1 + this.photos.length) % this.photos.length;
-  }
+  next(): void { this.prevIndex = this.currentIndex; this.currentIndex = (this.currentIndex + 1) % this.photos.length; }
+  prev(): void { this.prevIndex = this.currentIndex; this.currentIndex = (this.currentIndex - 1 + this.photos.length) % this.photos.length; }
 
   goTo(index: number): void {
     if (index === this.currentIndex) return;
@@ -729,16 +506,7 @@ export class SalleComponent implements OnInit, OnDestroy {
   pauseAuto(): void { this.stopAuto(); }
   resumeAuto(): void { if (this.photos.length > 1) this.startAuto(); }
 
-  private startAuto(): void {
-    this.autoTimer = setInterval(() => this.next(), 5000);
-  }
-
-  private stopAuto(): void {
-    if (this.autoTimer) { clearInterval(this.autoTimer); this.autoTimer = null; }
-  }
-
-  private resetAuto(): void {
-    this.stopAuto();
-    if (this.photos.length > 1) this.startAuto();
-  }
+  private startAuto(): void { this.autoTimer = setInterval(() => this.next(), 5000); }
+  private stopAuto(): void { if (this.autoTimer) { clearInterval(this.autoTimer); this.autoTimer = null; } }
+  private resetAuto(): void { this.stopAuto(); if (this.photos.length > 1) this.startAuto(); }
 }

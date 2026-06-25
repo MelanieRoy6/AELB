@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { DataService } from '../../core/services/data.service';
-import { MembreEquipe } from '../../core/models';
+import { AdminService } from '../services/admin.service';
+import { MembreEquipe } from '../../../core/models';
 
 const ROLES_PREDEFINIS = [
   'Président(e)',
@@ -70,9 +70,7 @@ const ROLES_PREDEFINIS = [
           <div class="membre-info">
             <div class="membre-name">{{ m.prenom }} {{ m.nom }}</div>
             <span class="role-tag">{{ m.role }}</span>
-            @if (m.bio) {
-              <p class="membre-bio">{{ m.bio }}</p>
-            }
+            @if (m.bio) { <p class="membre-bio">{{ m.bio }}</p> }
           </div>
 
           <div class="membre-actions">
@@ -115,7 +113,6 @@ const ROLES_PREDEFINIS = [
           </div>
 
           <div class="modal-body">
-
             <!-- Photo -->
             <div class="photo-section">
               <div class="photo-preview-wrap">
@@ -167,9 +164,7 @@ const ROLES_PREDEFINIS = [
                 <label>Rôle / Fonction *</label>
                 <select [(ngModel)]="roleSelection" (ngModelChange)="onRoleChange($event)" name="roleSelect">
                   <option value="">-- Choisir un rôle --</option>
-                  @for (r of rolesPredefs; track r) {
-                    <option [value]="r">{{ r }}</option>
-                  }
+                  @for (r of rolesPredefs; track r) { <option [value]="r">{{ r }}</option> }
                 </select>
               </div>
               <div class="form-group">
@@ -193,9 +188,7 @@ const ROLES_PREDEFINIS = [
               <span class="char-count">{{ form.bio?.length ?? 0 }} / 400 caractères</span>
             </div>
 
-            @if (errorMessage) {
-              <div class="form-error">{{ errorMessage }}</div>
-            }
+            @if (errorMessage) { <div class="form-error">{{ errorMessage }}</div> }
           </div>
 
           <div class="modal-footer">
@@ -206,281 +199,59 @@ const ROLES_PREDEFINIS = [
               {{ saving ? 'Enregistrement…' : (editingMembre ? 'Mettre à jour' : 'Ajouter au bureau') }}
             </button>
           </div>
-
         </div>
       </div>
     }
   `,
   styles: [`
-    .admin-header {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      margin-bottom: 28px;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
+    .admin-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 28px; gap: 16px; flex-wrap: wrap; }
     .header-left h2 { margin-bottom: 4px; color: #1e3d2f; }
     .header-left p { color: #64748b; margin: 0; font-size: 0.9rem; }
-
     .add-btn { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
-
-    /* ── Empty state ── */
-    .empty-state {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 14px;
-      padding: 60px 24px;
-      color: #94a3b8;
-      font-style: italic;
-      text-align: center;
-    }
+    .empty-state { display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 60px 24px; color: #94a3b8; font-style: italic; text-align: center; }
     .empty-state svg { opacity: 0.35; color: #2d6a4f; }
-
-    /* ── Liste membres ── */
     .membres-list { display: flex; flex-direction: column; gap: 12px; }
-
-    .membre-row {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      padding: 16px 20px;
-    }
-
-    .membre-photo-wrap {
-      position: relative;
-      flex-shrink: 0;
-    }
-
-    .membre-photo {
-      width: 72px;
-      height: 72px;
-      border-radius: 12px;
-      object-fit: cover;
-      border: 2px solid rgba(45, 106, 79, 0.15);
-    }
-
-    .membre-photo-placeholder {
-      width: 72px;
-      height: 72px;
-      border-radius: 12px;
-      background: #edf5ee;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #52b788;
-      border: 2px dashed rgba(45, 106, 79, 0.2);
-    }
-
-    .ordre-badge {
-      position: absolute;
-      bottom: -6px;
-      right: -6px;
-      background: #2d6a4f;
-      color: white;
-      font-size: 0.65rem;
-      font-weight: 800;
-      padding: 2px 5px;
-      border-radius: 6px;
-    }
-
+    .membre-row { display: flex; align-items: center; gap: 20px; padding: 16px 20px; }
+    .membre-photo-wrap { position: relative; flex-shrink: 0; }
+    .membre-photo { width: 72px; height: 72px; border-radius: 12px; object-fit: cover; border: 2px solid rgba(45, 106, 79, 0.15); }
+    .membre-photo-placeholder { width: 72px; height: 72px; border-radius: 12px; background: #edf5ee; display: flex; align-items: center; justify-content: center; color: #52b788; border: 2px dashed rgba(45, 106, 79, 0.2); }
+    .ordre-badge { position: absolute; bottom: -6px; right: -6px; background: #2d6a4f; color: white; font-size: 0.65rem; font-weight: 800; padding: 2px 5px; border-radius: 6px; }
     .membre-info { flex: 1; min-width: 0; }
     .membre-name { font-size: 1rem; font-weight: 800; color: #1e3d2f; margin-bottom: 4px; }
-    .role-tag {
-      display: inline-block;
-      background: #edf5ee;
-      color: #2d6a4f;
-      font-size: 0.72rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      padding: 2px 10px;
-      border-radius: 20px;
-      margin-bottom: 6px;
-    }
-    .membre-bio {
-      font-size: 0.85rem;
-      color: #64748b;
-      margin: 0;
-      overflow: hidden;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-    }
-
+    .role-tag { display: inline-block; background: #edf5ee; color: #2d6a4f; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; padding: 2px 10px; border-radius: 20px; margin-bottom: 6px; }
+    .membre-bio { font-size: 0.85rem; color: #64748b; margin: 0; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
     .membre-actions { display: flex; gap: 8px; flex-shrink: 0; }
-    .icon-btn {
-      width: 36px;
-      height: 36px;
-      border-radius: 8px;
-      border: 1px solid #e2e8f0;
-      background: #f8fafc;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: background 0.15s, color 0.15s, border-color 0.15s;
-      color: #64748b;
-    }
+    .icon-btn { width: 36px; height: 36px; border-radius: 8px; border: 1px solid #e2e8f0; background: #f8fafc; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.15s, color 0.15s, border-color 0.15s; color: #64748b; }
     .icon-btn.edit:hover { background: #edf5ee; border-color: #2d6a4f; color: #2d6a4f; }
     .icon-btn.delete:hover { background: #fef2f2; border-color: #fca5a5; color: #dc2626; }
-
-    /* ── Modal ── */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.45);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-      padding: 16px;
-    }
-    .modal {
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
-      width: 100%;
-      max-width: 640px;
-      max-height: 90vh;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-    }
-    .modal-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 22px 28px 18px;
-      border-bottom: 1px solid #f1f5f9;
-      flex-shrink: 0;
-    }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 16px; }
+    .modal { background: white; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); width: 100%; max-width: 640px; max-height: 90vh; overflow-y: auto; display: flex; flex-direction: column; }
+    .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 22px 28px 18px; border-bottom: 1px solid #f1f5f9; flex-shrink: 0; }
     .modal-header h3 { margin: 0; font-size: 1.1rem; font-weight: 800; color: #1e3d2f; }
-    .modal-close {
-      background: none; border: none; cursor: pointer;
-      color: #94a3b8; padding: 4px; border-radius: 6px;
-      display: flex; transition: color 0.15s, background 0.15s;
-    }
+    .modal-close { background: none; border: none; cursor: pointer; color: #94a3b8; padding: 4px; border-radius: 6px; display: flex; transition: color 0.15s, background 0.15s; }
     .modal-close:hover { color: #475569; background: #f1f5f9; }
-
     .modal-body { padding: 24px 28px; display: flex; flex-direction: column; gap: 18px; overflow-y: auto; }
-
-    /* Photo section */
-    .photo-section {
-      display: flex;
-      gap: 20px;
-      align-items: flex-start;
-    }
+    .photo-section { display: flex; gap: 20px; align-items: flex-start; }
     .photo-preview-wrap { flex-shrink: 0; }
-    .photo-preview {
-      width: 100px;
-      height: 120px;
-      object-fit: cover;
-      border-radius: 12px;
-      border: 2px solid rgba(45,106,79,0.2);
-    }
-    .photo-placeholder {
-      width: 100px;
-      height: 120px;
-      border-radius: 12px;
-      background: #f0f7f2;
-      border: 2px dashed rgba(45,106,79,0.25);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #52b788;
-    }
-    .photo-controls {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      justify-content: center;
-    }
-    .photo-upload-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      background: #edf5ee;
-      color: #2d6a4f;
-      border: 1.5px solid rgba(45,106,79,0.25);
-      border-radius: 8px;
-      padding: 8px 16px;
-      font-size: 0.84rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background 0.15s;
-    }
+    .photo-preview { width: 100px; height: 120px; object-fit: cover; border-radius: 12px; border: 2px solid rgba(45,106,79,0.2); }
+    .photo-placeholder { width: 100px; height: 120px; border-radius: 12px; background: #f0f7f2; border: 2px dashed rgba(45,106,79,0.25); display: flex; align-items: center; justify-content: center; color: #52b788; }
+    .photo-controls { display: flex; flex-direction: column; gap: 8px; justify-content: center; }
+    .photo-upload-btn { display: inline-flex; align-items: center; gap: 7px; background: #edf5ee; color: #2d6a4f; border: 1.5px solid rgba(45,106,79,0.25); border-radius: 8px; padding: 8px 16px; font-size: 0.84rem; font-weight: 700; cursor: pointer; transition: background 0.15s; }
     .photo-upload-btn:hover { background: #d8eddd; }
-    .remove-photo-btn {
-      background: none;
-      border: none;
-      color: #dc2626;
-      font-size: 0.8rem;
-      cursor: pointer;
-      text-align: left;
-      padding: 0;
-      font-weight: 600;
-    }
+    .remove-photo-btn { background: none; border: none; color: #dc2626; font-size: 0.8rem; cursor: pointer; text-align: left; padding: 0; font-weight: 600; }
     .photo-hint { font-size: 0.75rem; color: #94a3b8; margin: 0; }
-
     .form-divider { height: 1px; background: #f1f5f9; }
-
-    /* Form fields */
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     .form-group { display: flex; flex-direction: column; gap: 6px; }
-    .form-group label {
-      font-size: 0.8rem; font-weight: 700; color: #475569;
-      text-transform: uppercase; letter-spacing: 0.4px;
-    }
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-      border: 1.5px solid #e2e8f0;
-      border-radius: 10px;
-      padding: 10px 14px;
-      font-size: 0.9rem;
-      color: #1e293b;
-      outline: none;
-      font-family: inherit;
-      background: #fafcfe;
-      transition: border-color 0.18s, box-shadow 0.18s;
-    }
-    .form-group input:focus,
-    .form-group select:focus,
-    .form-group textarea:focus {
-      border-color: #2d6a4f;
-      box-shadow: 0 0 0 3px rgba(45,106,79,0.12);
-      background: white;
-    }
+    .form-group label { font-size: 0.8rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.4px; }
+    .form-group input, .form-group select, .form-group textarea { border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 10px 14px; font-size: 0.9rem; color: #1e293b; outline: none; font-family: inherit; background: #fafcfe; transition: border-color 0.18s, box-shadow 0.18s; }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #2d6a4f; box-shadow: 0 0 0 3px rgba(45,106,79,0.12); background: white; }
     .form-group textarea { resize: vertical; min-height: 90px; }
     .char-count { font-size: 0.75rem; color: #94a3b8; align-self: flex-end; }
-
-    .form-error {
-      background: #fef2f2;
-      border: 1px solid #fecaca;
-      color: #dc2626;
-      border-radius: 8px;
-      padding: 10px 14px;
-      font-size: 0.88rem;
-    }
-
-    .modal-footer {
-      display: flex;
-      justify-content: flex-end;
-      gap: 12px;
-      padding: 16px 28px 22px;
-      border-top: 1px solid #f1f5f9;
-      flex-shrink: 0;
-    }
-    .btn-cancel {
-      background: #f1f5f9; color: #475569;
-      border: 1px solid #e2e8f0; border-radius: 50px;
-      padding: 10px 24px; font-size: 0.9rem; font-weight: 600;
-      cursor: pointer; transition: background 0.18s;
-    }
+    .form-error { background: #fef2f2; border: 1px solid #fecaca; color: #dc2626; border-radius: 8px; padding: 10px 14px; font-size: 0.88rem; }
+    .modal-footer { display: flex; justify-content: flex-end; gap: 12px; padding: 16px 28px 22px; border-top: 1px solid #f1f5f9; flex-shrink: 0; }
+    .btn-cancel { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; border-radius: 50px; padding: 10px 24px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: background 0.18s; }
     .btn-cancel:hover { background: #e2e8f0; }
-
     @media (max-width: 640px) {
       .admin-header { flex-direction: column; }
       .add-btn { width: 100%; justify-content: center; }
@@ -515,14 +286,12 @@ export class EquipeAdminComponent implements OnInit {
     prenom: '', nom: '', role: '', bio: '', photoUrl: '', ordre: undefined
   };
 
-  constructor(private dataService: DataService) {}
+  constructor(private adminService: AdminService) {}
 
-  ngOnInit(): void {
-    this.loadMembres();
-  }
+  ngOnInit(): void { this.loadMembres(); }
 
   loadMembres(): void {
-    this.dataService.getAdminEquipe().subscribe(m => {
+    this.adminService.getAdminEquipe().subscribe(m => {
       this.membres = m.sort((a, b) => (a.ordre ?? 99) - (b.ordre ?? 99));
     });
   }
@@ -532,7 +301,6 @@ export class EquipeAdminComponent implements OnInit {
     this.errorMessage = '';
     this.photoPreview = null;
     this.selectedFile = null;
-
     if (membre) {
       this.form = { ...membre, bio: membre.bio ?? '' };
       this.roleSelection = ROLES_PREDEFINIS.includes(membre.role ?? '') ? (membre.role ?? '') : 'Autre';
@@ -551,21 +319,13 @@ export class EquipeAdminComponent implements OnInit {
     this.saving = false;
   }
 
-  onRoleChange(val: string): void {
-    if (val !== 'Autre') this.form.role = val;
-    else this.form.role = '';
-  }
+  onRoleChange(val: string): void { if (val !== 'Autre') this.form.role = val; else this.form.role = ''; }
 
   onPhotoSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
     if (!file) return;
-
-    if (file.size > 5 * 1024 * 1024) {
-      this.errorMessage = 'La photo dépasse 5 Mo.';
-      return;
-    }
-
+    if (file.size > 5 * 1024 * 1024) { this.errorMessage = 'La photo dépasse 5 Mo.'; return; }
     this.selectedFile = file;
     const reader = new FileReader();
     reader.onload = e => this.photoPreview = e.target?.result as string;
@@ -577,21 +337,12 @@ export class EquipeAdminComponent implements OnInit {
       this.errorMessage = 'Prénom, nom et rôle sont obligatoires.';
       return;
     }
-
     this.errorMessage = '';
-
     if (this.selectedFile) {
       this.photoUploading = true;
-      this.dataService.uploadMedia(this.selectedFile, 'EQUIPE' as any, `${this.form.prenom} ${this.form.nom}`).subscribe({
-        next: (media: any) => {
-          this.form.photoUrl = media.url;
-          this.photoUploading = false;
-          this.persist();
-        },
-        error: () => {
-          this.photoUploading = false;
-          this.errorMessage = 'Erreur lors de l\'upload de la photo.';
-        }
+      this.adminService.uploadMedia(this.selectedFile, 'EQUIPE' as any, `${this.form.prenom} ${this.form.nom}`).subscribe({
+        next: (media: any) => { this.form.photoUrl = media.url; this.photoUploading = false; this.persist(); },
+        error: () => { this.photoUploading = false; this.errorMessage = 'Erreur lors de l\'upload de la photo.'; }
       });
     } else {
       this.persist();
@@ -601,23 +352,18 @@ export class EquipeAdminComponent implements OnInit {
   private persist(): void {
     this.saving = true;
     const payload = { ...this.form };
-
     const req = this.editingMembre
-      ? this.dataService.updateMembre(this.editingMembre.id!, payload)
-      : this.dataService.createMembre(payload);
-
+      ? this.adminService.updateMembre(this.editingMembre.id!, payload)
+      : this.adminService.createMembre(payload);
     req.subscribe({
       next: () => { this.closeModal(); this.loadMembres(); },
-      error: (err) => {
-        this.saving = false;
-        this.errorMessage = err?.error?.message ?? 'Une erreur est survenue.';
-      }
+      error: (err) => { this.saving = false; this.errorMessage = err?.error?.message ?? 'Une erreur est survenue.'; }
     });
   }
 
   confirmDelete(m: MembreEquipe): void {
     if (confirm(`Supprimer ${m.prenom} ${m.nom} du bureau ?`)) {
-      this.dataService.deleteMembre(m.id!).subscribe(() => this.loadMembres());
+      this.adminService.deleteMembre(m.id!).subscribe(() => this.loadMembres());
     }
   }
 }

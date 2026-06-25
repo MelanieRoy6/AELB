@@ -1,8 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DataService } from '../../core/services/data.service';
-import { SeoService } from '../../core/services/seo.service';
-import { Evenement } from '../../core/models';
+import { AssociatifService } from '../services/associatif.service';
+import { SeoService } from '../../../core/services/seo.service';
+import { Evenement } from '../../../core/models';
 
 interface Activite {
   image: string;
@@ -58,12 +58,8 @@ interface Activite {
     </div>
   `,
   styles: [`
-    /* === Page === */
-    .page-wrapper {
-      background: #fff;
-    }
+    .page-wrapper { background: #fff; }
 
-    /* === Hero === */
     .hero {
       background: linear-gradient(155deg, rgba(30,61,47,.82) 0%, rgba(45,106,79,.50) 100%),
                   url('/salle-hero.png') center / cover no-repeat;
@@ -74,10 +70,7 @@ interface Activite {
       text-align: center;
     }
 
-    .hero-content {
-      max-width: 640px;
-      color: white;
-    }
+    .hero-content { max-width: 640px; color: white; }
 
     .hero-content h1 {
       font-size: 2.8rem;
@@ -94,12 +87,7 @@ interface Activite {
       margin: 0;
     }
 
-    /* === Layout commun === */
-    .section-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 0 24px;
-    }
+    .section-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
 
     .section-label {
       display: inline-block;
@@ -113,10 +101,7 @@ interface Activite {
       letter-spacing: 1.5px;
     }
 
-    .section-title {
-      text-align: center;
-      margin-bottom: 56px;
-    }
+    .section-title { text-align: center; margin-bottom: 56px; }
 
     .section-title h2 {
       font-size: 2rem;
@@ -125,19 +110,13 @@ interface Activite {
       margin: 12px 0 0;
     }
 
-    /* === Section activités === */
     .activites-section {
       padding: 90px 0 100px;
       background: linear-gradient(180deg, var(--g010, #f6faf7) 0%, #fff 70%);
     }
 
-    .activity-list {
-      display: flex;
-      flex-direction: column;
-      gap: 80px;
-    }
+    .activity-list { display: flex; flex-direction: column; gap: 80px; }
 
-    /* Ligne : texte à gauche, photo à droite */
     .activity-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -145,7 +124,6 @@ interface Activite {
       align-items: center;
     }
 
-    /* Ligne inversée : photo à gauche, texte à droite */
     .activity-row.reverse .activity-text { order: 2; }
     .activity-row.reverse .activity-visual { order: 1; }
 
@@ -163,7 +141,6 @@ interface Activite {
       margin: 0;
     }
 
-    /* Conteneur photo */
     .activity-visual {
       border-radius: 24px;
       overflow: hidden;
@@ -175,7 +152,6 @@ interface Activite {
       box-shadow: 0 8px 32px rgba(30,61,47,.10);
     }
 
-    /* Photo réelle */
     .activity-photo {
       width: 100%;
       height: 100%;
@@ -183,7 +159,6 @@ interface Activite {
       display: block;
     }
 
-    /* Si c'est encore un SVG (icône), on le centre et on le redimensionne */
     .activity-visual img[src$=".svg"] {
       width: 40%;
       height: 40%;
@@ -191,54 +166,10 @@ interface Activite {
       opacity: 0.7;
     }
 
-    /* === Section actualités === */
-    .actualites-section {
-      padding: 80px 0 100px;
-      background: #fff;
-    }
-
-    .news-item {
-      display: flex;
-      gap: 20px;
-      border-bottom: 1px solid var(--border, rgba(45,106,79,.15));
-      padding: 18px 0;
-    }
-
-    .news-date {
-      font-weight: 700;
-      color: var(--g800, #2d6a4f);
-      min-width: 100px;
-      font-size: 0.9rem;
-      padding-top: 2px;
-    }
-
-    .news-content h3 {
-      color: var(--g900, #1e3d2f);
-      margin: 0 0 6px;
-      font-size: 1rem;
-    }
-
-    .news-content p {
-      color: var(--text-muted, #556b5a);
-      margin: 0;
-      font-size: 0.9rem;
-      line-height: 1.55;
-    }
-
-    .empty-msg {
-      color: var(--text-muted, #556b5a);
-      font-style: italic;
-    }
-
-    /* === Responsive === */
     @media (max-width: 860px) {
       .activity-row,
-      .activity-row.reverse {
-        grid-template-columns: 1fr;
-        gap: 28px;
-      }
+      .activity-row.reverse { grid-template-columns: 1fr; gap: 28px; }
 
-      /* Sur mobile, toujours : texte en haut, photo en bas */
       .activity-row .activity-text,
       .activity-row.reverse .activity-text { order: 1; }
       .activity-row .activity-visual,
@@ -309,8 +240,7 @@ export class AssociatifComponent implements OnInit {
   ];
 
   private seo = inject(SeoService);
-
-  constructor(private dataService: DataService) {}
+  private associatifService = inject(AssociatifService);
 
   ngOnInit(): void {
     this.seo.set({
@@ -319,7 +249,7 @@ export class AssociatifComponent implements OnInit {
       keywords: 'association Brains, AELB associatif, amis écoles laïques Brains, activités Brains 44830, vie associative Loire-Atlantique',
       path: '/associatif'
     });
-    this.dataService.getEvents('ACTU').subscribe(page => {
+    this.associatifService.getActualites().subscribe(page => {
       this.actualites = page.content;
     });
   }

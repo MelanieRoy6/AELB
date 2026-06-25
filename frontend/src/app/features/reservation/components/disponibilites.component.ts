@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DataService } from '../../core/services/data.service';
+import { ReservationService } from '../services/reservation.service';
 
 const MONTHS_FR = [
   'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
@@ -26,7 +26,6 @@ interface MonthGrid {
   template: `
     <div class="year-container">
 
-      <!-- ── Vue DESKTOP : grille annuelle ── -->
       <div class="desktop-view">
         <div class="year-nav">
           <button class="nav-btn" (click)="prevYear()" aria-label="Année précédente">
@@ -71,7 +70,6 @@ interface MonthGrid {
         }
       </div>
 
-      <!-- ── Vue MOBILE : calendrier mensuel ── -->
       <div class="mobile-view">
         <div class="month-nav">
           <button class="nav-btn" (click)="prevMobileMonth()" aria-label="Mois précédent">
@@ -118,209 +116,51 @@ interface MonthGrid {
   `,
   styles: [`
     .year-container { margin-bottom: 20px; }
-
-    /* Navigation année */
-    .year-nav {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 20px;
-      margin-bottom: 20px;
-    }
-    .year-label {
-      font-size: 1.4rem;
-      font-weight: 800;
-      color: #1d3557;
-      min-width: 72px;
-      text-align: center;
-    }
+    .year-nav { display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 20px; }
+    .year-label { font-size: 1.4rem; font-weight: 800; color: #1d3557; min-width: 72px; text-align: center; }
     .nav-btn {
-      width: 36px;
-      height: 36px;
-      border-radius: 8px;
-      border: 1.5px solid #e2e8f0;
-      background: #f8fafc;
-      color: #475569;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: background 0.18s, border-color 0.18s;
+      width: 36px; height: 36px; border-radius: 8px; border: 1.5px solid #e2e8f0;
+      background: #f8fafc; color: #475569;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: background 0.18s, border-color 0.18s;
     }
     .nav-btn:hover { background: #e2e8f0; border-color: #cbd5e1; }
-
-    .loading-state {
-      text-align: center;
-      padding: 40px;
-      color: #94a3b8;
-      font-style: italic;
-      font-size: 0.9rem;
-    }
-
-    /* Grille 12 mois */
-    .year-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-    }
-
-    /* Carte mini-mois */
-    .mini-month {
-      background: #f9fafb;
-      border: 1.5px solid #e2e8f0;
-      border-radius: 12px;
-      padding: 10px;
-    }
-    .mini-month.current-month {
-      border-color: #a8dadc;
-      background: #f0fafc;
-    }
-
-    .mini-month-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 6px;
-    }
-    .mini-month-name {
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: #1d3557;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-    }
-    .mini-month-badge {
-      font-size: 0.62rem;
-      font-weight: 700;
-      background: #e63946;
-      color: white;
-      border-radius: 50px;
-      padding: 1px 6px;
-    }
-
-    /* Grille jours */
-    .mini-cal {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 1px;
-    }
-    .dow {
-      font-size: 0.6rem;
-      font-weight: 700;
-      color: #a8dadc;
-      text-align: center;
-      padding: 2px 0 3px;
-    }
-    .day-cell {
-      font-size: 0.65rem;
-      text-align: center;
-      padding: 3px 1px;
-      border-radius: 3px;
-      color: #475569;
-      line-height: 1.4;
-    }
+    .loading-state { text-align: center; padding: 40px; color: #94a3b8; font-style: italic; font-size: 0.9rem; }
+    .year-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .mini-month { background: #f9fafb; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 10px; }
+    .mini-month.current-month { border-color: #a8dadc; background: #f0fafc; }
+    .mini-month-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+    .mini-month-name { font-size: 0.72rem; font-weight: 700; color: #1d3557; text-transform: uppercase; letter-spacing: 0.4px; }
+    .mini-month-badge { font-size: 0.62rem; font-weight: 700; background: #e63946; color: white; border-radius: 50px; padding: 1px 6px; }
+    .mini-cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; }
+    .dow { font-size: 0.6rem; font-weight: 700; color: #a8dadc; text-align: center; padding: 2px 0 3px; }
+    .day-cell { font-size: 0.65rem; text-align: center; padding: 3px 1px; border-radius: 3px; color: #475569; line-height: 1.4; }
     .day-cell.empty { color: transparent; }
-    .day-cell.occupied {
-      background: #e63946;
-      color: white;
-      font-weight: 700;
-    }
-    .day-cell.today {
-      outline: 2px solid #1d3557;
-      outline-offset: -1px;
-      font-weight: 700;
-    }
-    .day-cell.occupied.today {
-      outline-color: white;
-    }
-
-    /* Légende */
-    .legend {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      margin-top: 14px;
-      justify-content: center;
-    }
-    .legend-item {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      font-size: 0.83rem;
-      color: #475569;
-      font-weight: 500;
-    }
+    .day-cell.occupied { background: #e63946; color: white; font-weight: 700; }
+    .day-cell.today { outline: 2px solid #1d3557; outline-offset: -1px; font-weight: 700; }
+    .day-cell.occupied.today { outline-color: white; }
+    .legend { display: flex; align-items: center; gap: 20px; margin-top: 14px; justify-content: center; }
+    .legend-item { display: flex; align-items: center; gap: 7px; font-size: 0.83rem; color: #475569; font-weight: 500; }
     .box { width: 14px; height: 14px; border-radius: 3px; flex-shrink: 0; }
     .occupied { background: #e63946; }
     .today-box { background: transparent; outline: 2px solid #1d3557; outline-offset: -1px; border-radius: 3px; }
-
-    /* ── Visibilité desktop / mobile ── */
     .desktop-view { display: block; }
-    .mobile-view  { display: none; }
-
+    .mobile-view { display: none; }
     @media (max-width: 992px) {
       .desktop-view { display: none; }
-      .mobile-view  { display: block; max-width: 380px; margin: 0 auto; width: 100%; }
+      .mobile-view { display: block; max-width: 380px; margin: 0 auto; width: 100%; }
     }
-
-    @media (max-width: 600px) {
-      .year-container { padding: 0 4px; }
-      .mobile-view { max-width: 100%; }
-    }
-
-    /* ── Vue mensuelle mobile ── */
-    .month-nav {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-      margin-bottom: 16px;
-    }
-    .month-label {
-      font-size: 1.1rem;
-      font-weight: 800;
-      color: #1d3557;
-      min-width: 160px;
-      text-align: center;
-      text-transform: capitalize;
-    }
-    .month-grid-large {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 4px;
-    }
-    .dow-lg {
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: #a8dadc;
-      text-align: center;
-      padding: 4px 0 6px;
-    }
-    .day-lg {
-      font-size: 0.92rem;
-      text-align: center;
-      padding: 8px 2px;
-      border-radius: 6px;
-      color: #475569;
-      line-height: 1;
-    }
+    @media (max-width: 600px) { .year-container { padding: 0 4px; } .mobile-view { max-width: 100%; } }
+    .month-nav { display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 16px; }
+    .month-label { font-size: 1.1rem; font-weight: 800; color: #1d3557; min-width: 160px; text-align: center; text-transform: capitalize; }
+    .month-grid-large { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+    .dow-lg { font-size: 0.72rem; font-weight: 700; color: #a8dadc; text-align: center; padding: 4px 0 6px; }
+    .day-lg { font-size: 0.92rem; text-align: center; padding: 8px 2px; border-radius: 6px; color: #475569; line-height: 1; }
     .day-lg.empty { color: transparent; }
-    .day-lg.occupied {
-      background: #e63946;
-      color: white;
-      font-weight: 700;
-    }
-    .day-lg.today {
-      outline: 2px solid #1d3557;
-      outline-offset: -2px;
-      font-weight: 700;
-    }
+    .day-lg.occupied { background: #e63946; color: white; font-weight: 700; }
+    .day-lg.today { outline: 2px solid #1d3557; outline-offset: -2px; font-weight: 700; }
     .day-lg.occupied.today { outline-color: white; }
-
-    /* Responsive desktop year grid */
-    @media (max-width: 900px) {
-      .year-grid { grid-template-columns: repeat(3, 1fr); }
-    }
+    @media (max-width: 900px) { .year-grid { grid-template-columns: repeat(3, 1fr); } }
   `]
 })
 export class DisponibilitesComponent implements OnInit {
@@ -338,40 +178,26 @@ export class DisponibilitesComponent implements OnInit {
     return `${MONTHS_FR[this.currentMobileMonth]} ${this.currentYear}`;
   }
 
-  constructor(private dataService: DataService, private cdr: ChangeDetectorRef) {}
+  constructor(private reservationService: ReservationService, private cdr: ChangeDetectorRef) {}
 
-  ngOnInit(): void {
-    this.loadYear();
-  }
+  ngOnInit(): void { this.loadYear(); }
 
   prevYear(): void { this.currentYear--; this.loadYear(); }
   nextYear(): void { this.currentYear++; this.loadYear(); }
 
   prevMobileMonth(): void {
-    if (this.currentMobileMonth === 0) {
-      this.currentMobileMonth = 11;
-      this.currentYear--;
-      this.loadYear();
-    } else {
-      this.currentMobileMonth--;
-    }
+    if (this.currentMobileMonth === 0) { this.currentMobileMonth = 11; this.currentYear--; this.loadYear(); }
+    else { this.currentMobileMonth--; }
   }
 
   nextMobileMonth(): void {
-    if (this.currentMobileMonth === 11) {
-      this.currentMobileMonth = 0;
-      this.currentYear++;
-      this.loadYear();
-    } else {
-      this.currentMobileMonth++;
-    }
+    if (this.currentMobileMonth === 11) { this.currentMobileMonth = 0; this.currentYear++; this.loadYear(); }
+    else { this.currentMobileMonth++; }
   }
 
   isToday(month: number, day: number): boolean {
     const today = new Date();
-    return today.getFullYear() === this.currentYear
-      && today.getMonth() === month
-      && today.getDate() === day;
+    return today.getFullYear() === this.currentYear && today.getMonth() === month && today.getDate() === day;
   }
 
   isCurrentMonth(month: number): boolean {
@@ -384,7 +210,7 @@ export class DisponibilitesComponent implements OnInit {
     const from = `${this.currentYear}-01-01T00:00:00`;
     const to   = `${this.currentYear}-12-31T23:59:59`;
 
-    this.dataService.getDisponibilites(from, to).subscribe(dispos => {
+    this.reservationService.getDisponibilites(from, to).subscribe(dispos => {
       this.occupiedDays.clear();
       for (const d of dispos) {
         const start = new Date(d.start);
@@ -409,23 +235,18 @@ export class DisponibilitesComponent implements OnInit {
   private buildMonth(year: number, month: number): MonthGrid {
     const firstDay = new Date(year, month, 1);
     const daysInMonth = new Date(year, month + 1, 0).getDate();
-
     let startDow = firstDay.getDay();
     startDow = startDow === 0 ? 6 : startDow - 1;
-
     const cells: (DayCell | null)[] = new Array(startDow).fill(null);
     let count = 0;
-
     for (let d = 1; d <= daysInMonth; d++) {
       const key = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
       const occupied = this.occupiedDays.has(key);
       if (occupied) count++;
       cells.push({ day: d, occupied });
     }
-
     const remainder = cells.length % 7;
     if (remainder > 0) for (let i = 0; i < 7 - remainder; i++) cells.push(null);
-
     return { name: MONTHS_FR[month], month, count, cells };
   }
 

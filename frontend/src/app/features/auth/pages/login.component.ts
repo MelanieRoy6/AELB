@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../../core/services/auth.service';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -64,7 +64,6 @@ import { AuthService } from '../../core/services/auth.service';
       box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.15);
     }
     .login-btn { width: 100%; margin-top: 8px; }
-    /* Erreur : #7a3f18 sur #fdf3ec = 6.5:1 AA */
     .error {
       color: #7a3f18;
       background: #fdf3ec;

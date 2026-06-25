@@ -1,8 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DataService } from '../../core/services/data.service';
-import { SeoService } from '../../core/services/seo.service';
-import { MembreEquipe } from '../../core/models';
+import { EquipeService } from '../services/equipe.service';
+import { SeoService } from '../../../core/services/seo.service';
+import { MembreEquipe } from '../../../core/models';
 
 @Component({
   selector: 'app-equipe',
@@ -11,7 +11,6 @@ import { MembreEquipe } from '../../core/models';
   template: `
     <div class="page-wrapper">
 
-      <!-- En-tête de page -->
       <div class="container">
         <div class="page-header">
           <img src="/ICON/PeopleCapacity.svg" alt="" aria-hidden="true" class="page-icon">
@@ -19,7 +18,6 @@ import { MembreEquipe } from '../../core/models';
         </div>
         <p class="intro">Découvrez les membres bénévoles qui animent l'Amicale au quotidien.</p>
 
-        <!-- Grille équipe : vide pour l'instant -->
         @if (equipe.length > 0) {
           <div class="equipe-list">
             @for (membre of equipe; track membre.nom; let i = $index) {
@@ -134,7 +132,6 @@ import { MembreEquipe } from '../../core/models';
   styles: [`
     .page-wrapper { background: #fff; }
 
-    /* ── En-tête ── */
     .container { padding: 40px 24px 60px; max-width: 1000px; margin: auto; }
 
     .page-header { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
@@ -142,14 +139,8 @@ import { MembreEquipe } from '../../core/models';
 
     h1 { color: var(--g900, #1e3d2f); font-size: 2.2rem; font-weight: 800; margin: 0; }
 
-    .intro {
-      text-align: center;
-      font-size: 1.05rem;
-      color: var(--text-muted, #556b5a);
-      margin-bottom: 48px;
-    }
+    .intro { text-align: center; font-size: 1.05rem; color: var(--text-muted, #556b5a); margin-bottom: 48px; }
 
-    /* ── Liste équipe ── */
     .equipe-list { display: flex; flex-direction: column; gap: 32px; }
 
     .membre-card {
@@ -167,21 +158,12 @@ import { MembreEquipe } from '../../core/models';
     .membre-card.reverse { flex-direction: row-reverse; }
 
     .membre-photo-col { flex-shrink: 0; }
-    .membre-img {
-      width: 220px;
-      height: 260px;
-      object-fit: cover;
-      display: block;
-    }
+    .membre-img { width: 220px; height: 260px; object-fit: cover; display: block; }
     .membre-avatar {
-      width: 220px;
-      height: 260px;
+      width: 220px; height: 260px;
       background: var(--g010, #f0f7f2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--g400, #52b788);
-      opacity: 0.5;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--g400, #52b788); opacity: 0.5;
     }
 
     .membre-info { padding: 28px 36px 28px 0; flex: 1; }
@@ -201,12 +183,8 @@ import { MembreEquipe } from '../../core/models';
     }
     .bio { font-size: 0.95rem; color: var(--text-muted, #556b5a); line-height: 1.7; margin: 0; }
 
-    /* ── Placeholder ── */
     .equipe-placeholder {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 16px;
+      display: flex; flex-direction: column; align-items: center; gap: 16px;
       padding: 60px 24px;
       color: var(--text-muted, #556b5a);
       border: 2px dashed rgba(45, 106, 79, 0.2);
@@ -216,19 +194,13 @@ import { MembreEquipe } from '../../core/models';
     .equipe-placeholder svg { color: var(--g400, #52b788); opacity: 0.6; }
     .equipe-placeholder p { margin: 0; font-size: 1rem; font-style: italic; }
 
-    /* ── Section "Comment nous soutenir ?" ── */
     .support-section {
       background: linear-gradient(135deg, var(--g900, #1e3d2f) 0%, var(--g800, #2d6a4f) 100%);
       padding: 80px 0 90px;
     }
 
-    .support-inner {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 0 24px;
-    }
+    .support-inner { max-width: 960px; margin: 0 auto; padding: 0 24px; }
 
-    /* En-tête */
     .support-header { text-align: center; margin-bottom: 52px; }
 
     .support-label {
@@ -244,104 +216,43 @@ import { MembreEquipe } from '../../core/models';
       margin-bottom: 14px;
     }
 
-    .support-header h2 {
-      font-size: 2rem;
-      font-weight: 800;
-      color: #fff;
-      margin: 0 0 16px;
-    }
+    .support-header h2 { font-size: 2rem; font-weight: 800; color: #fff; margin: 0 0 16px; }
 
-    .support-lead {
-      font-size: 1rem;
-      color: rgba(255, 255, 255, 0.78);
-      line-height: 1.7;
-      max-width: 620px;
-      margin: 0 auto;
-    }
+    .support-lead { font-size: 1rem; color: rgba(255, 255, 255, 0.78); line-height: 1.7; max-width: 620px; margin: 0 auto; }
 
-    /* Cartes */
-    .support-ways {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      margin-bottom: 52px;
-    }
+    .support-ways { display: flex; flex-direction: column; gap: 16px; margin-bottom: 52px; }
 
     .way-card {
-      display: flex;
-      gap: 22px;
-      align-items: flex-start;
+      display: flex; gap: 22px; align-items: flex-start;
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.14);
       border-radius: 18px;
       padding: 26px 28px;
       transition: background 0.25s ease, border-color 0.25s ease;
     }
-
-    .way-card:hover {
-      background: rgba(255, 255, 255, 0.13);
-      border-color: rgba(255, 255, 255, 0.25);
-    }
+    .way-card:hover { background: rgba(255, 255, 255, 0.13); border-color: rgba(255, 255, 255, 0.25); }
 
     .way-icon {
-      width: 54px;
-      height: 54px;
+      width: 54px; height: 54px;
       background: rgba(82, 183, 136, 0.25);
       border-radius: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--g400, #52b788);
-      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--g400, #52b788); flex-shrink: 0;
     }
 
-    .way-content h3 {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: #fff;
-      margin: 0 0 8px;
-    }
+    .way-content h3 { font-size: 1.05rem; font-weight: 700; color: #fff; margin: 0 0 8px; }
+    .way-content p { font-size: 0.92rem; color: rgba(255, 255, 255, 0.72); line-height: 1.65; margin: 0; }
 
-    .way-content p {
-      font-size: 0.92rem;
-      color: rgba(255, 255, 255, 0.72);
-      line-height: 1.65;
-      margin: 0;
-    }
+    .support-cta { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 22px; }
 
-    /* CTA bas */
-    .support-cta {
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 22px;
-    }
+    .cta-tagline { font-size: 1.25rem; font-weight: 700; color: rgba(255, 255, 255, 0.95); margin: 0; font-style: italic; }
+    .cta-btn { font-size: 1rem !important; padding: 14px 32px !important; gap: 10px; }
 
-    .cta-tagline {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: rgba(255, 255, 255, 0.95);
-      margin: 0;
-      font-style: italic;
-    }
-
-    .cta-btn {
-      font-size: 1rem !important;
-      padding: 14px 32px !important;
-      gap: 10px;
-    }
-
-    /* ── Responsive ── */
     @media (max-width: 700px) {
       .way-card { flex-direction: column; gap: 14px; padding: 22px 20px; }
       .support-header h2 { font-size: 1.6rem; }
       .cta-tagline { font-size: 1.1rem; }
-    }
-
-    @media (max-width: 700px) {
-      .membre-card,
-      .membre-card.reverse { flex-direction: column; }
+      .membre-card, .membre-card.reverse { flex-direction: column; }
       .membre-img, .membre-avatar { width: 100%; height: 260px; }
       .membre-info { padding: 20px 20px 24px !important; }
     }
@@ -359,8 +270,7 @@ export class EquipeComponent implements OnInit {
   equipe: MembreEquipe[] = [];
 
   private seo = inject(SeoService);
-
-  constructor(private dataService: DataService) {}
+  private equipeService = inject(EquipeService);
 
   ngOnInit(): void {
     this.seo.set({
@@ -369,7 +279,7 @@ export class EquipeComponent implements OnInit {
       keywords: 'équipe AELB, bénévoles Brains, bureau association AELB, membres association Brains',
       path: '/equipe'
     });
-    this.dataService.getEquipe().subscribe(membres => {
+    this.equipeService.getEquipe().subscribe(membres => {
       this.equipe = membres;
     });
   }

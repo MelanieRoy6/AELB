@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { SeoService } from '../../core/services/seo.service';
+import { SeoService } from '../../../core/services/seo.service';
 
 interface Animation {
   image: string;
@@ -74,10 +74,8 @@ interface Animation {
     </div>
   `,
   styles: [`
-    /* === Page === */
     .page-wrapper { background: #fff; }
 
-    /* === Hero === */
     .hero {
       background:
         linear-gradient(155deg, rgba(30,61,47,.82) 0%, rgba(45,106,79,.50) 100%),
@@ -106,7 +104,6 @@ interface Animation {
       margin: 0;
     }
 
-    /* === Layout commun === */
     .section-inner {
       max-width: 1100px;
       margin: 0 auto;
@@ -137,7 +134,6 @@ interface Animation {
       margin: 12px 0 0;
     }
 
-    /* === Section animations === */
     .animations-section {
       padding: 90px 0 100px;
       background: linear-gradient(180deg, var(--g010, #f6faf7) 0%, #fff 70%);
@@ -149,7 +145,6 @@ interface Animation {
       gap: 80px;
     }
 
-    /* Ligne : texte à gauche, photo à droite */
     .animation-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -157,7 +152,6 @@ interface Animation {
       align-items: center;
     }
 
-    /* Ligne inversée : photo à gauche, texte à droite */
     .animation-row.reverse .animation-text { order: 2; }
     .animation-row.reverse .animation-visual { order: 1; }
 
@@ -188,7 +182,6 @@ interface Animation {
       margin: 0;
     }
 
-    /* Conteneur photo */
     .animation-visual {
       border-radius: 24px;
       overflow: hidden;
@@ -207,7 +200,6 @@ interface Animation {
 
     .animation-visual:hover .animation-photo { transform: scale(1.04); }
 
-    /* === CTA bas de page === */
     .cta-section {
       padding: 90px 24px;
       background: linear-gradient(135deg, var(--g900, #1e3d2f) 0%, var(--g800, #2d6a4f) 100%);
@@ -260,7 +252,6 @@ interface Animation {
       background: rgba(255,255,255,.22);
     }
 
-    /* === Responsive === */
     @media (max-width: 860px) {
       .animation-row,
       .animation-row.reverse {
