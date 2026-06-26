@@ -29,6 +29,10 @@ export class DashboardAdminComponent implements OnInit {
   daysUntil = 0;
   demandesEnAttente = 0;
 
+  adherents: any[] = [];
+  anneeActuelle = new Date().getFullYear();
+  copyRelanceSuccess = false;
+
   adherentLastUpdate: Date | null = null;
   adherentMonthsAgo = 0;
   adherentStatus: 'never' | 'ok' | 'warn' | 'due' = 'never';
@@ -48,6 +52,7 @@ export class DashboardAdminComponent implements OnInit {
     this.loadNextReservation();
     this.loadAdherentReminder();
     this.loadPostIts();
+    this.loadAdherents();
   }
 
   private buildTodayLabel(): void {
@@ -85,6 +90,57 @@ export class DashboardAdminComponent implements OnInit {
   markAdherentsUpdated(): void {
     localStorage.setItem(STORAGE_ADHERENTS, new Date().toISOString());
     this.loadAdherentReminder();
+  }
+
+  loadAdherents(): void {
+    this.adminService.getAdherents().subscribe(res => this.adherents = res);
+  }
+
+  get adherentsEnAttente(): any[] {
+    return this.adherents
+      .filter(a => a.actif && (!a.cotisationPayee || a.anneeCotisation !== this.anneeActuelle))
+      .sort((a, b) => a.nom.localeCompare(b.nom, 'fr'));
+  }
+
+  relanceStatus(a: any): string {
+    if (!a.cotisationPayee) return `Non payée ${this.anneeActuelle}`;
+    return `Payée ${a.anneeCotisation} — ${this.anneeActuelle} manquante`;
+  }
+
+  copyRelanceEmails(): void {
+    const emails = this.adherentsEnAttente.map(a => a.email).join(', ');
+    if (!emails) return;
+    navigator.clipboard.writeText(emails).then(() => {
+      this.copyRelanceSuccess = true;
+      setTimeout(() => this.copyRelanceSuccess = false, 2500);
+    });
+  }
+
+  resaInitials(nom: string): string {
+    const p = nom.trim().split(/\s+/);
+    return p.length >= 2 ? (p[0][0] + p[1][0]).toUpperCase() : nom.substring(0, 2).toUpperCase();
+  }
+
+  formatResaDate(dateStr: string): string {
+    if (!dateStr) return '—';
+    return new Date(dateStr).toLocaleDateString('fr-FR', {
+      weekday: 'short', day: 'numeric', month: 'short', year: 'numeric'
+    });
+  }
+
+  formatResaTime(dateStr: string): string {
+    if (!dateStr) return '';
+    const d = new Date(dateStr);
+    return `${d.getHours()}h${String(d.getMinutes()).padStart(2, '0')}`;
+  }
+
+  get resaDurationLabel(): string {
+    if (!this.nextResa) return '';
+    const ms = new Date(this.nextResa.dateFin).getTime() - new Date(this.nextResa.dateDebut).getTime();
+    const hours = ms / (1000 * 60 * 60);
+    if (hours < 24) return `${Math.round(hours)}h`;
+    const days = Math.round(hours / 24);
+    return `${days} jour${days > 1 ? 's' : ''}`;
   }
 
   loadPostIts(): void {

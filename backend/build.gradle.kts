@@ -27,6 +27,9 @@ dependencies {
     
     runtimeOnly("org.postgresql:postgresql")
     
+    // Excel (Apache POI)
+    implementation("org.apache.poi:poi-ooxml:5.2.5")
+
     // JWT
     implementation("io.jsonwebtoken:jjwt-api:0.12.5")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.5")

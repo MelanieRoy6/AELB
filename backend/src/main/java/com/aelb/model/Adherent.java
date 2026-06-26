@@ -26,9 +26,20 @@ public class Adherent {
     @Column(name = "date_adhesion")
     private LocalDate dateAdhesion;
 
+    @Column(name = "date_naissance")
+    private LocalDate dateNaissance;
+
+    @Column(name = "annee_adhesion")
+    private Integer anneeAdhesion;
+
+    @Column(name = "cotisation_payee")
+    private boolean cotisationPayee;
+
+    @Column(name = "annee_cotisation")
+    private Integer anneeCotisation;
+
     private boolean actif;
 
-    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getNom() { return nom; }
@@ -43,6 +54,14 @@ public class Adherent {
     public void setSection(String section) { this.section = section; }
     public LocalDate getDateAdhesion() { return dateAdhesion; }
     public void setDateAdhesion(LocalDate dateAdhesion) { this.dateAdhesion = dateAdhesion; }
+    public LocalDate getDateNaissance() { return dateNaissance; }
+    public void setDateNaissance(LocalDate dateNaissance) { this.dateNaissance = dateNaissance; }
+    public Integer getAnneeAdhesion() { return anneeAdhesion; }
+    public void setAnneeAdhesion(Integer anneeAdhesion) { this.anneeAdhesion = anneeAdhesion; }
+    public boolean isCotisationPayee() { return cotisationPayee; }
+    public void setCotisationPayee(boolean cotisationPayee) { this.cotisationPayee = cotisationPayee; }
+    public Integer getAnneeCotisation() { return anneeCotisation; }
+    public void setAnneeCotisation(Integer anneeCotisation) { this.anneeCotisation = anneeCotisation; }
     public boolean isActif() { return actif; }
     public void setActif(boolean actif) { this.actif = actif; }
 }

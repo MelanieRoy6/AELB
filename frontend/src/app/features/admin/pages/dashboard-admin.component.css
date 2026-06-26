@@ -21,16 +21,76 @@
 .widget-link { margin-top: auto; font-size: 0.82rem; font-weight: 700; color: #2d6a4f; text-decoration: none; }
 .widget-link:hover { text-decoration: underline; }
 
-.resa-body { display: flex; flex-direction: column; gap: 8px; flex: 1; }
-.resa-name { font-size: 1.25rem; font-weight: 800; color: #1e3d2f; }
-.resa-dates { display: flex; align-items: center; gap: 6px; font-size: 0.88rem; color: #334155; flex-wrap: wrap; }
-.resa-badge { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; padding: 2px 6px; border-radius: 4px; background: #edf5ee; color: #2d6a4f; }
-.resa-sep { color: #94a3b8; }
-.resa-motif { font-size: 0.88rem; color: #475569; font-style: italic; background: #f8fafc; border-left: 3px solid #2d6a4f; padding: 6px 10px; border-radius: 0 6px 6px 0; }
-.resa-meta { font-size: 0.8rem; color: #94a3b8; }
-.resa-countdown { display: inline-flex; align-items: center; gap: 5px; background: #edf5ee; color: #2d6a4f; font-size: 0.8rem; font-weight: 700; padding: 4px 10px; border-radius: 20px; width: fit-content; }
+/* ── Widget réservation amélioré ───────────────────────────────── */
+.resa-body { display: flex; flex-direction: column; gap: 14px; flex: 1; }
+
+.resa-top-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.resa-top-left { display: flex; align-items: center; gap: 10px; }
+.resa-avatar-lg {
+  width: 42px; height: 42px; border-radius: 12px;
+  background: #d1fae5; color: #2d6a4f;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 0.9rem; flex-shrink: 0;
+}
+.resa-name { font-size: 1.1rem; font-weight: 800; color: #1e3d2f; line-height: 1.2; }
+.resa-label-sub { font-size: 0.72rem; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; margin-top: 2px; }
+
+.resa-countdown { display: inline-flex; align-items: center; gap: 5px; background: #edf5ee; color: #2d6a4f; font-size: 0.78rem; font-weight: 700; padding: 5px 11px; border-radius: 20px; white-space: nowrap; flex-shrink: 0; }
 .resa-countdown.soon { background: #fef3c7; color: #b45309; }
+
+.resa-details-grid { display: flex; flex-direction: column; gap: 0; background: #f8fafc; border-radius: 12px; overflow: hidden; border: 1px solid #f1f5f9; }
+.resa-detail { display: flex; align-items: flex-start; gap: 10px; padding: 9px 14px; border-bottom: 1px solid #f1f5f9; }
+.resa-detail:last-child { border-bottom: none; }
+.resa-detail-icon { width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; color: #94a3b8; flex-shrink: 0; margin-top: 1px; }
+.resa-detail-body { display: flex; align-items: baseline; gap: 8px; flex: 1; min-width: 0; flex-wrap: wrap; }
+.resa-detail-lbl { font-size: 0.72rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.04em; width: 46px; flex-shrink: 0; }
+.resa-detail-val { font-size: 0.85rem; color: #334155; font-weight: 500; }
+.resa-time-chip { background: #e0f2fe; color: #0369a1; font-size: 0.72rem; font-weight: 700; padding: 1px 7px; border-radius: 6px; margin-left: 5px; }
+.resa-duration-badge { background: #edf5ee; color: #2d6a4f; font-size: 0.78rem; font-weight: 800; padding: 2px 9px; border-radius: 20px; }
+.resa-motif-text { font-style: italic; color: #64748b; }
+.resa-phone { color: #94a3b8; }
+
 .resa-empty { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; color: #94a3b8; font-size: 0.88rem; font-style: italic; }
+
+/* ── Section relances cotisations ──────────────────────────────── */
+.relance-section { margin-bottom: 28px; }
+
+.relance-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-wrap: wrap; gap: 10px; }
+.relance-count-badge { display: inline-flex; align-items: center; justify-content: center; background: #fef3c7; color: #b45309; font-size: 0.72rem; font-weight: 800; min-width: 22px; height: 22px; border-radius: 11px; padding: 0 6px; margin-left: 6px; }
+
+.copy-relance-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: white; border: 1.5px solid #e2e8f0; border-radius: 50px;
+  padding: 7px 16px; font-size: 0.82rem; font-weight: 700; color: #475569;
+  cursor: pointer; transition: border-color 0.15s, color 0.15s, background 0.15s;
+  font-family: inherit;
+}
+.copy-relance-btn:hover { border-color: #2d6a4f; color: #2d6a4f; }
+.copy-relance-btn.copied { background: #2d6a4f; border-color: #2d6a4f; color: white; }
+
+.relance-all-ok {
+  display: flex; align-items: center; gap: 10px;
+  background: #edf5ee; border: 1.5px solid #c8ebd4; border-radius: 12px;
+  padding: 18px 20px; color: #2d6a4f; font-size: 0.92rem; font-weight: 700;
+}
+
+.relance-list { padding: 0; overflow: hidden; }
+.relance-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 18px; border-bottom: 1px solid #f1f5f9;
+}
+.relance-item:last-child { border-bottom: none; }
+.relance-avatar {
+  width: 34px; height: 34px; border-radius: 9px; flex-shrink: 0;
+  background: #fef3c7; color: #b45309;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 0.75rem;
+}
+.relance-info { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
+.relance-name { font-weight: 700; color: #1e293b; font-size: 0.88rem; }
+.relance-email { font-size: 0.78rem; color: #64748b; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.relance-tag { background: #edf5ee; color: #2d6a4f; padding: 2px 9px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; white-space: nowrap; flex-shrink: 0; }
+.relance-status { font-size: 0.75rem; font-weight: 700; color: #b45309; background: #fef9ec; border: 1px solid #fde68a; padding: 3px 9px; border-radius: 20px; white-space: nowrap; flex-shrink: 0; }
 
 .adherent-reminder { transition: border-color 0.3s; }
 .status-ok    { border-left: 4px solid #2a9d8f; }
@@ -85,5 +145,8 @@
   .add-postit-btn { width: 100%; justify-content: center; }
   .form-footer { flex-direction: column; gap: 10px; }
   .form-actions { justify-content: flex-end; }
+  .relance-item { flex-wrap: wrap; gap: 8px; }
+  .relance-status { width: 100%; text-align: left; }
+  .copy-relance-btn { width: 100%; justify-content: center; }
 }
 @media (max-width: 480px) { .postits-grid { grid-template-columns: 1fr 1fr; } }

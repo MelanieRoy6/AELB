@@ -398,6 +398,35 @@
   margin-bottom: 20px;
 }
 
+.facebook-icon,
+.youtube-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.facebook-btn {
+  background: #1877F2;
+  color: #fff !important;
+  border-color: #1877F2;
+}
+
+.facebook-btn:hover {
+  background: #0d65d9;
+  border-color: #0d65d9;
+}
+
+.youtube-btn {
+  background: #ff0000;
+  color: #fff !important;
+  border-color: #ff0000;
+}
+
+.youtube-btn:hover {
+  background: #cc0000;
+  border-color: #cc0000;
+}
+
 /* === Responsive === */
 @media (max-width: 960px) {
   .objectives-grid { grid-template-columns: 1fr; }

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.aelb.service.FileStorageServiceTest" tests="14" skipped="0" failures="0" errors="0" timestamp="2026-06-26T08:59:50.243Z" hostname="PC_MÉLANIE" time="0.052">
+  <properties/>
+  <testcase name="save_extensionJpeg_préservéeDansLUrl()" classname="com.aelb.service.FileStorageServiceTest" time="0.013"/>
+  <testcase name="save_extensionSvg_préservéeDansLUrl()" classname="com.aelb.service.FileStorageServiceTest" time="0.002"/>
+  <testcase name="save_deuxFichiersOnDesNomsDifférents()" classname="com.aelb.service.FileStorageServiceTest" time="0.004"/>
+  <testcase name="save_extensionJpg_préservéeDansLUrl()" classname="com.aelb.service.FileStorageServiceTest" time="0.003"/>
+  <testcase name="save_urlCommenceParLePathAttendu()" classname="com.aelb.service.FileStorageServiceTest" time="0.003"/>
+  <testcase name="save_extensionBmp_préservéeDansLUrl()" classname="com.aelb.service.FileStorageServiceTest" time="0.002"/>
+  <testcase name="save_extensionPngMixte_normaliséeEnMinuscules()" classname="com.aelb.service.FileStorageServiceTest" time="0.002"/>
+  <testcase name="save_extensionJpgMajuscule_traitéeCommeLowercaseEtAutorisée()" classname="com.aelb.service.FileStorageServiceTest" time="0.003"/>
+  <testcase name="save_extensionPdf_rejetée()" classname="com.aelb.service.FileStorageServiceTest" time="0.003"/>
+  <testcase name="save_extensionExe_rejetée()" classname="com.aelb.service.FileStorageServiceTest" time="0.002"/>
+  <testcase name="save_extensionPng_préservéeDansLUrl()" classname="com.aelb.service.FileStorageServiceTest" time="0.002"/>
+  <testcase name="save_extensionWebp_préservéeDansLUrl()" classname="com.aelb.service.FileStorageServiceTest" time="0.002"/>
+  <testcase name="save_extensionGif_préservéeDansLUrl()" classname="com.aelb.service.FileStorageServiceTest" time="0.003"/>
+  <testcase name="save_sansDot_pasDExtension()" classname="com.aelb.service.FileStorageServiceTest" time="0.003"/>
+  <system-out><![CDATA[10:59:50.251 [Test worker] INFO com.aelb.service.FileStorageService -- [FileStorageService] Dossier uploads : C:\Project_Java_Spring\AELB\backend\uploads
+10:59:50.254 [Test worker] INFO com.aelb.service.FileStorageService -- [FileStorageService] Fichier sauvegardé : C:\Users\royme\AppData\Local\Temp\junit-6972530955060553370\668c185f-9c8b-4b70-bd7b-764aa0a009a9.jpeg
+10:59:50.259 [Test worker] INFO com.aelb.service.FileStorageService -- [FileStorageService] Dossier uploads : C:\Project_Java_Spring\AELB\backend\uploads
+10:59:50.260 [Test worker] INFO com.aelb.service.FileStorageService -- [FileStorageService] Fichier sauvegardé : C:\Users\royme\AppData\Local\Temp\junit-13730687497970453482\6142b053-fb8c-4b21-9ea8-71b4004639f7.svg
+10:59:50.262 [Test worker] INFO com.aelb.service.FileStorageService -- [FileStorageService] Dossier uploads : C:\Project_Java_Spring\AELB\backend\uploads
+10:59:50.263 [Test worker] INFO com.aelb.service.FileStorageService -- [FileStorageService] Fichier sauvegardé : C:\Users\royme\AppData\Local\Temp\junit-4573582595546214006\4d38edd5-9dbc-4053-b777-602dd687bfdc.jpg
+10:59:50.263 [Test worker] INFO com.aelb.service.FileStorageService -- [FileStorageService] Fichier sauvegardé : C:\Users\royme\AppData\Local\Temp\junit-4573582595546214006\aecee4a3-71fb-49ff-b9f6-283d335c43f2.jpg
+10:59:50.265 [Test worker] INFO com.aelb.service.FileStorageService -- [FileStorageService] Dossier uploads : C:\Project_Java_Spring\AELB\backend\uploads
+10:59:50.267 [Test worker] INFO com.aelb.service.FileStorageService -- [FileStorageService] Fichier sauvegardé : C:\Users\royme\AppData\Local\Temp\junit-9370990387502541035\0b92feee-fd41-4e5c-9390-ba7eb7a8ac66.jpg
+10:59:50.269 [Test worker] INFO com.aelb.service.FileStorageService -- [FileStorageService] Dossier uploads : C:\Project_Java_Spring\AELB\backend\uploads
+10:59:50.270 [Test worker] INFO com.aelb.service.FileStorageService -- [FileStorageService] Fichier sauvegardé : C:\Users\royme\AppData\Local\Temp\junit-14796239396596300258\17db6579-3af4-4202-99e7-9fc74b323de1.jpg
+10:59:50.272 [Test worker] INFO com.aelb.service.FileStorageService -- [FileStorageService] Dossier uploads : C:\Project_Java_Spring\AELB\backend\uploads
+10:59:50.272 [Test worker] INFO com.aelb.service.FileStorageService -- [FileStorageService] Fichier sauvegardé : C:\Users\royme\AppData\Local\Temp\junit-9111049936729222922\b3ddd105-c36e-4881-bb88-fd0ff41dbce6.bmp
+10:59:50.274 [Test worker] INFO com.aelb.service.FileStorageService -- [FileStorageService] Dossier uploads : C:\Project_Java_Spring\AELB\backend\uploads
+10:59:50.274 [Test worker] INFO com.aelb.service.FileStorageService -- [FileStorageService] Fichier sauvegardé : C:\Users\royme\AppData\Local\Temp\junit-12163201997786866708\6e526507-29e2-4f92-8083-b7faff070029.png
+10:59:50.277 [Test worker] INFO com.aelb.service.FileStorageService -- [FileStorageService] Dossier uploads : C:\Project_Java_Spring\AELB\backend\uploads
+10:59:50.277 [Test worker] INFO com.aelb.service.FileStorageService -- [FileStorageService] Fichier sauvegardé : C:\Users\royme\AppData\Local\Temp\junit-13705855199646705425\9b65d153-d8c6-4d06-abd3-acc6cda4ff9c.jpg
+10:59:50.280 [Test worker] INFO com.aelb.service.FileStorageService -- [FileStorageService] Dossier uploads : C:\Project_Java_Spring\AELB\backend\uploads
+10:59:50.281 [Test worker] INFO com.aelb.service.FileStorageService -- [FileStorageService] Fichier sauvegardé : C:\Users\royme\AppData\Local\Temp\junit-4143185366448837763\d151b191-1143-4ccf-a8a4-06c9f1151f44
+10:59:50.283 [Test worker] INFO com.aelb.service.FileStorageService -- [FileStorageService] Dossier uploads : C:\Project_Java_Spring\AELB\backend\uploads
+10:59:50.284 [Test worker] INFO com.aelb.service.FileStorageService -- [FileStorageService] Fichier sauvegardé : C:\Users\royme\AppData\Local\Temp\junit-13344026429066608128\5b95161b-dc13-47d7-8451-42902847c3f5
+10:59:50.286 [Test worker] INFO com.aelb.service.FileStorageService -- [FileStorageService] Dossier uploads : C:\Project_Java_Spring\AELB\backend\uploads
+10:59:50.286 [Test worker] INFO com.aelb.service.FileStorageService -- [FileStorageService] Fichier sauvegardé : C:\Users\royme\AppData\Local\Temp\junit-13128573831566361799\d20b14a4-5b25-4cb2-b671-3ea201e1219e.png
+10:59:50.288 [Test worker] INFO com.aelb.service.FileStorageService -- [FileStorageService] Dossier uploads : C:\Project_Java_Spring\AELB\backend\uploads
+10:59:50.288 [Test worker] INFO com.aelb.service.FileStorageService -- [FileStorageService] Fichier sauvegardé : C:\Users\royme\AppData\Local\Temp\junit-18245619681208895010\5493f4a9-e4e7-4c4d-bf3d-22cc26e0a65e.webp
+10:59:50.291 [Test worker] INFO com.aelb.service.FileStorageService -- [FileStorageService] Dossier uploads : C:\Project_Java_Spring\AELB\backend\uploads
+10:59:50.291 [Test worker] INFO com.aelb.service.FileStorageService -- [FileStorageService] Fichier sauvegardé : C:\Users\royme\AppData\Local\Temp\junit-995476035400815994\28ad1f85-357f-4300-91de-5bb889b956ec.gif
+10:59:50.293 [Test worker] INFO com.aelb.service.FileStorageService -- [FileStorageService] Dossier uploads : C:\Project_Java_Spring\AELB\backend\uploads
+10:59:50.294 [Test worker] INFO com.aelb.service.FileStorageService -- [FileStorageService] Fichier sauvegardé : C:\Users\royme\AppData\Local\Temp\junit-761646227242829685\5b3abcdb-c01d-4875-8d62-3c61ae54c8d9
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
