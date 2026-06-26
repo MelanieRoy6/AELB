@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.aelb.controller.MediaControllerTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2026-06-26T08:59:48.701Z" hostname="PC_MÉLANIE" time="0.17">
+<testsuite name="com.aelb.controller.MediaControllerTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-06-26T09:56:07.772Z" hostname="PC_MÉLANIE" time="0.146">
   <properties/>
-  <testcase name="upload_contentTypeImageWebp_accepté()" classname="com.aelb.controller.MediaControllerTest" time="0.144"/>
-  <testcase name="upload_contentTypeNonImage_retourne400()" classname="com.aelb.controller.MediaControllerTest" time="0.002"/>
-  <testcase name="upload_fichierExactement10Mo_accepté()" classname="com.aelb.controller.MediaControllerTest" time="0.004"/>
-  <testcase name="upload_fichierValide_retourne200AvecLeMedia()" classname="com.aelb.controller.MediaControllerTest" time="0.003"/>
-  <testcase name="upload_fichierValide_appèleFileStorageService()" classname="com.aelb.controller.MediaControllerTest" time="0.003"/>
-  <testcase name="upload_fichierVide_retourne400()" classname="com.aelb.controller.MediaControllerTest" time="0.003"/>
-  <testcase name="upload_fichierValide_urletCatégorieSauvegardéesDansLeMedia()" classname="com.aelb.controller.MediaControllerTest" time="0.004"/>
+  <testcase name="upload_contentTypeNonImage_retourne400()" classname="com.aelb.controller.MediaControllerTest" time="0.134"/>
+  <testcase name="upload_fichierVide_retourne400()" classname="com.aelb.controller.MediaControllerTest" time="0.002"/>
+  <testcase name="upload_fichierValide_retourne200AvecLeMediaSauvegardé()" classname="com.aelb.controller.MediaControllerTest" time="0.006"/>
   <testcase name="upload_fichierDépassant10Mo_retourne400()" classname="com.aelb.controller.MediaControllerTest" time="0.002"/>
-  <testcase name="upload_contentTypeNull_retourne400()" classname="com.aelb.controller.MediaControllerTest" time="0.002"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

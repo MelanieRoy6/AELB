@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.aelb.controller.AdherentControllerTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-06-26T08:59:47.783Z" hostname="PC_MÉLANIE" time="0.912">
+<testsuite name="com.aelb.controller.AdherentControllerTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-06-26T09:56:06.787Z" hostname="PC_MÉLANIE" time="0.979">
   <properties/>
-  <testcase name="sendBulkEmail_valide_délègueAuServiceAvecLesValeurs()" classname="com.aelb.controller.AdherentControllerTest" time="0.873"/>
-  <testcase name="sendBulkEmail_sujetEtCorpsValides_retourne200()" classname="com.aelb.controller.AdherentControllerTest" time="0.005"/>
-  <testcase name="sendBulkEmail_corpsAbsent_retourne400()" classname="com.aelb.controller.AdherentControllerTest" time="0.002"/>
-  <testcase name="sendBulkEmail_corpsBlank_retourne400()" classname="com.aelb.controller.AdherentControllerTest" time="0.002"/>
-  <testcase name="sendBulkEmail_sujetAbsent_retourne400()" classname="com.aelb.controller.AdherentControllerTest" time="0.001"/>
-  <testcase name="sendBulkEmail_sujetBlank_retourne400()" classname="com.aelb.controller.AdherentControllerTest" time="0.001"/>
-  <testcase name="sendBulkEmail_réponse400ContientMessageDErreur()" classname="com.aelb.controller.AdherentControllerTest" time="0.003"/>
+  <testcase name="sendBulkEmail_corpsAbsent_retourne400SansAppelerLeService()" classname="com.aelb.controller.AdherentControllerTest" time="0.935"/>
+  <testcase name="sendBulkEmail_sujetEtCorpsValides_retourne200EtDélègueAuService()" classname="com.aelb.controller.AdherentControllerTest" time="0.027"/>
+  <testcase name="sendBulkEmail_sujetAbsent_retourne400SansAppelerLeService()" classname="com.aelb.controller.AdherentControllerTest" time="0.001"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build what is described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org/mockito/Mockito.html#0.3
 WARNING: A Java agent has been loaded dynamically (C:\Users\royme\.gradle\caches\modules-2\files-2.1\net.bytebuddy\byte-buddy-agent\1.15.11\a38b16385e867f59a641330f0362ebe742788ed8\byte-buddy-agent-1.15.11.jar)

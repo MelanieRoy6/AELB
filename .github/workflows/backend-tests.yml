@@ -2,9 +2,9 @@ name: Tests Backend
 
 on:
   push:
-    branches: ["**"]          # tous les branches
+    branches: ["**"]          # test jouer sur toutes les branches
     paths:
-      - "backend/**"          # uniquement si le backend change
+      - "backend/**"          
       - ".github/workflows/backend-tests.yml"
   pull_request:
     branches: ["**"]
@@ -45,7 +45,7 @@ jobs:
 
       - name: Publier le rapport de tests
         uses: actions/upload-artifact@v4
-        if: always()           # publié même en cas d'échec
+        if: always()           # rapport publié même en cas d'échec
         with:
           name: rapport-tests
           path: backend/build/reports/tests/test/

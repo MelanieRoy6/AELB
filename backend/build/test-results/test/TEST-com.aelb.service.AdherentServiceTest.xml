@@ -1,29 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.aelb.service.AdherentServiceTest" tests="23" skipped="0" failures="0" errors="0" timestamp="2026-06-26T08:59:49.158Z" hostname="PC_MÉLANIE" time="1.024">
+<testsuite name="com.aelb.service.AdherentServiceTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-06-26T09:56:08.257Z" hostname="PC_MÉLANIE" time="0.683">
   <properties/>
-  <testcase name="importExcel_cotisationOui_vrai()" classname="com.aelb.service.AdherentServiceTest" time="0.496"/>
-  <testcase name="importExcel_emailInexistant_créationNouvelAdherent()" classname="com.aelb.service.AdherentServiceTest" time="0.026"/>
-  <testcase name="importExcel_cotisationOuiMajuscules_vrai()" classname="com.aelb.service.AdherentServiceTest" time="0.024"/>
-  <testcase name="importExcel_ligneDEnTête_ignorée()" classname="com.aelb.service.AdherentServiceTest" time="0.043"/>
-  <testcase name="exportToExcel_retourneFluxNonVide()" classname="com.aelb.service.AdherentServiceTest" time="0.147"/>
-  <testcase name="exportToExcel_cotisationPayéeFormatéeOuiNon()" classname="com.aelb.service.AdherentServiceTest" time="0.043"/>
-  <testcase name="importExcel_emailExistant_miseAJourDeLAdherent()" classname="com.aelb.service.AdherentServiceTest" time="0.02"/>
-  <testcase name="importExcel_cotisation1_vrai()" classname="com.aelb.service.AdherentServiceTest" time="0.017"/>
+  <testcase name="importExcel_ligneDEnTête_ignorée()" classname="com.aelb.service.AdherentServiceTest" time="0.561"/>
+  <testcase name="importExcel_cotisationAutreValeur_mappéFaux()" classname="com.aelb.service.AdherentServiceTest" time="0.031"/>
   <testcase name="sendBulkEmail_envoyéUniquementAuxAdherentsActifs()" classname="com.aelb.service.AdherentServiceTest" time="0.003"/>
-  <testcase name="importExcel_dateNaissanceInvalide_ignoréeSilencieusement()" classname="com.aelb.service.AdherentServiceTest" time="0.017"/>
-  <testcase name="importExcel_tousLesImportésSontActifs()" classname="com.aelb.service.AdherentServiceTest" time="0.018"/>
-  <testcase name="importExcel_cotisationVide_faux()" classname="com.aelb.service.AdherentServiceTest" time="0.016"/>
-  <testcase name="importExcel_cotisationTrue_vrai()" classname="com.aelb.service.AdherentServiceTest" time="0.017"/>
-  <testcase name="importExcel_ligneNomBlank_ignorée()" classname="com.aelb.service.AdherentServiceTest" time="0.018"/>
-  <testcase name="exportToExcel_contientLesDonnéesDeLAdherent()" classname="com.aelb.service.AdherentServiceTest" time="0.023"/>
-  <testcase name="importExcel_annéeCotisationNonNumérique_ignoréeSilencieusement()" classname="com.aelb.service.AdherentServiceTest" time="0.015"/>
-  <testcase name="importExcel_cotisationNon_faux()" classname="com.aelb.service.AdherentServiceTest" time="0.016"/>
-  <testcase name="sendBulkEmail_sujetEtCorpsTransmisIntacts()" classname="com.aelb.service.AdherentServiceTest" time="0.001"/>
-  <testcase name="sendBulkEmail_aucunActif_aucunEmailEnvoyé()" classname="com.aelb.service.AdherentServiceTest" time="0.0"/>
-  <testcase name="importExcel_ligneEmailBlank_ignorée()" classname="com.aelb.service.AdherentServiceTest" time="0.012"/>
-  <testcase name="exportToExcel_premièreLigneContientLesEnTêtes()" classname="com.aelb.service.AdherentServiceTest" time="0.018"/>
-  <testcase name="importExcel_lignePrenomBlank_ignorée()" classname="com.aelb.service.AdherentServiceTest" time="0.012"/>
-  <testcase name="importExcel_annéeAdhésionNonNumérique_ignoréeSilencieusement()" classname="com.aelb.service.AdherentServiceTest" time="0.015"/>
+  <testcase name="importExcel_cotisationOui_mappéVrai()" classname="com.aelb.service.AdherentServiceTest" time="0.024"/>
+  <testcase name="importExcel_champObligatoireBlank_ligneIgnorée()" classname="com.aelb.service.AdherentServiceTest" time="0.022"/>
+  <testcase name="importExcel_emailExistant_adhérentMisAJourPasRecréé()" classname="com.aelb.service.AdherentServiceTest" time="0.019"/>
+  <testcase name="importExcel_tousLesImportésForcésActifs()" classname="com.aelb.service.AdherentServiceTest" time="0.021"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

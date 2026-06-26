@@ -1,21 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.aelb.service.ReservationServiceTest" tests="15" skipped="0" failures="0" errors="0" timestamp="2026-06-26T08:59:50.297Z" hostname="PC_MÉLANIE" time="0.059">
+<testsuite name="com.aelb.service.ReservationServiceTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-06-26T09:56:09.017Z" hostname="PC_MÉLANIE" time="0.044">
   <properties/>
-  <testcase name="updateStatut_confirmée_sujetEmailCorrect()" classname="com.aelb.service.ReservationServiceTest" time="0.036"/>
-  <testcase name="createReservation_deuxEmailsEnvoyés()" classname="com.aelb.service.ReservationServiceTest" time="0.001"/>
-  <testcase name="createReservation_emailEnvoyéÀLAdmin()" classname="com.aelb.service.ReservationServiceTest" time="0.001"/>
-  <testcase name="createReservation_emailEnvoyéAuDemandeur()" classname="com.aelb.service.ReservationServiceTest" time="0.002"/>
+  <testcase name="updateStatut_confirmée_sujetEmailCorrect()" classname="com.aelb.service.ReservationServiceTest" time="0.034"/>
+  <testcase name="createReservation_échecSMTP_réservationQuandMêmeSauvegardée()" classname="com.aelb.service.ReservationServiceTest" time="0.005"/>
   <testcase name="createReservation_statutForcéEnAttente()" classname="com.aelb.service.ReservationServiceTest" time="0.001"/>
   <testcase name="createAdminReservation_statutForcéConfirmée()" classname="com.aelb.service.ReservationServiceTest" time="0.001"/>
-  <testcase name="updateStatut_metAJourLEStatut()" classname="com.aelb.service.ReservationServiceTest" time="0.002"/>
-  <testcase name="createReservation_réservationSauvegardéeMêmeSiEmailÉchoue()" classname="com.aelb.service.ReservationServiceTest" time="0.003"/>
-  <testcase name="updateStatut_échecEmailNonBloquant()" classname="com.aelb.service.ReservationServiceTest" time="0.002"/>
-  <testcase name="createAdminReservation_aucunEmailEnvoyé()" classname="com.aelb.service.ReservationServiceTest" time="0.001"/>
-  <testcase name="updateStatut_refusée_sujetEmailCorrect()" classname="com.aelb.service.ReservationServiceTest" time="0.001"/>
-  <testcase name="getConfirmedInPeriod_délègueAuRepository()" classname="com.aelb.service.ReservationServiceTest" time="0.001"/>
-  <testcase name="updateStatut_idInexistant_leveNoSuchElementException()" classname="com.aelb.service.ReservationServiceTest" time="0.001"/>
-  <testcase name="updateStatut_metAJourLeCommentaireAdmin()" classname="com.aelb.service.ReservationServiceTest" time="0.001"/>
-  <testcase name="createReservation_échecEmailNonBloquant()" classname="com.aelb.service.ReservationServiceTest" time="0.002"/>
+  <testcase name="updateStatut_idInexistant_leveNoSuchElementException()" classname="com.aelb.service.ReservationServiceTest" time="0.002"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

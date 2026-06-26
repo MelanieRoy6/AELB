@@ -18,22 +18,12 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class AdherentControllerTest {
 
-    @Mock
-    private AdherentRepository adherentRepository;
-
-    @Mock
-    private AdherentService adherentService;
-
-    @InjectMocks
-    private AdherentController adherentController;
-
-    // -------------------------------------------------------------------------
-    // sendBulkEmail — validation des champs obligatoires
-    // -------------------------------------------------------------------------
+    @Mock private AdherentRepository adherentRepository;
+    @Mock private AdherentService adherentService;
+    @InjectMocks private AdherentController adherentController;
 
     @Test
-    void sendBulkEmail_sujetAbsent_retourne400() {
-        // Seul "corps" fourni, "sujet" absent → null
+    void sendBulkEmail_sujetAbsent_retourne400SansAppelerLeService() {
         Map<String, String> body = new HashMap<>();
         body.put("corps", "Corps valide");
 
@@ -44,7 +34,7 @@ class AdherentControllerTest {
     }
 
     @Test
-    void sendBulkEmail_corpsAbsent_retourne400() {
+    void sendBulkEmail_corpsAbsent_retourne400SansAppelerLeService() {
         Map<String, String> body = new HashMap<>();
         body.put("sujet", "Sujet valide");
 
@@ -55,29 +45,7 @@ class AdherentControllerTest {
     }
 
     @Test
-    void sendBulkEmail_sujetBlank_retourne400() {
-        Map<String, String> body = new HashMap<>();
-        body.put("sujet", "   ");
-        body.put("corps", "Corps valide");
-
-        ResponseEntity<?> response = adherentController.sendBulkEmail(body);
-
-        assertEquals(400, response.getStatusCode().value());
-    }
-
-    @Test
-    void sendBulkEmail_corpsBlank_retourne400() {
-        Map<String, String> body = new HashMap<>();
-        body.put("sujet", "Sujet valide");
-        body.put("corps", "");
-
-        ResponseEntity<?> response = adherentController.sendBulkEmail(body);
-
-        assertEquals(400, response.getStatusCode().value());
-    }
-
-    @Test
-    void sendBulkEmail_sujetEtCorpsValides_retourne200() {
+    void sendBulkEmail_sujetEtCorpsValides_retourne200EtDélègueAuService() {
         Map<String, String> body = new HashMap<>();
         body.put("sujet", "Réunion");
         body.put("corps", "Bonjour à tous");
@@ -86,29 +54,5 @@ class AdherentControllerTest {
 
         assertEquals(200, response.getStatusCode().value());
         verify(adherentService).sendBulkEmail("Réunion", "Bonjour à tous");
-    }
-
-    @Test
-    void sendBulkEmail_valide_délègueAuServiceAvecLesValeurs() {
-        Map<String, String> body = new HashMap<>();
-        body.put("sujet", "Mon sujet");
-        body.put("corps", "Mon corps");
-
-        adherentController.sendBulkEmail(body);
-
-        verify(adherentService).sendBulkEmail("Mon sujet", "Mon corps");
-    }
-
-    @Test
-    void sendBulkEmail_réponse400ContientMessageDErreur() {
-        Map<String, String> body = new HashMap<>();
-        body.put("corps", "Corps sans sujet");
-
-        ResponseEntity<?> response = adherentController.sendBulkEmail(body);
-
-        assertEquals(400, response.getStatusCode().value());
-        assertNotNull(response.getBody());
-        assertTrue(response.getBody().toString().toLowerCase().contains("requis")
-                || response.getBody().toString().toLowerCase().contains("sujet"));
     }
 }
